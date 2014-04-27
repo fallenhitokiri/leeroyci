@@ -1,0 +1,94 @@
+2014/04/27 09:52:23 
+
+
+{
+"ref":"refs/heads/master",   // master = branch name!
+"after":"2c7f7accbcf73b7b4c98ee7e1f213eb46a885042",
+"before":"b369a904428a1d5d671e3f740443590d3db55fb0",
+"created":false,
+"deleted":false,
+"forced":false,
+"compare":"https://github.com/fallenhitokiri/pushtest/compare/b369a904428a...2c7f7accbcf7",
+"commits":[
+  {
+    "id":"2c7f7accbcf73b7b4c98ee7e1f213eb46a885042",
+    "distinct":true,
+    "message":"asdf",
+    "timestamp":"2014-04-27T11:53:14+02:00",
+    "url":"https://github.com/fallenhitokiri/pushtest/commit/2c7f7accbcf73b7b4c98ee7e1f213eb46a885042",
+    "author": {
+      "name":"Timo Zimmermann",
+      "email":"timo@screamingatmyscreen.com",
+      "username":"fallenhitokiri"
+    },
+    "committer":{ 
+      "name":"Timo Zimmermann",
+      "email":"timo@screamingatmyscreen.com",
+      "username":"fallenhitokiri"
+    },
+    "added":[
+      "test2.md"
+    ],
+    "removed": [
+    ],
+    "modified": [
+    ]
+  }
+],
+"head_commit": {
+  "id":"2c7f7accbcf73b7b4c98ee7e1f213eb46a885042",
+  "distinct":true,
+  "message":"asdf",
+  "timestamp":"2014-04-27T11:53:14+02:00",
+  "url":"https://github.com/fallenhitokiri/pushtest/commit/2c7f7accbcf73b7b4c98ee7e1f213eb46a885042",
+  "author": {
+    "name":"Timo Zimmermann",
+    "email":"timo@screamingatmyscreen.com",
+    "username":"fallenhitokiri"
+  },
+  "committer": {
+    "name":"Timo Zimmermann",
+    "email":"timo@screamingatmyscreen.com",
+    "username":"fallenhitokiri"
+  },
+  "added": [
+    "test2.md"
+  ],
+  "removed":[
+  ],
+  "modified":[
+  ]
+},
+"repository":{
+  "id":19200766,
+  "name":"pushtest",
+  "url":"https://github.com/fallenhitokiri/pushtest",
+  "description":"nothing to see here",
+  "watchers":0,
+  "stargazers":0,
+  "forks":0,
+  "fork":false,
+  "size":0,
+  "owner":{
+    "name":"fallenhitokiri",
+    "email":"timo@screamingatmyscreen.com"
+  },
+  "private":false,
+  "open_issues":0,
+  "has_issues":true,
+  "has_downloads":true,
+  "has_wiki":true,
+  "created_at":1398591886,
+  "pushed_at":1398592401,
+  "master_branch":"master"
+},
+"pusher": {
+  "name":"fallenhitokiri",
+  "email":"timo@screamingatmyscreen.com"}
+}
+
+
+2014/04/27 09:52:23 map[after:2c7f7accbcf73b7b4c98ee7e1f213eb46a885042 created:false commits:[map[id:2c7f7accbcf73b7b4c98ee7e1f213eb46a885042 message:asdf url:https://github.com/fallenhitokiri/pushtest/commit/2c7f7accbcf73b7b4c98ee7e1f213eb46a885042 author:map[name:Timo Zimmermann email:timo@screamingatmyscreen.com username:fallenhitokiri] modified:[] distinct:true timestamp:2014-04-27T11:53:14+02:00 committer:map[name:Timo Zimmermann email:timo@screamingatmyscreen.com username:fallenhitokiri] added:[test2.md] removed:[]]] head_commit:map[distinct:true timestamp:2014-04-27T11:53:14+02:00 committer:map[name:Timo Zimmermann email:timo@screamingatmyscreen.com username:fallenhitokiri] added:[test2.md] removed:[] id:2c7f7accbcf73b7b4c98ee7e1f213eb46a885042 message:asdf url:https://github.com/fallenhitokiri/pushtest/commit/2c7f7accbcf73b7b4c98ee7e1f213eb46a885042 author:map[name:Timo Zimmermann email:timo@screamingatmyscreen.com username:fallenhitokiri] modified:[]] repository:map[id:1.9200766e+07 url:https://github.com/fallenhitokiri/pushtest watchers:0 forks:0 size:0 open_issues:0 has_issues:true has_wiki:true description:nothing to see here stargazers:0 has_downloads:true name:pushtest owner:map[name:fallenhitokiri email:timo@screamingatmyscreen.com] private:false pushed_at:1.398592401e+09 master_branch:master fork:false created_at:1.398591886e+09] ref:refs/heads/master before:b369a904428a1d5d671e3f740443590d3db55fb0 deleted:false forced:false compare:https://github.com/fallenhitokiri/pushtest/compare/b369a904428a...2c7f7accbcf7 pusher:map[name:fallenhitokiri email:timo@screamingatmyscreen.com]]
+
+
+receive
