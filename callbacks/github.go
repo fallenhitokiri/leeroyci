@@ -73,3 +73,8 @@ func (g GitHubCallback) Branch() string {
 func (g GitHubCallback) URL() string {
 	return g.Repository.Url
 }
+
+// By returns who pushed / triggered the callback. Format Name <email>.
+func (g GitHubCallback) By() string {
+	return g.Pusher.Name + " <" + g.Pusher.Email + ">"
+}

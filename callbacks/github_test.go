@@ -53,3 +53,21 @@ func TestGitHubCallbackURL(t *testing.T) {
 		t.Error("Wrong URL", cb.URL())
 	}
 }
+
+func TestGitHubCallbackBy(t *testing.T) {
+	var cb GitHubCallback
+	var p GitUser
+
+	p = GitUser{
+		Name:  "foo",
+		Email: "bar",
+	}
+
+	cb = GitHubCallback{
+		Pusher: p,
+	}
+
+	if cb.By() != "foo <bar>" {
+		t.Error("Wrong Pusher", cb.By())
+	}
+}
