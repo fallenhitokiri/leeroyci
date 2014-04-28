@@ -3,11 +3,17 @@ package config
 
 import (
 	"errors"
+	"strconv"
 )
 
 type Config struct {
-	Secret       string
-	Repositories []Repository
+	Secret        string
+	EmailFrom     string
+	EmailHost     string
+	EmailPort     int
+	EmailUser     string
+	EmailPassword string
+	Repositories  []Repository
 }
 
 type Repository struct {
@@ -41,4 +47,8 @@ func (c *Config) ConfigForRepo(url string) (r Repository, err error) {
 	msg := "Could not find repository with URL: " + url
 	err = errors.New(msg)
 	return
+}
+
+func (c *Config) MailServer() string {
+	return c.EmailHost + ":" + strconv.Itoa(c.EmailPort)
 }
