@@ -9,7 +9,7 @@ import (
 type Notification interface {
 	Branch() string
 	URL() string
-	By() string
+	By() (string, string)
 }
 
 func Callback(rw http.ResponseWriter, req *http.Request, not chan Notification) {
@@ -27,5 +27,5 @@ func Callback(rw http.ResponseWriter, req *http.Request, not chan Notification) 
 		panic("could not unmarshal request")
 	}
 
-	not <- cb
+	not <- &cb
 }

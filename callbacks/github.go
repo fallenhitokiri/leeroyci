@@ -64,17 +64,17 @@ type GitUser struct {
 }
 
 // Branch returns the name of the branch.
-func (g GitHubCallback) Branch() string {
+func (g *GitHubCallback) Branch() string {
 	s := strings.Split(g.Ref, "/")
 	return s[2]
 }
 
 // URL returns the URL for the repository
-func (g GitHubCallback) URL() string {
+func (g *GitHubCallback) URL() string {
 	return g.Repository.Url
 }
 
 // By returns who pushed / triggered the callback. Format Name <email>.
-func (g GitHubCallback) By() string {
-	return g.Pusher.Name + " <" + g.Pusher.Email + ">"
+func (g *GitHubCallback) By() (string, string) {
+	return g.Pusher.Name, g.Pusher.Email
 }

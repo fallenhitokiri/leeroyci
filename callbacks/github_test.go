@@ -67,7 +67,13 @@ func TestGitHubCallbackBy(t *testing.T) {
 		Pusher: p,
 	}
 
-	if cb.By() != "foo <bar>" {
-		t.Error("Wrong Pusher", cb.By())
+	name, email := cb.By()
+
+	if name != "foo" {
+		t.Error("Wrong name", name)
+	}
+
+	if email != "bar" {
+		t.Error("Wrong email", email)
 	}
 }
