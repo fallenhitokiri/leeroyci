@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"ironman/build"
 	"ironman/callbacks"
 	"ironman/config"
@@ -8,9 +9,14 @@ import (
 	"net/http"
 )
 
+var cfgFlag = flag.String("config", "ironman.json", "JSON formatted config")
+
 func main() {
+	flag.Parse()
+
+	c := config.FromFile(*cfgFlag)
+
 	not := make(chan callbacks.Notification, 100)
-	c := config.Config{}
 	b := build.Buildlog{}
 
 	go build.Build(not, &c, &b)
