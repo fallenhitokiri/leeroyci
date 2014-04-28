@@ -15,7 +15,7 @@ func main() {
 
 	go build.Build(not, &c, &b)
 
-	http.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/callback", func(w http.ResponseWriter, r *http.Request) {
 		callbacks.Callback(w, r, not)
 	})
 	log.Fatal(http.ListenAndServe(":8082", nil))
