@@ -25,7 +25,7 @@ func run(n callbacks.Notification, c *config.Config, b *Buildlog) {
 	config, err := c.ConfigForRepo(repo)
 
 	if err != nil {
-		log.Println("could not find repo")
+		log.Println("could not find repo", repo)
 		return
 	}
 
