@@ -1,3 +1,4 @@
+// Build runs the build commands for a repository.
 package build
 
 import (
@@ -39,14 +40,14 @@ func run(n callbacks.Notification, c *config.Config, b *Buildlog) {
 	}
 }
 
-// Call a build script and return the output
+// Call a build script and return the output.
 func call(app string, repo string, branch string) (string, error) {
 	cmd := exec.Command(app, repo, branch)
 	out, err := cmd.Output()
 	return string(out), err
 }
 
-// Notify a pusher that a build failed
+// Notify a pusher that a build failed.
 func notify_fail(cmd config.Command, repo string, branch string, out string,
 	err error, c *config.Config, name string, mail string) error {
 	mime := "MIME-version: 1.0;Content-Type: text/html; charset=\"UTF-8\";\n\n"
