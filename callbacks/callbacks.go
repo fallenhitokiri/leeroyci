@@ -25,8 +25,8 @@ func Callback(rw http.ResponseWriter, req *http.Request, not chan Notification) 
 	err = json.Unmarshal(body, &cb)
 
 	if err != nil {
-		log.Println("Could not unmarshal request")
 		log.Println(string(body))
+		panic("Could not unmarshal request")
 	}
 
 	not <- &cb
