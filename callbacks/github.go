@@ -78,3 +78,12 @@ func (g *GitHubCallback) URL() string {
 func (g *GitHubCallback) By() (string, string) {
 	return g.Pusher.Name, g.Pusher.Email
 }
+
+// Returns if this commit should be build. Do not build if the branch was
+// deleted for example.
+func (g *GitHubCallback) ShouldBuild() bool {
+	if g.Deleted == true {
+		return false
+	}
+	return true
+}

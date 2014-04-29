@@ -77,3 +77,21 @@ func TestGitHubCallbackBy(t *testing.T) {
 		t.Error("Wrong email", email)
 	}
 }
+
+func TestGitHubShouldBuild(t *testing.T) {
+	var cb GitHubCallback
+
+	cb = GitHubCallback{
+		Deleted: true,
+	}
+
+	if cb.ShouldBuild() != false {
+		t.Error("ShouldBuild is not false")
+	}
+
+	cb.Deleted = false
+
+	if cb.ShouldBuild() != true {
+		t.Error("ShouldBuild is not true")
+	}
+}
