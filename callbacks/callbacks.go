@@ -5,6 +5,7 @@ package callbacks
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -24,7 +25,8 @@ func Callback(rw http.ResponseWriter, req *http.Request, not chan Notification) 
 	err = json.Unmarshal(body, &cb)
 
 	if err != nil {
-		panic("could not unmarshal request")
+		log.Println("Could not unmarshal request")
+		log.Println(string(body))
 	}
 
 	not <- &cb
