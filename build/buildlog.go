@@ -19,7 +19,7 @@ type Job struct {
 }
 
 // Add adds a new job to the buildlog
-func (b *Buildlog) Add(url, branch, pusher, output string, code error) {
+func (b *Buildlog) Add(url, branch, pusher, output string, code error) *Job {
 	job := Job{
 		URL:        url,
 		Branch:     branch,
@@ -30,4 +30,6 @@ func (b *Buildlog) Add(url, branch, pusher, output string, code error) {
 	}
 
 	b.Jobs = append(b.Jobs, job)
+
+	return &job
 }
