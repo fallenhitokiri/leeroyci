@@ -15,18 +15,20 @@ type Job struct {
 	Timestamp  time.Time
 	ReturnCode error
 	Output     string
-	Pusher     string
+	Name       string
+	Email      string
 }
 
 // Add adds a new job to the buildlog
-func (b *Buildlog) Add(url, branch, pusher, output string, code error) *Job {
+func (b *Buildlog) Add(url, branch, name, email, output string, code error) *Job {
 	job := Job{
 		URL:        url,
 		Branch:     branch,
 		Timestamp:  time.Now(),
 		ReturnCode: code,
 		Output:     output,
-		Pusher:     pusher,
+		Name:       name,
+		Email:      email,
 	}
 
 	b.Jobs = append(b.Jobs, job)

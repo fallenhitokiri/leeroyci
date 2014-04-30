@@ -6,7 +6,7 @@ import (
 
 func TestBuildlogAdd(t *testing.T) {
 	log := Buildlog{}
-	log.Add("url", "branch", "pusher", "output", nil)
+	log.Add("url", "branch", "name", "email", "output", nil)
 
 	if len(log.Jobs) != 1 {
 		t.Error("build not added")
@@ -30,7 +30,11 @@ func TestBuildlogAdd(t *testing.T) {
 		t.Error("wrong Output", j.Output)
 	}
 
-	if j.Pusher != "pusher" {
-		t.Error("wrong Pusher", j.Pusher)
+	if j.Name != "name" {
+		t.Error("wrong Name", j.Name)
+	}
+
+	if j.Email != "email" {
+		t.Error("wrong Email", j.Email)
 	}
 }

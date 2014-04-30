@@ -32,7 +32,7 @@ func run(n callbacks.Notification, c *config.Config, b *Buildlog) {
 
 	for _, cmd := range config.Commands {
 		out, code := call(cmd.Execute, repo, branch)
-		job := b.Add(repo, branch, email, out, code)
+		job := b.Add(repo, branch, name, email, out, code)
 
 		if code != nil {
 			notify_fail(cmd, repo, branch, out, code, c, name, email)
@@ -43,7 +43,7 @@ func run(n callbacks.Notification, c *config.Config, b *Buildlog) {
 // Call a build script and return the output.
 func call(app string, repo string, branch string) (string, error) {
 	cmd := exec.Command(app, repo, branch)
-	out, err := cmd.Output()
+	out, err := cmd.CombinedOutput()
 	return string(out), err
 }
 
