@@ -9,17 +9,6 @@ type Buildlog struct {
 	Jobs []Job
 }
 
-type Job struct {
-	URL        string
-	Branch     string
-	Timestamp  time.Time
-	Command    string
-	ReturnCode error
-	Output     string
-	Name       string
-	Email      string
-}
-
 // Add adds a new job to the buildlog
 func (b *Buildlog) Add(url, branch, command, name, email, output string,
 	code error) *Job {
