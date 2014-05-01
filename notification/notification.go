@@ -21,21 +21,23 @@ func Notify(c *config.Config, job *logging.Job) {
 
 // Notify the person who pushed the changes
 func notifyPusher(c *config.Config, job *logging.Job) {
-	code := "0"
-	if job.ReturnCode != nil {
-		code = job.ReturnCode.Error()
-	}
-
 	from := mail.Address{"Ironman", c.EmailFrom}
 	to := mail.Address{job.Name, job.Email}
-	subject := "Build finished"
+
+	subject := "Build for " + job.Branch + " finished "
+
+	if job.Success() == true {
+		subject = subject + "successfully"
+	} else {
+		subject = subject + "with errors"
+	}
 
 	body := "Finished building your commits.\n\n"
 	body = body + "Repo: " + job.URL + "\n"
 	body = body + "Branch: " + job.Branch + "\n"
 	body = body + "Time: " + job.Timestamp.String() + "\n"
 	body = body + "Command: " + job.Command + "\n"
-	body = body + "Return Code: " + code + "\n\n"
+	body = body + "Return Code: " + job.Status() + "\n\n"
 	body = body + "Output: \n" + job.Output + "\n"
 
 	message := buildEmail(from.String(), to.String(), subject, body)
