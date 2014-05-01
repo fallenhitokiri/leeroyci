@@ -31,11 +31,14 @@ func run(n callbacks.Notification, c *config.Config, b *logging.Buildlog) {
 		return
 	}
 
+	log.Println("Starting build process for", repo, branch)
 	for _, cmd := range config.Commands {
+		log.Println("Building", cmd.Name)
 		out, code := call(cmd.Execute, repo, branch)
 		job := b.Add(repo, branch, cmd.Name, name, email, out, code)
 		go notification.Notify(c, job)
 	}
+	log.Println("Finished building", repo, branch)
 }
 
 // Call a build script and return the output.
