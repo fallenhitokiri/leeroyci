@@ -1,4 +1,4 @@
-package build
+package logging
 
 import (
 	"testing"
@@ -6,7 +6,7 @@ import (
 
 func TestBuildlogAdd(t *testing.T) {
 	log := Buildlog{}
-	log.Add("url", "branch", "name", "email", "output", nil)
+	log.Add("url", "branch", "command", "name", "email", "output", nil)
 
 	if len(log.Jobs) != 1 {
 		t.Error("build not added")
@@ -20,6 +20,10 @@ func TestBuildlogAdd(t *testing.T) {
 
 	if j.Branch != "branch" {
 		t.Error("wrong Branch", j.Branch)
+	}
+
+	if j.Command != "command" {
+		t.Error("wrong Command", j.Command)
 	}
 
 	if j.ReturnCode != nil {

@@ -13,6 +13,8 @@ type Config struct {
 	EmailPort     int
 	EmailUser     string
 	EmailPassword string
+	SlackChannel  string
+	SlackEndpoint string
 	Repositories  []Repository
 }
 

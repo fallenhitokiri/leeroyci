@@ -3,6 +3,7 @@ package build
 import (
 	"ironman/callbacks"
 	"ironman/config"
+	"ironman/logging"
 	"testing"
 )
 
@@ -19,7 +20,7 @@ func TestRun(t *testing.T) {
 	var r callbacks.Repository
 	var p callbacks.GitUser
 	var cb callbacks.GitHubCallback
-	var b Buildlog
+	var b logging.Buildlog
 	var c config.Config
 	var cr config.Repository
 	var cc config.Command
@@ -39,7 +40,7 @@ func TestRun(t *testing.T) {
 		Pusher:     p,
 	}
 
-	b = Buildlog{}
+	b = logging.Buildlog{}
 
 	cc = config.Command{
 		Name:    "cmd",

@@ -1,5 +1,5 @@
 // Buildlog stores all builds that were triggered and the result.
-package build
+package logging
 
 import (
 	"time"
@@ -13,6 +13,7 @@ type Job struct {
 	URL        string
 	Branch     string
 	Timestamp  time.Time
+	Command    string
 	ReturnCode error
 	Output     string
 	Name       string
@@ -20,11 +21,13 @@ type Job struct {
 }
 
 // Add adds a new job to the buildlog
-func (b *Buildlog) Add(url, branch, name, email, output string, code error) *Job {
+func (b *Buildlog) Add(url, branch, command, name, email, output string,
+	code error) *Job {
 	job := Job{
 		URL:        url,
 		Branch:     branch,
 		Timestamp:  time.Now(),
+		Command:    command,
 		ReturnCode: code,
 		Output:     output,
 		Name:       name,

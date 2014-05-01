@@ -4,6 +4,8 @@ package build
 import (
 	"ironman/callbacks"
 	"ironman/config"
+	"ironman/logging"
+	"ironman/notification"
 	"log"
 	"net/smtp"
 	"os/exec"
@@ -11,7 +13,7 @@ import (
 
 // Build waits for new notifications and runs the build process after
 // receiving one.
-func Build(not chan callbacks.Notification, c *config.Config, b *Buildlog) {
+func Build(not chan callbacks.Notification, c *config.Config, b *logging.Buildlog) {
 	for {
 		n := <-not
 		run(n, c, b)
@@ -19,7 +21,7 @@ func Build(not chan callbacks.Notification, c *config.Config, b *Buildlog) {
 }
 
 // Run a build porcess.
-func run(n callbacks.Notification, c *config.Config, b *Buildlog) {
+func run(n callbacks.Notification, c *config.Config, b *logging.Buildlog) {
 	repo := n.URL()
 	branch := n.Branch()
 	name, email := n.By()
@@ -32,11 +34,8 @@ func run(n callbacks.Notification, c *config.Config, b *Buildlog) {
 
 	for _, cmd := range config.Commands {
 		out, code := call(cmd.Execute, repo, branch)
-		job := b.Add(repo, branch, name, email, out, code)
-
-		if code != nil {
-			notify_fail(cmd, repo, branch, out, code, c, name, email)
-		}
+		job := b.Add(repo, branch, cmd.Name, name, email, out, code)
+		notification.Notify(c, job)
 	}
 }
 
