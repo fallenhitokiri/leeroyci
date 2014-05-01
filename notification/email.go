@@ -5,12 +5,15 @@ import (
 	"encoding/base64"
 	"fmt"
 	"ironman/config"
+	"ironman/logging"
 	"log"
+	"net/mail"
 	"net/smtp"
 )
 
 // Send an email to `toName <toEmail>` with the details of the failed build.
-func email(c *config.Config, to string, message []byte) {
+func email(c *config.Config, j *logging.Job, to string) {
+	message := buildEmail(c, j)
 	auth := smtp.PlainAuth("", c.EmailUser, c.EmailPassword, c.EmailHost)
 
 	err := smtp.SendMail(
@@ -26,8 +29,33 @@ func email(c *config.Config, to string, message []byte) {
 	}
 }
 
+// Notify the person who pushed the changes
+func buildEmail(c *config.Config, j *logging.Job) []byte {
+	from := mail.Address{"Ironman", c.EmailFrom}
+	to := mail.Address{j.Name, j.Email}
+
+	subject := "Build for " + j.Branch + " finished "
+
+	if j.Success() == true {
+		subject = subject + "successfully"
+	} else {
+		subject = subject + "with errors"
+	}
+
+	body := "Repo: " + j.URL + "\n"
+	body = body + "Branch: " + j.Branch + "\n"
+	body = body + "Time: " + j.Timestamp.String() + "\n"
+	body = body + "Command: " + j.Command + "\n"
+	body = body + "Return Code: " + j.Status() + "\n\n"
+	body = body + "Output: \n" + j.Output + "\n"
+
+	message := addHeaders(from.String(), to.String(), subject, body)
+
+	return message
+}
+
 // Build a string to be used as argument for net/smtp to send as mail.
-func buildEmail(from, to, subject, body string) []byte {
+func addHeaders(from, to, subject, body string) []byte {
 	header := make(map[string]string)
 	header["From"] = from
 	header["To"] = to

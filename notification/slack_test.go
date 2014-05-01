@@ -23,7 +23,7 @@ func TestBuildSlack(t *testing.T) {
 		ReturnCode: errors.New("0"),
 	}
 
-	_, err := buildSlack(&c, job)
+	_, err := buildSlack(&c, &job)
 
 	if err != nil {
 		t.Error(err)

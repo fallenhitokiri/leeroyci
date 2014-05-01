@@ -4,8 +4,8 @@ import (
 	"testing"
 )
 
-func TestBuildEmail(t *testing.T) {
-	message := buildEmail("foo", "bar", "bla", "baz")
+func TestAddHeaders(t *testing.T) {
+	message := addHeaders("foo", "bar", "bla", "baz")
 
 	if len(message) != 137 {
 		t.Error("Message got the wrong length", len(message))
