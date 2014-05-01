@@ -30,8 +30,8 @@ type Command struct {
 }
 
 type Notify struct {
-	Name  string
-	Email string
+	Service   string
+	Arguments []string
 }
 
 // ConfigForRepo returns the configuration for a repository that matches
