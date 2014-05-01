@@ -35,7 +35,7 @@ func run(n callbacks.Notification, c *config.Config, b *logging.Buildlog) {
 	for _, cmd := range config.Commands {
 		out, code := call(cmd.Execute, repo, branch)
 		job := b.Add(repo, branch, cmd.Name, name, email, out, code)
-		notification.Notify(c, job)
+		go notification.Notify(c, job)
 	}
 }
 
