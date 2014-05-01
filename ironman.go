@@ -26,4 +26,6 @@ func main() {
 		callbacks.Callback(w, r, not)
 	})
 	log.Fatal(http.ListenAndServe(":8082", nil))
+
+	log.Println("Ironman up an running!")
 }
