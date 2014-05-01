@@ -5,6 +5,7 @@ import (
 	"ironman/build"
 	"ironman/callbacks"
 	"ironman/config"
+	"ironman/logging"
 	"log"
 	"net/http"
 )
@@ -17,7 +18,7 @@ func main() {
 	c := config.FromFile(*cfgFlag)
 
 	not := make(chan callbacks.Notification, 100)
-	b := build.Buildlog{}
+	b := logging.Buildlog{}
 
 	go build.Build(not, &c, &b)
 
