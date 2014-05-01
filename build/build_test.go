@@ -17,42 +17,34 @@ func TestCall(t *testing.T) {
 }
 
 func TestRun(t *testing.T) {
-	var r callbacks.Repository
-	var p callbacks.GitUser
-	var cb callbacks.GitHubCallback
-	var b logging.Buildlog
-	var c config.Config
-	var cr config.Repository
-	var cc config.Command
-
-	p = callbacks.GitUser{
+	p := callbacks.GitUser{
 		Name:  "foo",
 		Email: "bar",
 	}
 
-	r = callbacks.Repository{
+	r := callbacks.Repository{
 		Url: "http://test.tld",
 	}
 
-	cb = callbacks.GitHubCallback{
+	cb := callbacks.GitHubCallback{
 		Ref:        "a/b/master",
 		Repository: r,
 		Pusher:     p,
 	}
 
-	b = logging.Buildlog{}
+	b := logging.Buildlog{}
 
-	cc = config.Command{
+	cc := config.Command{
 		Name:    "cmd",
 		Execute: "ls",
 	}
 
-	cr = config.Repository{
+	cr := config.Repository{
 		URL:      "http://test.tld",
 		Commands: []config.Command{cc, cc},
 	}
 
-	c = config.Config{
+	c := config.Config{
 		Repositories: []config.Repository{cr},
 	}
 

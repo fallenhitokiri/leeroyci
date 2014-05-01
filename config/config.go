@@ -36,19 +36,19 @@ type Notify struct {
 
 // ConfigForRepo returns the configuration for a repository that matches
 // the URL.
-func (c *Config) ConfigForRepo(url string) (r Repository, err error) {
-	r = Repository{}
+func (c *Config) ConfigForRepo(url string) (Repository, error) {
+	r := Repository{}
 
 	for _, repo := range c.Repositories {
 		if repo.URL == url {
 			r = repo
-			return
+			return r, nil
 		}
 	}
 
 	msg := "Could not find repository with URL: " + url
-	err = errors.New(msg)
-	return
+	err := errors.New(msg)
+	return r, err
 }
 
 func (c *Config) MailServer() string {

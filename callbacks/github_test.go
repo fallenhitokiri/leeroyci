@@ -26,9 +26,7 @@ func TestJsonUnmarshal(t *testing.T) {
 }
 
 func TestGitHubCallbackBranch(t *testing.T) {
-	var cb GitHubCallback
-
-	cb = GitHubCallback{
+	cb := GitHubCallback{
 		Ref: "refs/heads/master",
 	}
 
@@ -38,14 +36,11 @@ func TestGitHubCallbackBranch(t *testing.T) {
 }
 
 func TestGitHubCallbackURL(t *testing.T) {
-	var cb GitHubCallback
-	var r Repository
-
-	r = Repository{
+	r := Repository{
 		Url: "foobar",
 	}
 
-	cb = GitHubCallback{
+	cb := GitHubCallback{
 		Repository: r,
 	}
 
@@ -55,15 +50,12 @@ func TestGitHubCallbackURL(t *testing.T) {
 }
 
 func TestGitHubCallbackBy(t *testing.T) {
-	var cb GitHubCallback
-	var p GitUser
-
-	p = GitUser{
+	p := GitUser{
 		Name:  "foo",
 		Email: "bar",
 	}
 
-	cb = GitHubCallback{
+	cb := GitHubCallback{
 		Pusher: p,
 	}
 
@@ -79,9 +71,7 @@ func TestGitHubCallbackBy(t *testing.T) {
 }
 
 func TestGitHubShouldBuild(t *testing.T) {
-	var cb GitHubCallback
-
-	cb = GitHubCallback{
+	cb := GitHubCallback{
 		Deleted: true,
 	}
 

@@ -8,14 +8,11 @@ import (
 )
 
 func TestBuildSlack(t *testing.T) {
-	var c config.Config
-	var job logging.Job
-
-	c = config.Config{
+	c := config.Config{
 		SlackChannel: "#devel",
 	}
 
-	job = logging.Job{
+	job := logging.Job{
 		URL:        "foo",
 		Branch:     "bar",
 		Name:       "baz",
