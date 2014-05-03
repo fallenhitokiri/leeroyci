@@ -3,10 +3,10 @@
 package callbacks
 
 import (
-	"encoding/json"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type Notification interface {
@@ -14,30 +14,34 @@ type Notification interface {
 	URL() string
 	By() (string, string)
 	ShouldBuild() bool
+	Commit() string
 }
 
 func Callback(rw http.ResponseWriter, req *http.Request, not chan Notification) {
 	body, err := ioutil.ReadAll(req.Body)
+
 	if err != nil {
 		panic("reading")
 	}
 
-	parse(not, body)
+	s := service(req)
+
+	switch s {
+	case "github":
+		parseGitHub(not, body)
+	default:
+		log.Println("serivce", s, "not supported")
+	}
 }
 
-// Parse a request body and add it to the build queue.
-func parse(not chan Notification, body []byte) {
-	var cb GitHubCallback
-	err := json.Unmarshal(body, &cb)
+// Returns the name of the service of the callback.
+func service(req *http.Request) string {
+	path := req.URL.Path[len("/callback/"):]
 
-	if err != nil {
-		log.Println(string(body))
-		panic("Could not unmarshal request")
+	// remove slash at the end of the URL if necessary
+	if strings.HasSuffix(path, "/") {
+		path = strings.Split(path, "/")[0]
 	}
 
-	if cb.ShouldBuild() == true {
-		not <- &cb
-	} else {
-		log.Println("Not adding", cb.URL(), cb.Branch(), "to build queue")
-	}
+	return path
 }

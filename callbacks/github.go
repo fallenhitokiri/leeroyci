@@ -2,6 +2,8 @@
 package callbacks
 
 import (
+	"encoding/json"
+	"log"
 	"strings"
 )
 
@@ -91,4 +93,21 @@ func (g *GitHubCallback) ShouldBuild() bool {
 // Returns the ID of the head commit.
 func (g *GitHubCallback) Commit() string {
 	return g.Head_commit.Id
+}
+
+// Parse a GitHub request body and add it to the build queue.
+func parseGitHub(not chan Notification, body []byte) {
+	var cb GitHubCallback
+	err := json.Unmarshal(body, &cb)
+
+	if err != nil {
+		log.Println(string(body))
+		panic("Could not unmarshal request")
+	}
+
+	if cb.ShouldBuild() == true {
+		not <- &cb
+	} else {
+		log.Println("Not adding", cb.URL(), cb.Branch(), "to build queue")
+	}
 }
