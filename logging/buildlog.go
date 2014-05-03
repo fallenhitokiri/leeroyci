@@ -10,12 +10,13 @@ type Buildlog struct {
 }
 
 // Add adds a new job to the buildlog
-func (b *Buildlog) Add(url, branch, command, name, email, output string,
+func (b *Buildlog) Add(url, branch, commit, command, name, email, output string,
 	code error) *Job {
 	job := Job{
 		URL:        url,
 		Branch:     branch,
 		Timestamp:  time.Now(),
+		Commit:     commit,
 		Command:    command,
 		ReturnCode: code,
 		Output:     output,

@@ -35,7 +35,7 @@ func run(n callbacks.Notification, c *config.Config, b *logging.Buildlog) {
 	for _, cmd := range config.Commands {
 		log.Println("Building", cmd.Name)
 		out, code := call(cmd.Execute, repo, branch)
-		job := b.Add(repo, branch, cmd.Name, name, email, out, code)
+		job := b.Add(repo, branch, n.Commit(), cmd.Name, name, email, out, code)
 		go notification.Notify(c, job)
 	}
 	log.Println("Finished building", repo, branch)

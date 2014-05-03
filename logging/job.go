@@ -8,6 +8,7 @@ import (
 type Job struct {
 	URL        string
 	Branch     string
+	Commit     string
 	Timestamp  time.Time
 	Command    string
 	ReturnCode error

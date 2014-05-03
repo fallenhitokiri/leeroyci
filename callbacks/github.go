@@ -87,3 +87,8 @@ func (g *GitHubCallback) ShouldBuild() bool {
 	}
 	return true
 }
+
+// Returns the ID of the head commit.
+func (g *GitHubCallback) Commit() string {
+	return g.Head_commit.Id
+}
