@@ -3,8 +3,10 @@ package callbacks
 
 import (
 	"encoding/json"
+	"ironman/logging"
 	"log"
 	"strings"
+	"time"
 )
 
 type GitHubCallback struct {
@@ -96,9 +98,20 @@ func (g *GitHubCallback) Commit() string {
 }
 
 // Parse a GitHub request body and add it to the build queue.
-func parseGitHub(not chan Notification, body []byte) {
+func parseGitHub(jobs chan logging.Job, body []byte) {
 	var cb GitHubCallback
 	err := json.Unmarshal(body, &cb)
+
+	name, email := cb.By()
+
+	j := logging.Job{
+		URL:       cb.URL(),
+		Branch:    cb.Branch(),
+		Timestamp: time.Now(),
+		Commit:    cb.Commit(),
+		Name:      name,
+		Email:     email,
+	}
 
 	if err != nil {
 		log.Println(string(body))
@@ -106,7 +119,7 @@ func parseGitHub(not chan Notification, body []byte) {
 	}
 
 	if cb.ShouldBuild() == true {
-		not <- &cb
+		jobs <- j
 	} else {
 		log.Println("Not adding", cb.URL(), cb.Branch(), "to build queue")
 	}

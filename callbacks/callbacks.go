@@ -4,20 +4,13 @@ package callbacks
 
 import (
 	"io/ioutil"
+	"ironman/logging"
 	"log"
 	"net/http"
 	"strings"
 )
 
-type Notification interface {
-	Branch() string
-	URL() string
-	By() (string, string)
-	ShouldBuild() bool
-	Commit() string
-}
-
-func Callback(rw http.ResponseWriter, req *http.Request, not chan Notification) {
+func Callback(rw http.ResponseWriter, req *http.Request, jobs chan logging.Job) {
 	body, err := ioutil.ReadAll(req.Body)
 
 	if err != nil {
@@ -28,7 +21,7 @@ func Callback(rw http.ResponseWriter, req *http.Request, not chan Notification) 
 
 	switch s {
 	case "github":
-		parseGitHub(not, body)
+		parseGitHub(jobs, body)
 	default:
 		log.Println("serivce", s, "not supported")
 	}

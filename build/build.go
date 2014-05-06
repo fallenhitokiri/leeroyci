@@ -2,7 +2,6 @@
 package build
 
 import (
-	"ironman/callbacks"
 	"ironman/config"
 	"ironman/logging"
 	"ironman/notification"
@@ -12,33 +11,33 @@ import (
 
 // Build waits for new notifications and runs the build process after
 // receiving one.
-func Build(not chan callbacks.Notification, c *config.Config, b *logging.Buildlog) {
+func Build(jobs chan logging.Job, c *config.Config, b *logging.Buildlog) {
 	for {
-		n := <-not
-		run(n, c, b)
+		j := <-jobs
+		run(j, c, b)
 	}
 }
 
 // Run a build porcess.
-func run(n callbacks.Notification, c *config.Config, b *logging.Buildlog) {
-	repo := n.URL()
-	branch := n.Branch()
-	name, email := n.By()
-	config, err := c.ConfigForRepo(repo)
+func run(j logging.Job, c *config.Config, b *logging.Buildlog) {
+	config, err := c.ConfigForRepo(j.URL)
 
 	if err != nil {
-		log.Println("could not find repo", repo)
+		log.Println("could not find repo", j.URL)
 		return
 	}
 
-	log.Println("Starting build process for", repo, branch)
+	log.Println("Starting build process for", j.URL, j.Branch)
 	for _, cmd := range config.Commands {
 		log.Println("Building", cmd.Name)
-		out, code := call(cmd.Execute, repo, branch)
-		job := b.Add(repo, branch, n.Commit(), cmd.Name, name, email, out, code)
-		go notification.Notify(c, job)
+		out, code := call(cmd.Execute, j.URL, j.Branch)
+		j.Command = cmd.Name
+		j.ReturnCode = code
+		j.Output = out
+		b.Add(j)
+		go notification.Notify(c, &j)
 	}
-	log.Println("Finished building", repo, branch)
+	log.Println("Finished building", j.URL, j.Branch)
 }
 
 // Call a build script and return the output.

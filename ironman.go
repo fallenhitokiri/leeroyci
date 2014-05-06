@@ -17,13 +17,13 @@ func main() {
 
 	c := config.FromFile(*cfgFlag)
 
-	not := make(chan callbacks.Notification, 100)
+	jobs := make(chan logging.Job, 100)
 	b := logging.Buildlog{}
 
-	go build.Build(not, &c, &b)
+	go build.Build(jobs, &c, &b)
 
 	http.HandleFunc("/callback/", func(w http.ResponseWriter, r *http.Request) {
-		callbacks.Callback(w, r, not)
+		callbacks.Callback(w, r, jobs)
 	})
 	log.Fatal(http.ListenAndServe(":8082", nil))
 

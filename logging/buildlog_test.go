@@ -6,7 +6,17 @@ import (
 
 func TestBuildlogAdd(t *testing.T) {
 	log := Buildlog{}
-	log.Add("url", "branch", "commit", "command", "name", "email", "output", nil)
+	job := Job{
+		URL:        "url",
+		Branch:     "branch",
+		Commit:     "commit",
+		Command:    "command",
+		Name:       "name",
+		Email:      "email",
+		Output:     "output",
+		ReturnCode: nil,
+	}
+	log.Add(job)
 
 	if len(log.Jobs) != 1 {
 		t.Error("build not added")

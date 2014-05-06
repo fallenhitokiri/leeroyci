@@ -1,7 +1,6 @@
 package build
 
 import (
-	"ironman/callbacks"
 	"ironman/config"
 	"ironman/logging"
 	"testing"
@@ -17,21 +16,6 @@ func TestCall(t *testing.T) {
 }
 
 func TestRun(t *testing.T) {
-	p := callbacks.GitUser{
-		Name:  "foo",
-		Email: "bar",
-	}
-
-	r := callbacks.Repository{
-		Url: "http://test.tld",
-	}
-
-	cb := callbacks.GitHubCallback{
-		Ref:        "a/b/master",
-		Repository: r,
-		Pusher:     p,
-	}
-
 	b := logging.Buildlog{}
 
 	cc := config.Command{
@@ -48,7 +32,18 @@ func TestRun(t *testing.T) {
 		Repositories: []config.Repository{cr},
 	}
 
-	run(&cb, &c, &b)
+	j := logging.Job{
+		URL:        "http://test.tld",
+		Branch:     "branch",
+		Commit:     "commit",
+		Command:    "command",
+		Name:       "name",
+		Email:      "email",
+		Output:     "output",
+		ReturnCode: nil,
+	}
+
+	run(j, &c, &b)
 
 	if len(b.Jobs) != 2 {
 		t.Error("Wrong number of jobs", len(b.Jobs))
