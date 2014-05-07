@@ -38,3 +38,28 @@ func TestSuccess(t *testing.T) {
 		t.Error("Returned no error for failed build")
 	}
 }
+
+func TestAddTask(t *testing.T) {
+	j := Job{}
+	task := Task{}
+
+	j.AddTask(task)
+
+	if len(j.Tasks) != 1 {
+		t.Error("Wrong length of task list", len(j.Tasks))
+	}
+}
+
+func TestTaskStatus(t *testing.T) {
+	task := Task{}
+
+	if task.Status() != "success" {
+		t.Error("Wrong status", task.Status())
+	}
+
+	task.Return = errors.New("foo")
+
+	if task.Status() == "success" {
+		t.Error("Wrong status", task.Status())
+	}
+}
