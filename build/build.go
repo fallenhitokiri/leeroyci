@@ -28,15 +28,23 @@ func run(j logging.Job, c *config.Config, b *logging.Buildlog) {
 	}
 
 	log.Println("Starting build process for", j.URL, j.Branch)
+
 	for _, cmd := range config.Commands {
 		log.Println("Building", cmd.Name)
-		out, code := call(cmd.Execute, j.URL, j.Branch)
-		j.Command = cmd.Name
-		j.ReturnCode = code
-		j.Output = out
-		b.Add(j)
-		go notification.Notify(c, &j)
+
+		o, c := call(cmd.Execute, j.URL, j.Branch)
+		t := logging.Task{
+			Command: cmd.Name,
+			Return:  c,
+			Output:  o,
+		}
+
+		j.AddTask(t)
 	}
+
+	b.Add(j)
+	go notification.Notify(c, &j)
+
 	log.Println("Finished building", j.URL, j.Branch)
 }
 

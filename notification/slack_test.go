@@ -12,12 +12,15 @@ func TestBuildSlack(t *testing.T) {
 		SlackChannel: "#devel",
 	}
 
+	task := logging.Task{
+		Return: errors.New("0"),
+	}
 	job := logging.Job{
-		URL:        "foo",
-		Branch:     "bar",
-		Name:       "baz",
-		Email:      "zab",
-		ReturnCode: errors.New("0"),
+		URL:    "foo",
+		Branch: "bar",
+		Name:   "baz",
+		Email:  "zab",
+		Tasks:  []logging.Task{task},
 	}
 
 	_, err := buildSlack(&c, &job)

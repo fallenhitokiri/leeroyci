@@ -6,15 +6,18 @@ import (
 
 func TestBuildlogAdd(t *testing.T) {
 	log := Buildlog{}
+	task := Task{
+		Command: "command",
+		Output:  "output",
+		Return:  nil,
+	}
 	job := Job{
-		URL:        "url",
-		Branch:     "branch",
-		Commit:     "commit",
-		Command:    "command",
-		Name:       "name",
-		Email:      "email",
-		Output:     "output",
-		ReturnCode: nil,
+		URL:    "url",
+		Branch: "branch",
+		Commit: "commit",
+		Name:   "name",
+		Email:  "email",
+		Tasks:  []Task{task},
 	}
 	log.Add(job)
 
@@ -36,16 +39,16 @@ func TestBuildlogAdd(t *testing.T) {
 		t.Error("wrong Commit", j.Commit)
 	}
 
-	if j.Command != "command" {
-		t.Error("wrong Command", j.Command)
+	if j.Tasks[0].Command != "command" {
+		t.Error("wrong Command", j.Tasks[0].Command)
 	}
 
-	if j.ReturnCode != nil {
-		t.Error("wrong ReturnCode", j.ReturnCode)
+	if j.Tasks[0].Return != nil {
+		t.Error("wrong ReturnCode", j.Tasks[0].Return)
 	}
 
-	if j.Output != "output" {
-		t.Error("wrong Output", j.Output)
+	if j.Tasks[0].Output != "output" {
+		t.Error("wrong Output", j.Tasks[0].Output)
 	}
 
 	if j.Name != "name" {

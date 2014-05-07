@@ -39,8 +39,7 @@ func buildSlack(c *config.Config, j *logging.Job) ([]byte, error) {
 	}
 
 	message := "Repo: " + j.URL + " Branch: " + j.Branch
-	message = message + " Command: " + j.Command + " Pushed by "
-	message = message + j.Name + " <" + j.Email + "> "
+	message = message + " Pushed by " + j.Name + " <" + j.Email + "> "
 
 	if j.Success() == true {
 		message = message + "build was successful"

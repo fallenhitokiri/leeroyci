@@ -12,7 +12,10 @@ func TestStatus(t *testing.T) {
 		t.Error("Wrong status", j.Status())
 	}
 
-	j.ReturnCode = errors.New("foo")
+	task := Task{
+		Return: errors.New("foo"),
+	}
+	j.Tasks = append(j.Tasks, task)
 
 	if j.Status() == "0" {
 		t.Error("Wrong status", j.Status())
@@ -26,7 +29,10 @@ func TestSuccess(t *testing.T) {
 		t.Error("Returned error for successful build")
 	}
 
-	j.ReturnCode = errors.New("foo")
+	task := Task{
+		Return: errors.New("foo"),
+	}
+	j.Tasks = append(j.Tasks, task)
 
 	if j.Success() == true {
 		t.Error("Returned no error for failed build")

@@ -33,19 +33,20 @@ func TestRun(t *testing.T) {
 	}
 
 	j := logging.Job{
-		URL:        "http://test.tld",
-		Branch:     "branch",
-		Commit:     "commit",
-		Command:    "command",
-		Name:       "name",
-		Email:      "email",
-		Output:     "output",
-		ReturnCode: nil,
+		URL:    "http://test.tld",
+		Branch: "branch",
+		Commit: "commit",
+		Name:   "name",
+		Email:  "email",
 	}
 
 	run(j, &c, &b)
 
-	if len(b.Jobs) != 2 {
+	if len(b.Jobs) != 1 {
 		t.Error("Wrong number of jobs", len(b.Jobs))
+	}
+
+	if len(b.Jobs[0].Tasks) != 2 {
+		t.Error("Wrong number of tasks", len(b.Jobs[0].Tasks))
 	}
 }

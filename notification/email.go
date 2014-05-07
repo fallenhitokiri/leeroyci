@@ -45,9 +45,13 @@ func buildEmail(c *config.Config, j *logging.Job) []byte {
 	body := "Repo: " + j.URL + "\n"
 	body = body + "Branch: " + j.Branch + "\n"
 	body = body + "Time: " + j.Timestamp.String() + "\n"
-	body = body + "Command: " + j.Command + "\n"
-	body = body + "Return Code: " + j.Status() + "\n\n"
-	body = body + "Output: \n" + j.Output + "\n"
+	body = body + "Return: " + j.Status() + "\n\n\n"
+
+	for _, t := range j.Tasks {
+		body = body + "Command: " + t.Command + "\n"
+		body = body + "Return: " + t.Status() + "\n\n"
+		body = body + "Output: \n" + t.Output + "\n\n\n"
+	}
 
 	message := addHeaders(from.String(), to.String(), subject, body)
 
