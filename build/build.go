@@ -39,7 +39,7 @@ func run(j logging.Job, c *config.Config, b *logging.Buildlog) {
 			Output:  o,
 		}
 
-		j.AddTask(t)
+		j.Add(t)
 	}
 
 	b.Add(j)
