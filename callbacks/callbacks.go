@@ -37,11 +37,6 @@ func Callback(rw http.ResponseWriter, req *http.Request, jobs chan logging.Job,
 func splitUrl(req *http.Request) (string, string) {
 	path := req.URL.Path[len("/callback/"):]
 
-	// remove slash at the end of the URL if necessary
-	if strings.HasSuffix(path, "/") {
-
-	}
-
 	k := strings.Split(path, "/")[0]
 	s := strings.Split(path, "/")[1]
 
