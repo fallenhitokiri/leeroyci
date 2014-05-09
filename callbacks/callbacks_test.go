@@ -6,23 +6,27 @@ import (
 	"testing"
 )
 
-func TestService(t *testing.T) {
+func TestSplitURL(t *testing.T) {
 	u := url.URL{
-		Path: "/callback/github",
+		Path: "/callback/foo/github",
 	}
 	req := http.Request{
 		URL: &u,
 	}
 
-	s := service(&req)
+	s, k := splitUrl(&req)
 
 	if s != "github" {
 		t.Error("service returned a wrong string", s)
 	}
 
-	u.Path = "/callback/github/"
+	if k != "foo" {
+		t.Error("wrong key", k)
+	}
 
-	s = service(&req)
+	u.Path = "/callback/foo/github/"
+
+	s, _ = splitUrl(&req)
 
 	if s != "github" {
 		t.Error("service returned a wrong string", s)

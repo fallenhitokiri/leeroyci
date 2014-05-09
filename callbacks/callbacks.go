@@ -10,14 +10,20 @@ import (
 	"strings"
 )
 
-func Callback(rw http.ResponseWriter, req *http.Request, jobs chan logging.Job) {
+func Callback(rw http.ResponseWriter, req *http.Request, jobs chan logging.Job,
+	secret string) {
 	body, err := ioutil.ReadAll(req.Body)
 
 	if err != nil {
 		panic("reading")
 	}
 
-	s := service(req)
+	s, k := splitUrl(req)
+
+	if k != secret {
+		log.Println("wrong key from", req.Host)
+		return
+	}
 
 	switch s {
 	case "github":
@@ -27,14 +33,17 @@ func Callback(rw http.ResponseWriter, req *http.Request, jobs chan logging.Job) 
 	}
 }
 
-// Returns the name of the service of the callback.
-func service(req *http.Request) string {
+// Returns the name of the service and the secret key.
+func splitUrl(req *http.Request) (string, string) {
 	path := req.URL.Path[len("/callback/"):]
 
 	// remove slash at the end of the URL if necessary
 	if strings.HasSuffix(path, "/") {
-		path = strings.Split(path, "/")[0]
+
 	}
 
-	return path
+	k := strings.Split(path, "/")[0]
+	s := strings.Split(path, "/")[1]
+
+	return s, k
 }
