@@ -8,6 +8,7 @@ import (
 
 type Config struct {
 	Secret        string
+	BuildLogPath  string
 	EmailFrom     string
 	EmailHost     string
 	EmailPort     int

@@ -18,9 +18,9 @@ func main() {
 	c := config.FromFile(*cfgFlag)
 
 	jobs := make(chan logging.Job, 100)
-	b := logging.Buildlog{}
+	b := logging.New(c.BuildLogPath)
 
-	go build.Build(jobs, &c, &b)
+	go build.Build(jobs, &c, b)
 
 	log.Println("Ironman up an running!")
 
