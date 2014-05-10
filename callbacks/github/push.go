@@ -1,4 +1,4 @@
-// Structs used to process a push
+// Structs and methods used to process a push.
 package github
 
 import (

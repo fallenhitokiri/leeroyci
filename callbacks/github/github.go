@@ -15,6 +15,8 @@ func Parse(jobs chan logging.Job, req *http.Request) {
 	switch e {
 	case "push":
 		handlePush(req, jobs)
+	case "pull_request":
+		handlePR(req)
 	default:
 		log.Println("event not supported", e)
 	}
@@ -25,7 +27,7 @@ func parseBody(req *http.Request) []byte {
 	b, err := ioutil.ReadAll(req.Body)
 
 	if err != nil {
-		panic("reading")
+		log.Println(err)
 	}
 
 	return b
