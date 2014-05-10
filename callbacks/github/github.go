@@ -1,5 +1,5 @@
 // GitHub provides all structs to unmarshal a GitHub webhook.
-package callbacks
+package github
 
 import (
 	"encoding/json"
@@ -98,7 +98,7 @@ func (g *GitHubCallback) Commit() string {
 }
 
 // Parse a GitHub request body and add it to the build queue.
-func parseGitHub(jobs chan logging.Job, body []byte) {
+func Parse(jobs chan logging.Job, body []byte) {
 	var cb GitHubCallback
 	err := json.Unmarshal(body, &cb)
 

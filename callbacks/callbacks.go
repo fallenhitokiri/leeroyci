@@ -4,6 +4,7 @@ package callbacks
 
 import (
 	"io/ioutil"
+	"ironman/callbacks/github"
 	"ironman/logging"
 	"log"
 	"net/http"
@@ -27,7 +28,7 @@ func Callback(rw http.ResponseWriter, req *http.Request, jobs chan logging.Job,
 
 	switch s {
 	case "github":
-		parseGitHub(jobs, body)
+		github.Parse(jobs, body)
 	default:
 		log.Println("serivce", s, "not supported")
 	}
