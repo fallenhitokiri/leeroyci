@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type GitHubCallback struct {
+type PushCallback struct {
 	Ref         string
 	After       string
 	Before      string
@@ -18,32 +18,32 @@ type GitHubCallback struct {
 	Deleted     bool
 	Forced      bool
 	Compare     string
-	Commits     []Commit
-	Head_commit Commit
-	Repository  Repository
-	Pusher      GitUser
+	Commits     []PushCommit
+	Head_commit PushCommit
+	Repository  PushRepository
+	Pusher      PushGitUser
 }
 
-type Commit struct {
+type PushCommit struct {
 	Id        string
 	Distinct  bool
 	Message   string
 	Timestamp string
 	Url       string
-	Author    GitHubUser
-	Committer GitHubUser
+	Author    PushGitHubUser
+	Committer PushGitHubUser
 	Added     []string
 	Removed   []string
 	Modified  []string
 }
 
-type GitHubUser struct {
+type PushGitHubUser struct {
 	Name     string
 	Email    string
 	Username string
 }
 
-type Repository struct {
+type PushRepository struct {
 	Id            int64
 	Name          string
 	Url           string
@@ -52,7 +52,7 @@ type Repository struct {
 	Stargazers    int
 	Forks         int
 	Size          int
-	Owner         GitUser
+	Owner         PushGitUser
 	Private       bool
 	Open_issues   int
 	Has_issues    bool
@@ -63,46 +63,46 @@ type Repository struct {
 	Master_branch string
 }
 
-type GitUser struct {
+type PushGitUser struct {
 	Name  string
 	Email string
 }
 
 // Branch returns the name of the branch.
-func (g *GitHubCallback) Branch() string {
-	s := strings.Split(g.Ref, "/")
+func (p *PushCallback) Branch() string {
+	s := strings.Split(p.Ref, "/")
 	return s[2]
 }
 
 // URL returns the URL for the repository
-func (g *GitHubCallback) URL() string {
-	return g.Repository.Url
+func (p *PushCallback) URL() string {
+	return p.Repository.Url
 }
 
 // By returns who pushed / triggered the callback. Format Name <email>.
-func (g *GitHubCallback) By() (string, string) {
-	return g.Pusher.Name, g.Pusher.Email
+func (p *PushCallback) By() (string, string) {
+	return p.Pusher.Name, p.Pusher.Email
 }
 
 // Returns if this commit should be build. Do not build if the branch was
 // deleted for example.
-func (g *GitHubCallback) ShouldBuild() bool {
-	if g.Deleted == true {
+func (p *PushCallback) ShouldBuild() bool {
+	if p.Deleted == true {
 		return false
 	}
 	return true
 }
 
 // Returns the ID of the head commit.
-func (g *GitHubCallback) Commit() string {
-	return g.Head_commit.Id
+func (p *PushCallback) Commit() string {
+	return p.Head_commit.Id
 }
 
 // Handle GitHub push events.
 func handlePush(req *http.Request, jobs chan logging.Job) {
 	b := parseBody(req)
 
-	var cb GitHubCallback
+	var cb PushCallback
 
 	err := json.Unmarshal(b, &cb)
 	if err != nil {
@@ -118,7 +118,7 @@ func handlePush(req *http.Request, jobs chan logging.Job) {
 }
 
 // Convert a callback to a loggin.Job and push it to the build queue.
-func pushToQueue(jobs chan logging.Job, cb GitHubCallback) {
+func pushToQueue(jobs chan logging.Job, cb PushCallback) {
 	name, email := cb.By()
 
 	j := logging.Job{
