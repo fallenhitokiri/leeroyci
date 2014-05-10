@@ -25,7 +25,7 @@ func main() {
 	log.Println("Ironman up an running!")
 
 	http.HandleFunc("/callback/", func(w http.ResponseWriter, r *http.Request) {
-		callbacks.Callback(w, r, jobs, c.Secret)
+		callbacks.Callback(w, r, jobs, c.Secret, b)
 	})
 	log.Fatal(http.ListenAndServe(":8082", nil))
 }

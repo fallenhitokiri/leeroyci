@@ -11,7 +11,7 @@ import (
 )
 
 func Callback(rw http.ResponseWriter, req *http.Request, jobs chan logging.Job,
-	secret string) {
+	secret string, blog *logging.Buildlog) {
 	s, k := splitUrl(req)
 
 	if k != secret {
@@ -21,7 +21,7 @@ func Callback(rw http.ResponseWriter, req *http.Request, jobs chan logging.Job,
 
 	switch s {
 	case "github":
-		github.Parse(jobs, req)
+		github.Parse(jobs, req, blog)
 	default:
 		log.Println("serivce", s, "not supported")
 	}

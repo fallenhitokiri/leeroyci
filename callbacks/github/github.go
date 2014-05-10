@@ -9,14 +9,14 @@ import (
 )
 
 // Parse a GitHub request body and add it to the build queue.
-func Parse(jobs chan logging.Job, req *http.Request) {
+func Parse(jobs chan logging.Job, req *http.Request, blog *logging.Buildlog) {
 	e := req.Header["X-Github-Event"][0]
 
 	switch e {
 	case "push":
 		handlePush(req, jobs)
 	case "pull_request":
-		handlePR(req)
+		handlePR(req, blog)
 	default:
 		log.Println("event not supported", e)
 	}

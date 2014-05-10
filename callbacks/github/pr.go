@@ -3,6 +3,7 @@ package github
 
 import (
 	"encoding/json"
+	"ironman/logging"
 	"log"
 	"net/http"
 )
@@ -18,10 +19,15 @@ type PRCallback struct {
 type PRPullRequest struct {
 	Url          string
 	Comments_url string
+	Head         PRCommit
+}
+
+type PRCommit struct {
+	Commit string `json:"sha"`
 }
 
 // Handle GitHub pull requests.
-func handlePR(req *http.Request) {
+func handlePR(req *http.Request, blog *logging.Buildlog) {
 	b := parseBody(req)
 
 	var pc PRCallback
@@ -32,5 +38,18 @@ func handlePR(req *http.Request) {
 		panic("Could not unmarshal request")
 	}
 
-	log.Println(pc)
+	go updatePR(pc, blog)
+}
+
+func updatePR(pc PRCallback, blog *logging.Buildlog) {
+	for {
+		<-blog.Done
+		for _, job := range blog.Jobs {
+			if job.Commit == pc.PR.Head.Commit {
+				PostPR("", job, pc)
+				ClosePR("", job, pc)
+				return
+			}
+		}
+	}
 }

@@ -10,6 +10,7 @@ import (
 type Buildlog struct {
 	Path string
 	Jobs []Job
+	Done chan bool
 }
 
 func New(path string) *Buildlog {
@@ -19,6 +20,8 @@ func New(path string) *Buildlog {
 
 	b.load()
 
+	b.Done = make(chan bool, 5)
+
 	return &b
 }
 
@@ -26,11 +29,12 @@ func New(path string) *Buildlog {
 func (b *Buildlog) Add(j Job) {
 	b.Jobs = append(b.Jobs, j)
 	b.persist()
+	b.Done <- true
 }
 
 // Save buildlog to disk.
 func (b *Buildlog) persist() {
-	bin, err := json.Marshal(&b)
+	bin, err := json.Marshal(&b.Jobs)
 
 	if err != nil {
 		log.Println(err)
@@ -52,5 +56,5 @@ func (b *Buildlog) load() {
 		return
 	}
 
-	json.Unmarshal(f, &b)
+	json.Unmarshal(f, &b.Jobs)
 }
