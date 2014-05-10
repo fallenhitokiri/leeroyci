@@ -2,7 +2,12 @@
 package github
 
 import (
+	"encoding/json"
+	"ironman/logging"
+	"log"
+	"net/http"
 	"strings"
+	"time"
 )
 
 type GitHubCallback struct {
@@ -91,4 +96,39 @@ func (g *GitHubCallback) ShouldBuild() bool {
 // Returns the ID of the head commit.
 func (g *GitHubCallback) Commit() string {
 	return g.Head_commit.Id
+}
+
+// Handle GitHub push events.
+func handlePush(req *http.Request, jobs chan logging.Job) {
+	b := parseBody(req)
+
+	var cb GitHubCallback
+
+	err := json.Unmarshal(b, &cb)
+	if err != nil {
+		log.Println(string(b))
+		panic("Could not unmarshal request")
+	}
+
+	if cb.ShouldBuild() == true {
+		pushToQueue(jobs, cb)
+	} else {
+		log.Println("Not adding", cb.URL(), cb.Branch(), "to build queue")
+	}
+}
+
+// Convert a callback to a loggin.Job and push it to the build queue.
+func pushToQueue(jobs chan logging.Job, cb GitHubCallback) {
+	name, email := cb.By()
+
+	j := logging.Job{
+		URL:       cb.URL(),
+		Branch:    cb.Branch(),
+		Timestamp: time.Now(),
+		Commit:    cb.Commit(),
+		Name:      name,
+		Email:     email,
+	}
+
+	jobs <- j
 }

@@ -3,7 +3,6 @@
 package callbacks
 
 import (
-	"io/ioutil"
 	"ironman/callbacks/github"
 	"ironman/logging"
 	"log"
@@ -13,12 +12,6 @@ import (
 
 func Callback(rw http.ResponseWriter, req *http.Request, jobs chan logging.Job,
 	secret string) {
-	body, err := ioutil.ReadAll(req.Body)
-
-	if err != nil {
-		panic("reading")
-	}
-
 	s, k := splitUrl(req)
 
 	if k != secret {
@@ -28,7 +21,7 @@ func Callback(rw http.ResponseWriter, req *http.Request, jobs chan logging.Job,
 
 	switch s {
 	case "github":
-		github.Parse(jobs, body)
+		github.Parse(jobs, req)
 	default:
 		log.Println("serivce", s, "not supported")
 	}

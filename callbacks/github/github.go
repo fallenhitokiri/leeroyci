@@ -2,36 +2,31 @@
 package github
 
 import (
-	"encoding/json"
+	"io/ioutil"
 	"ironman/logging"
 	"log"
-	"time"
+	"net/http"
 )
 
 // Parse a GitHub request body and add it to the build queue.
-func Parse(jobs chan logging.Job, body []byte) {
-	var cb GitHubCallback
-	err := json.Unmarshal(body, &cb)
+func Parse(jobs chan logging.Job, req *http.Request) {
+	e := req.Header["X-Github-Event"][0]
 
-	name, email := cb.By()
-
-	j := logging.Job{
-		URL:       cb.URL(),
-		Branch:    cb.Branch(),
-		Timestamp: time.Now(),
-		Commit:    cb.Commit(),
-		Name:      name,
-		Email:     email,
+	switch e {
+	case "push":
+		handlePush(req, jobs)
+	default:
+		log.Println("event not supported", e)
 	}
+}
+
+// Parse the body of a request.
+func parseBody(req *http.Request) []byte {
+	b, err := ioutil.ReadAll(req.Body)
 
 	if err != nil {
-		log.Println(string(body))
-		panic("Could not unmarshal request")
+		panic("reading")
 	}
 
-	if cb.ShouldBuild() == true {
-		jobs <- j
-	} else {
-		log.Println("Not adding", cb.URL(), cb.Branch(), "to build queue")
-	}
+	return b
 }
