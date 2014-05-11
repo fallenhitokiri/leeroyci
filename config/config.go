@@ -17,12 +17,15 @@ type Config struct {
 	SlackChannel  string
 	SlackEndpoint string
 	Repositories  []Repository
+	GitHubKey     string
 }
 
 type Repository struct {
-	URL      string
-	Commands []Command
-	Notify   []Notify
+	URL       string
+	Commands  []Command
+	Notify    []Notify
+	CommentPR bool
+	ClosePR   bool
 }
 
 type Command struct {
