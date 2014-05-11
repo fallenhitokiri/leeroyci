@@ -3,20 +3,22 @@ package github
 
 import (
 	"io/ioutil"
+	"ironman/config"
 	"ironman/logging"
 	"log"
 	"net/http"
 )
 
 // Parse a GitHub request body and add it to the build queue.
-func Parse(jobs chan logging.Job, req *http.Request, blog *logging.Buildlog) {
+func Parse(jobs chan logging.Job, req *http.Request, blog *logging.Buildlog,
+	c *config.Config) {
 	e := req.Header["X-Github-Event"][0]
 
 	switch e {
 	case "push":
 		handlePush(req, jobs)
 	case "pull_request":
-		handlePR(req, blog)
+		handlePR(req, blog, c)
 	default:
 		log.Println("event not supported", e)
 	}

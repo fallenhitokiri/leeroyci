@@ -4,6 +4,7 @@ package callbacks
 
 import (
 	"ironman/callbacks/github"
+	"ironman/config"
 	"ironman/logging"
 	"log"
 	"net/http"
@@ -11,17 +12,17 @@ import (
 )
 
 func Callback(rw http.ResponseWriter, req *http.Request, jobs chan logging.Job,
-	secret string, blog *logging.Buildlog) {
+	c *config.Config, blog *logging.Buildlog) {
 	s, k := splitUrl(req)
 
-	if k != secret {
+	if k != c.Secret {
 		log.Println("wrong key from", req.Host)
 		return
 	}
 
 	switch s {
 	case "github":
-		github.Parse(jobs, req, blog)
+		github.Parse(jobs, req, blog, c)
 	default:
 		log.Println("serivce", s, "not supported")
 	}
