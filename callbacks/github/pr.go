@@ -33,6 +33,8 @@ func handlePR(req *http.Request, blog *logging.Buildlog, c *config.Config) {
 
 	var pc PRCallback
 
+	log.Println("handling pull request", pc.Number)
+
 	err := json.Unmarshal(b, &pc)
 	if err != nil {
 		log.Println(string(b))
