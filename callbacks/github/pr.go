@@ -46,7 +46,6 @@ func handlePR(req *http.Request, blog *logging.Buildlog, c *config.Config) {
 
 func updatePR(pc PRCallback, blog *logging.Buildlog, c *config.Config) {
 	for {
-		<-blog.Done
 		for _, j := range blog.Jobs {
 			if j.Commit == pc.PR.Head.Commit {
 				r, err := c.ConfigForRepo(j.URL)
@@ -67,5 +66,6 @@ func updatePR(pc PRCallback, blog *logging.Buildlog, c *config.Config) {
 				return
 			}
 		}
+		<-blog.Done
 	}
 }
