@@ -11,6 +11,7 @@ import (
 
 func Status(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	blog *logging.Buildlog) {
+	blog.Sort()
 	t := template.New("status")
 	t, _ = t.Parse(templateStatus)
 	t.Execute(
