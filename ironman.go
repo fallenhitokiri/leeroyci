@@ -31,5 +31,11 @@ func main() {
 	http.HandleFunc("/status/", func(w http.ResponseWriter, r *http.Request) {
 		web.Status(w, r, &c, b)
 	})
+	http.HandleFunc("/status/repo/", func(w http.ResponseWriter, r *http.Request) {
+		web.Repo(w, r, &c, b)
+	})
+	http.HandleFunc("/status/branch/", func(w http.ResponseWriter, r *http.Request) {
+		web.Branch(w, r, &c, b)
+	})
 	log.Fatal(http.ListenAndServe(":8082", nil))
 }
