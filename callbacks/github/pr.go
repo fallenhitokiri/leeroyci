@@ -7,6 +7,7 @@ import (
 	"ironman/logging"
 	"log"
 	"net/http"
+	"runtime"
 )
 
 // TODO: parse full body, not just the fields needed
@@ -32,14 +33,14 @@ func handlePR(req *http.Request, blog *logging.Buildlog, c *config.Config) {
 	b := parseBody(req)
 
 	var pc PRCallback
-
-	log.Println("handling pull request", pc.Number)
-
 	err := json.Unmarshal(b, &pc)
+
 	if err != nil {
 		log.Println(string(b))
 		panic("Could not unmarshal request")
 	}
+
+	log.Println("handling pull request", pc.Number)
 
 	go updatePR(pc, blog, c)
 }
@@ -66,6 +67,6 @@ func updatePR(pc PRCallback, blog *logging.Buildlog, c *config.Config) {
 				return
 			}
 		}
-		<-blog.Done
+		runtime.Gosched()
 	}
 }

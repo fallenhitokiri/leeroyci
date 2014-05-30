@@ -6,6 +6,7 @@ import (
 	"ironman/callbacks"
 	"ironman/config"
 	"ironman/logging"
+	"ironman/web"
 	"log"
 	"net/http"
 )
@@ -26,6 +27,9 @@ func main() {
 
 	http.HandleFunc("/callback/", func(w http.ResponseWriter, r *http.Request) {
 		callbacks.Callback(w, r, jobs, &c, b)
+	})
+	http.HandleFunc("/status/", func(w http.ResponseWriter, r *http.Request) {
+		web.Status(w, r, &c, b)
 	})
 	log.Fatal(http.ListenAndServe(":8082", nil))
 }
