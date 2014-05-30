@@ -39,7 +39,7 @@ func ClosePR(token string, job logging.Job, pc PRCallback) {
 	client := &http.Client{}
 	r, err := http.NewRequest(
 		"PATCH",
-		pc.PR.Comments_url,
+		pc.PR.Url,
 		bytes.NewReader(m),
 	)
 
