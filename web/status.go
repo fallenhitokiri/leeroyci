@@ -26,7 +26,7 @@ func Status(rw http.ResponseWriter, req *http.Request, c *config.Config,
 
 func Repo(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	blog *logging.Buildlog) {
-	r := splitRepo(req.URL.Path)
+	r := splitFirst(req.URL.Path)
 
 	j := blog.JobsForRepo(r)
 
@@ -42,8 +42,8 @@ func Repo(rw http.ResponseWriter, req *http.Request, c *config.Config,
 
 func Branch(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	blog *logging.Buildlog) {
-	r := splitRepo(req.URL.Path)
-	b := splitBranch(req.URL.Path)
+	r := splitFirst(req.URL.Path)
+	b := splitSecond(req.URL.Path)
 
 	j := blog.JobsForRepoBranch(r, b)
 
@@ -59,8 +59,8 @@ func Branch(rw http.ResponseWriter, req *http.Request, c *config.Config,
 
 func Commit(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	blog *logging.Buildlog) {
-	r := splitRepo(req.URL.Path)
-	co := splitBranch(req.URL.Path)
+	r := splitFirst(req.URL.Path)
+	co := splitSecond(req.URL.Path)
 
 	j := blog.JobByCommit(r, co)
 
@@ -69,8 +69,9 @@ func Commit(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	t.Execute(rw, j)
 }
 
-// Splits a request path and returns the repo name.
-func splitRepo(path string) string {
+// Splits a request path and returns the first part after the endpoint.
+// This is usually the hex string of the repository.
+func splitFirst(path string) string {
 	s := strings.Split(path, "/")[3]
 	r, err := hex.DecodeString(s)
 
@@ -81,7 +82,8 @@ func splitRepo(path string) string {
 	return string(r)
 }
 
-// Splits a request path and returns the branch name.
-func splitBranch(path string) string {
+// Splits a request path and returns the first part after the endpoint.
+// This is likely the branch name or commit sha1.
+func splitSecond(path string) string {
 	return strings.Split(path, "/")[4]
 }
