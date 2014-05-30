@@ -42,7 +42,31 @@ func Repo(rw http.ResponseWriter, req *http.Request, c *config.Config,
 
 func Branch(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	blog *logging.Buildlog) {
-	log.Println("branch")
+	r := splitRepo(req.URL.Path)
+	b := splitBranch(req.URL.Path)
+
+	j := blog.JobsForRepoBranch(r, b)
+
+	t := template.New("status")
+	t, _ = t.Parse(templateStatus)
+	t.Execute(
+		rw,
+		map[string]interface{}{
+			"Jobs": j,
+		},
+	)
+}
+
+func Commit(rw http.ResponseWriter, req *http.Request, c *config.Config,
+	blog *logging.Buildlog) {
+	r := splitRepo(req.URL.Path)
+	co := splitBranch(req.URL.Path)
+
+	j := blog.JobByCommit(r, co)
+
+	t := template.New("status")
+	t, _ = t.Parse(templateSingle)
+	t.Execute(rw, j)
 }
 
 // Splits a request path and returns the repo name.
@@ -55,4 +79,9 @@ func splitRepo(path string) string {
 	}
 
 	return string(r)
+}
+
+// Splits a request path and returns the branch name.
+func splitBranch(path string) string {
+	return strings.Split(path, "/")[4]
 }

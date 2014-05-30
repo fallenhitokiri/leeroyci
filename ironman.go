@@ -37,5 +37,8 @@ func main() {
 	http.HandleFunc("/status/branch/", func(w http.ResponseWriter, r *http.Request) {
 		web.Branch(w, r, &c, b)
 	})
+	http.HandleFunc("/status/commit/", func(w http.ResponseWriter, r *http.Request) {
+		web.Commit(w, r, &c, b)
+	})
 	log.Fatal(http.ListenAndServe(":8082", nil))
 }

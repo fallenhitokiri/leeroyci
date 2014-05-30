@@ -12,3 +12,12 @@ func TestSplitRepo(t *testing.T) {
 		t.Error("Wrong repo", r)
 	}
 }
+
+func TestSplitBranch(t *testing.T) {
+	p := "/status/repo/a/foo/"
+	b := splitBranch(p)
+
+	if b != "foo" {
+		t.Error("Wrong repo", b)
+	}
+}
