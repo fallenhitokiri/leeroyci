@@ -84,6 +84,11 @@ func (p *PushCallback) By() (string, string) {
 	return p.Pusher.Name, p.Pusher.Email
 }
 
+// CommitURL returns the URL to the head commit
+func (p *PushCallback) CommitURL() string {
+	return p.Head_commit.Url
+}
+
 // Returns if this commit should be build. Do not build if the branch was
 // deleted for example.
 func (p *PushCallback) ShouldBuild() bool {
@@ -128,6 +133,7 @@ func pushToQueue(jobs chan logging.Job, cb PushCallback) {
 		Commit:    cb.Commit(),
 		Name:      name,
 		Email:     email,
+		CommitURL: cb.CommitURL(),
 	}
 
 	jobs <- j

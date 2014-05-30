@@ -10,6 +10,7 @@ type Job struct {
 	URL       string
 	Branch    string
 	Commit    string
+	CommitURL string
 	Timestamp time.Time
 	Name      string
 	Email     string
