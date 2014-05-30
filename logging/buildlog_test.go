@@ -6,7 +6,6 @@ import (
 
 func TestBuildlogAdd(t *testing.T) {
 	log := Buildlog{}
-	log.Done = make(chan bool, 5)
 
 	task := Task{
 		Command: "command",

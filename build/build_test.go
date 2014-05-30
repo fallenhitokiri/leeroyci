@@ -17,7 +17,6 @@ func TestCall(t *testing.T) {
 
 func TestRun(t *testing.T) {
 	b := logging.Buildlog{}
-	b.Done = make(chan bool, 5)
 
 	cc := config.Command{
 		Name:    "cmd",
