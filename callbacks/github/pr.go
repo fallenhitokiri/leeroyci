@@ -42,7 +42,9 @@ func handlePR(req *http.Request, blog *logging.Buildlog, c *config.Config) {
 
 	log.Println("handling pull request", pc.Number)
 
-	go updatePR(pc, blog, c)
+	if pc.Action == "opened" || pc.Action == "synchronize" {
+		go updatePR(pc, blog, c)
+	}
 }
 
 func updatePR(pc PRCallback, blog *logging.Buildlog, c *config.Config) {
