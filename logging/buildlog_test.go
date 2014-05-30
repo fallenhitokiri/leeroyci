@@ -92,3 +92,67 @@ func TestBuildlogSorted(t *testing.T) {
 		t.Error("wrong URL", log.Jobs[1].URL)
 	}
 }
+
+func TestBuildlogJobsForRepo(t *testing.T) {
+	log := Buildlog{}
+	j1 := Job{
+		URL:       "url",
+		Branch:    "branch",
+		Commit:    "commit",
+		Name:      "name",
+		Email:     "email",
+		Timestamp: time.Now(),
+	}
+	j2 := Job{
+		URL:       "lur",
+		Branch:    "branch",
+		Commit:    "commit",
+		Name:      "name",
+		Email:     "email",
+		Timestamp: time.Now(),
+	}
+	log.Add(j1)
+	log.Add(j2)
+
+	j := log.JobsForRepo("url")
+
+	if len(j) != 1 {
+		t.Error("Wrong length", len(j))
+	}
+
+	if j[0].URL != "url" {
+		t.Error("Wrong URL", j[0].URL)
+	}
+}
+
+func TestBuildlogJobsForRepoBranch(t *testing.T) {
+	log := Buildlog{}
+	j1 := Job{
+		URL:       "url",
+		Branch:    "foo",
+		Commit:    "commit",
+		Name:      "name",
+		Email:     "email",
+		Timestamp: time.Now(),
+	}
+	j2 := Job{
+		URL:       "url",
+		Branch:    "branch",
+		Commit:    "commit",
+		Name:      "name",
+		Email:     "email",
+		Timestamp: time.Now(),
+	}
+	log.Add(j1)
+	log.Add(j2)
+
+	j := log.JobsForRepoBranch("url", "foo")
+
+	if len(j) != 1 {
+		t.Error("Wrong length", len(j))
+	}
+
+	if j[0].Branch != "foo" {
+		t.Error("Wrong branch", j[0].Branch)
+	}
+}
