@@ -125,3 +125,18 @@ func (b *Buildlog) JobsForRepoBranch(repo, branch string) []Job {
 
 	return jobs
 }
+
+// Returns commit for a repo.
+func (b *Buildlog) JobByCommit(repo, commit string) Job {
+	jobs := b.JobsForRepo(repo)
+	job := Job{}
+
+	for _, j := range jobs {
+		if j.Commit == commit {
+			job = j
+			break
+		}
+	}
+
+	return job
+}

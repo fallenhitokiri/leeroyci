@@ -156,3 +156,31 @@ func TestBuildlogJobsForRepoBranch(t *testing.T) {
 		t.Error("Wrong branch", j[0].Branch)
 	}
 }
+
+func TestBuildlogJobByCommit(t *testing.T) {
+	log := Buildlog{}
+	j1 := Job{
+		URL:       "url",
+		Branch:    "foo",
+		Commit:    "commit1",
+		Name:      "name",
+		Email:     "email",
+		Timestamp: time.Now(),
+	}
+	j2 := Job{
+		URL:       "url",
+		Branch:    "branch",
+		Commit:    "commit2",
+		Name:      "name",
+		Email:     "email",
+		Timestamp: time.Now(),
+	}
+	log.Add(j1)
+	log.Add(j2)
+
+	j := log.JobByCommit("url", "commit1")
+
+	if j.Branch != "foo" {
+		t.Error("Wrong branch", j.Branch)
+	}
+}
