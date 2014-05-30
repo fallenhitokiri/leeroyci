@@ -2,6 +2,7 @@ package logging
 
 import (
 	"testing"
+	"time"
 )
 
 func TestBuildlogAdd(t *testing.T) {
@@ -57,5 +58,37 @@ func TestBuildlogAdd(t *testing.T) {
 
 	if j.Email != "email" {
 		t.Error("wrong Email", j.Email)
+	}
+}
+
+func TestBuildlogSorted(t *testing.T) {
+	log := Buildlog{}
+	j1 := Job{
+		URL:       "url",
+		Branch:    "branch",
+		Commit:    "commit",
+		Name:      "name",
+		Email:     "email",
+		Timestamp: time.Now(),
+	}
+	j2 := Job{
+		URL:       "lur",
+		Branch:    "branch",
+		Commit:    "commit",
+		Name:      "name",
+		Email:     "email",
+		Timestamp: time.Now(),
+	}
+	log.Add(j1)
+	log.Add(j2)
+
+	log.Sort()
+
+	if log.Jobs[0].URL != j2.URL {
+		t.Error("wrong URL", log.Jobs[0].URL)
+	}
+
+	if log.Jobs[1].URL != j1.URL {
+		t.Error("wrong URL", log.Jobs[1].URL)
 	}
 }
