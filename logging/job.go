@@ -21,8 +21,8 @@ func (j *Job) Status() string {
 	code := "0"
 
 	for _, task := range j.Tasks {
-		if task.Return != nil {
-			return task.Return.Error()
+		if task.Return != "" {
+			return task.Return
 		}
 	}
 

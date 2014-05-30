@@ -1,7 +1,6 @@
 package notification
 
 import (
-	"errors"
 	"ironman/config"
 	"ironman/logging"
 	"testing"
@@ -13,7 +12,7 @@ func TestBuildSlack(t *testing.T) {
 	}
 
 	task := logging.Task{
-		Return: errors.New("0"),
+		Return: "",
 	}
 	job := logging.Job{
 		URL:    "foo",

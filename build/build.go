@@ -35,8 +35,11 @@ func run(j logging.Job, c *config.Config, b *logging.Buildlog) {
 		o, c := call(cmd.Execute, j.URL, j.Branch)
 		t := logging.Task{
 			Command: cmd.Name,
-			Return:  c,
 			Output:  o,
+		}
+
+		if c != nil {
+			t.Return = c.Error()
 		}
 
 		j.Add(t)

@@ -1,7 +1,6 @@
 package logging
 
 import (
-	"errors"
 	"testing"
 )
 
@@ -13,7 +12,7 @@ func TestJobStatus(t *testing.T) {
 	}
 
 	task := Task{
-		Return: errors.New("foo"),
+		Return: "foo",
 	}
 	j.Tasks = append(j.Tasks, task)
 
@@ -30,7 +29,7 @@ func TestSuccess(t *testing.T) {
 	}
 
 	task := Task{
-		Return: errors.New("foo"),
+		Return: "foo",
 	}
 	j.Tasks = append(j.Tasks, task)
 

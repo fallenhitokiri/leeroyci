@@ -10,7 +10,6 @@ func TestBuildlogAdd(t *testing.T) {
 	task := Task{
 		Command: "command",
 		Output:  "output",
-		Return:  nil,
 	}
 	job := Job{
 		URL:    "url",
@@ -44,7 +43,7 @@ func TestBuildlogAdd(t *testing.T) {
 		t.Error("wrong Command", j.Tasks[0].Command)
 	}
 
-	if j.Tasks[0].Return != nil {
+	if j.Tasks[0].Return != "" {
 		t.Error("wrong ReturnCode", j.Tasks[0].Return)
 	}
 

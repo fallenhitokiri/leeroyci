@@ -3,7 +3,7 @@ package logging
 
 type Task struct {
 	Command string
-	Return  error
+	Return  string
 	Output  string
 }
 
@@ -12,8 +12,8 @@ type Task struct {
 func (t *Task) Status() string {
 	code := "success"
 
-	if t.Return != nil {
-		return t.Return.Error()
+	if t.Return != "" {
+		return t.Return
 	}
 
 	return code
