@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// View that shows all builds ever done.
 func Status(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	blog *logging.Buildlog) {
 	blog.Sort()
@@ -24,6 +25,7 @@ func Status(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	)
 }
 
+// View to show builds for a specific repository.
 func Repo(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	blog *logging.Buildlog) {
 	r := splitFirst(req.URL.Path)
@@ -40,6 +42,7 @@ func Repo(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	)
 }
 
+// View to show builds for a specific repository and branch.
 func Branch(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	blog *logging.Buildlog) {
 	r := splitFirst(req.URL.Path)
@@ -57,6 +60,7 @@ func Branch(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	)
 }
 
+// View to show the build for a commit in a repository.
 func Commit(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	blog *logging.Buildlog) {
 	r := splitFirst(req.URL.Path)
