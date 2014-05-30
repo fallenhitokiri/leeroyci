@@ -65,7 +65,7 @@ func updatePR(pc PRCallback, blog *logging.Buildlog, c *config.Config) {
 				}
 
 				if r.CommentPR {
-					PostPR(c.GitHubKey, j, pc)
+					PostPR(c, j, pc)
 				}
 
 				if r.ClosePR {

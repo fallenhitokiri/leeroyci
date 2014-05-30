@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
+	"ironman/config"
 	"ironman/logging"
 	"log"
 	"net/http"
@@ -14,23 +15,26 @@ type Comment struct {
 }
 
 // Returns a new Comment with the status of the job as body.
-func newComment(job logging.Job) Comment {
+func newComment(job logging.Job, base string) Comment {
 	c := Comment{}
 
 	if job.Success() {
 		c.Body = "build successful"
 	} else {
-		c.Body = "build failed"
+		c.Body = "build failed - <a href='"
+		c.Body = c.Body + base + "status/commit/"
+		c.Body = c.Body + job.Hex() + "/" + job.Commit
+		c.Body = c.Body + "'>show log</a>"
 	}
 
 	return c
 }
 
 // Post a new comment on a pull request
-func PostPR(token string, job logging.Job, pc PRCallback) {
-	c := newComment(job)
+func PostPR(c *config.Config, job logging.Job, pc PRCallback) {
+	comment := newComment(job, c.URL)
 
-	m, err := json.Marshal(&c)
+	m, err := json.Marshal(&comment)
 
 	if err != nil {
 		log.Println(err)
@@ -49,7 +53,7 @@ func PostPR(token string, job logging.Job, pc PRCallback) {
 		return
 	}
 
-	t := base64.URLEncoding.EncodeToString([]byte(token))
+	t := base64.URLEncoding.EncodeToString([]byte(c.GitHubKey))
 
 	r.Header.Add("content-type", "application/json")
 	r.Header.Add("Authorization", "Basic "+t)

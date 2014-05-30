@@ -18,6 +18,7 @@ type Config struct {
 	SlackEndpoint string
 	Repositories  []Repository
 	GitHubKey     string
+	URL           string
 }
 
 type Repository struct {
