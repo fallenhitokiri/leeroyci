@@ -30,7 +30,7 @@ func newComment(job logging.Job, base string) Comment {
 	return c
 }
 
-// Post a new comment on a pull request
+// Post a new comment on a pull request.
 func PostPR(c *config.Config, job logging.Job, pc PRCallback) {
 	comment := newComment(job, c.URL)
 
