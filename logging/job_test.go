@@ -48,3 +48,15 @@ func TestAdd(t *testing.T) {
 		t.Error("Wrong length of task list", len(j.Tasks))
 	}
 }
+
+func TestMD5(t *testing.T) {
+	j := Job{
+		URL: "https://github.com/fallenhitokiri/pushtest",
+	}
+
+	hex := "68747470733a2f2f6769746875622e636f6d2f66616c6c656e6869746f6b6972692f7075736874657374"
+
+	if j.Hex() != hex {
+		t.Error("Wrong hex", j.Hex())
+	}
+}

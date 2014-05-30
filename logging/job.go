@@ -2,6 +2,7 @@
 package logging
 
 import (
+	"encoding/hex"
 	"time"
 )
 
@@ -40,4 +41,9 @@ func (j *Job) Success() bool {
 // Add a task to the job.
 func (j *Job) Add(t Task) {
 	j.Tasks = append(j.Tasks, t)
+}
+
+// Returns the URL in hex
+func (j *Job) Hex() string {
+	return hex.EncodeToString([]byte(j.URL))
 }
