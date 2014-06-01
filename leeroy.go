@@ -13,13 +13,6 @@ import (
 
 var cfgFlag = flag.String("config", "leeroy.json", "JSON formatted config")
 
-func makeHandler(fn func(http.ResponseWriter, *http.Request)) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println(r)
-		fn(w, r)
-	}
-}
-
 func main() {
 	flag.Parse()
 
@@ -32,12 +25,12 @@ func main() {
 
 	log.Println("leeroy up an running!")
 
-	http.HandleFunc("/callback/", makeHandler(func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/callback/", web.Auth(func(w http.ResponseWriter, r *http.Request) {
 		callbacks.Callback(w, r, jobs, &c, b)
-	}))
-	http.HandleFunc("/status/", makeHandler(func(w http.ResponseWriter, r *http.Request) {
+	}, c.Secret))
+	http.HandleFunc("/status/", func(w http.ResponseWriter, r *http.Request) {
 		web.Status(w, r, &c, b)
-	}))
+	})
 	http.HandleFunc("/status/repo/", func(w http.ResponseWriter, r *http.Request) {
 		web.Repo(w, r, &c, b)
 	})
