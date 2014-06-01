@@ -15,14 +15,8 @@ import (
 func Status(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	blog *logging.Buildlog) {
 	blog.Sort()
-	t := template.New("status")
-	t, _ = t.Parse(standard)
-	t.Execute(
-		rw,
-		map[string]interface{}{
-			"Jobs": blog.Jobs,
-		},
-	)
+
+	render(rw, blog.Jobs)
 }
 
 // View to show builds for a specific repository.
@@ -32,14 +26,7 @@ func Repo(rw http.ResponseWriter, req *http.Request, c *config.Config,
 
 	j := blog.JobsForRepo(r)
 
-	t := template.New("status")
-	t, _ = t.Parse(standard)
-	t.Execute(
-		rw,
-		map[string]interface{}{
-			"Jobs": j,
-		},
-	)
+	render(rw, j)
 }
 
 // View to show builds for a specific repository and branch.
@@ -50,14 +37,7 @@ func Branch(rw http.ResponseWriter, req *http.Request, c *config.Config,
 
 	j := blog.JobsForRepoBranch(r, b)
 
-	t := template.New("status")
-	t, _ = t.Parse(standard)
-	t.Execute(
-		rw,
-		map[string]interface{}{
-			"Jobs": j,
-		},
-	)
+	render(rw, j)
 }
 
 // View to show the build for a commit in a repository.
@@ -68,12 +48,17 @@ func Commit(rw http.ResponseWriter, req *http.Request, c *config.Config,
 
 	j := blog.JobByCommit(r, co)
 
+	render(rw, []logging.Job{j})
+}
+
+// Get a template and execute it.
+func render(rw http.ResponseWriter, jobs []logging.Job) {
 	t := template.New("status")
 	t, _ = t.Parse(standard)
 	t.Execute(
 		rw,
 		map[string]interface{}{
-			"Jobs": []logging.Job{j},
+			"Jobs": jobs,
 		},
 	)
 }
