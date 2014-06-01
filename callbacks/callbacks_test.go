@@ -8,7 +8,7 @@ import (
 
 func TestSplitURL(t *testing.T) {
 	u := url.URL{
-		Path: "/callback/foo/github",
+		Path: "/callback/github/foo",
 	}
 	req := http.Request{
 		URL: &u,
@@ -24,7 +24,7 @@ func TestSplitURL(t *testing.T) {
 		t.Error("wrong key", k)
 	}
 
-	u.Path = "/callback/foo/github/"
+	u.Path = "/callback/github/foo/"
 
 	s, _ = splitUrl(&req)
 

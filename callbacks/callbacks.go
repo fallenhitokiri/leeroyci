@@ -31,8 +31,8 @@ func Callback(rw http.ResponseWriter, req *http.Request, jobs chan logging.Job,
 // Returns the name of the service and the secret key.
 func splitUrl(req *http.Request) (string, string) {
 	split := strings.Split(req.URL.Path, "/")
-	k := split[2]
-	s := split[3]
+	s := split[2]
+	k := split[3]
 
 	return s, k
 }
