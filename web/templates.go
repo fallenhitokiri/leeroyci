@@ -27,7 +27,7 @@ var standard = `
                 <div class="panel-body">
                     {{range .Tasks}}
                     <h6>{{.Command}} {{if .Return}}- {{.Return}}{{end}}</h6>
-                    <p><code>{{.Output}}</code></p>
+                    <pre><code>{{.Output}}</code></pre>
                     {{end}}
                 </div>
                 <div class="panel-footer">
