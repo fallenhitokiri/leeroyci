@@ -16,7 +16,7 @@ func Status(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	blog *logging.Buildlog) {
 	blog.Sort()
 	t := template.New("status")
-	t, _ = t.Parse(templateStatus)
+	t, _ = t.Parse(standard)
 	t.Execute(
 		rw,
 		map[string]interface{}{
@@ -33,7 +33,7 @@ func Repo(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	j := blog.JobsForRepo(r)
 
 	t := template.New("status")
-	t, _ = t.Parse(templateStatus)
+	t, _ = t.Parse(standard)
 	t.Execute(
 		rw,
 		map[string]interface{}{
@@ -51,7 +51,7 @@ func Branch(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	j := blog.JobsForRepoBranch(r, b)
 
 	t := template.New("status")
-	t, _ = t.Parse(templateStatus)
+	t, _ = t.Parse(standard)
 	t.Execute(
 		rw,
 		map[string]interface{}{
@@ -69,8 +69,13 @@ func Commit(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	j := blog.JobByCommit(r, co)
 
 	t := template.New("status")
-	t, _ = t.Parse(templateSingle)
-	t.Execute(rw, j)
+	t, _ = t.Parse(standard)
+	t.Execute(
+		rw,
+		map[string]interface{}{
+			"Jobs": []logging.Job{j},
+		},
+	)
 }
 
 // Splits a request path and returns the first part after the endpoint.
