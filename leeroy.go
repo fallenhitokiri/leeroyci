@@ -2,16 +2,16 @@ package main
 
 import (
 	"flag"
-	"ironman/build"
-	"ironman/callbacks"
-	"ironman/config"
-	"ironman/logging"
-	"ironman/web"
+	"leeroy/build"
+	"leeroy/callbacks"
+	"leeroy/config"
+	"leeroy/logging"
+	"leeroy/web"
 	"log"
 	"net/http"
 )
 
-var cfgFlag = flag.String("config", "ironman.json", "JSON formatted config")
+var cfgFlag = flag.String("config", "leeroy.json", "JSON formatted config")
 
 func main() {
 	flag.Parse()
@@ -23,7 +23,7 @@ func main() {
 
 	go build.Build(jobs, &c, b)
 
-	log.Println("Ironman up an running!")
+	log.Println("leeroy up an running!")
 
 	http.HandleFunc("/callback/", func(w http.ResponseWriter, r *http.Request) {
 		callbacks.Callback(w, r, jobs, &c, b)

@@ -3,9 +3,9 @@
 package callbacks
 
 import (
-	"ironman/callbacks/github"
-	"ironman/config"
-	"ironman/logging"
+	"leeroy/callbacks/github"
+	"leeroy/config"
+	"leeroy/logging"
 	"log"
 	"net/http"
 	"strings"

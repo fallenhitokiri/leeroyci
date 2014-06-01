@@ -2,9 +2,9 @@
 package build
 
 import (
-	"ironman/config"
-	"ironman/logging"
-	"ironman/notification"
+	"leeroy/config"
+	"leeroy/logging"
+	"leeroy/notification"
 	"log"
 	"os/exec"
 )

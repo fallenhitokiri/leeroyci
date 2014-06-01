@@ -3,7 +3,7 @@ package github
 import (
 	"bytes"
 	"encoding/json"
-	"ironman/logging"
+	"leeroy/logging"
 	"net/http"
 	"testing"
 )

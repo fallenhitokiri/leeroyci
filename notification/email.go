@@ -4,8 +4,8 @@ package notification
 import (
 	"encoding/base64"
 	"fmt"
-	"ironman/config"
-	"ironman/logging"
+	"leeroy/config"
+	"leeroy/logging"
 	"log"
 	"net/mail"
 	"net/smtp"
@@ -31,7 +31,7 @@ func email(c *config.Config, j *logging.Job, to string) {
 
 // Notify the person who pushed the changes
 func buildEmail(c *config.Config, j *logging.Job) []byte {
-	from := mail.Address{"Ironman", c.EmailFrom}
+	from := mail.Address{"leeroy", c.EmailFrom}
 	to := mail.Address{j.Name, j.Email}
 
 	subject := "Build for " + j.Branch + " finished "

@@ -3,8 +3,8 @@ package github
 
 import (
 	"io/ioutil"
-	"ironman/config"
-	"ironman/logging"
+	"leeroy/config"
+	"leeroy/logging"
 	"log"
 	"net/http"
 )

@@ -4,8 +4,8 @@ package notification
 import (
 	"bytes"
 	"encoding/json"
-	"ironman/config"
-	"ironman/logging"
+	"leeroy/config"
+	"leeroy/logging"
 	"log"
 	"net/http"
 )

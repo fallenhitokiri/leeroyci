@@ -2,8 +2,8 @@
 package notification
 
 import (
-	"ironman/config"
-	"ironman/logging"
+	"leeroy/config"
+	"leeroy/logging"
 	"log"
 )
 
