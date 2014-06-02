@@ -3,6 +3,7 @@ package logging
 
 import (
 	"encoding/hex"
+	"fmt"
 	"time"
 )
 
@@ -47,4 +48,9 @@ func (j *Job) Add(t Task) {
 // Returns the URL in hex
 func (j *Job) Hex() string {
 	return hex.EncodeToString([]byte(j.URL))
+}
+
+// Returns the URL for the webinterface
+func (j *Job) StatusURL(base string) string {
+	return fmt.Sprintf("%sstatus/commit/%s/%s", base, j.Hex(), j.Commit)
 }
