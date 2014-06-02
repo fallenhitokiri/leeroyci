@@ -31,49 +31,61 @@ func email(c *config.Config, j *logging.Job, to string) {
 
 // Notify the person who pushed the changes
 func buildEmail(c *config.Config, j *logging.Job) []byte {
-	from := mail.Address{"leeroy", c.EmailFrom}
-	to := mail.Address{j.Name, j.Email}
-
-	subject := "Build for " + j.Branch + " finished "
-
-	if j.Success() == true {
-		subject = subject + "successfully"
-	} else {
-		subject = subject + "with errors"
-	}
-
-	body := "Repo: " + j.URL + "\n"
-	body = body + "Branch: " + j.Branch + "\n"
-	body = body + "Time: " + j.Timestamp.String() + "\n"
-	body = body + "Return: " + j.Status() + "\n\n\n"
-
-	for _, t := range j.Tasks {
-		body = body + "Command: " + t.Command + "\n"
-		body = body + "Return: " + t.Status() + "\n\n"
-		body = body + "Output: \n" + t.Output + "\n\n\n"
-	}
-
-	message := addHeaders(from.String(), to.String(), subject, body)
-
-	return message
+	f := mail.Address{"leeroy", c.EmailFrom}
+	t := mail.Address{j.Name, j.Email}
+	s := subject(j)
+	b := body(j, c.URL)
+	m := addHeaders(f.String(), t.String(), s, b)
+	return m
 }
 
 // Build a string to be used as argument for net/smtp to send as mail.
 func addHeaders(from, to, subject, body string) []byte {
-	header := make(map[string]string)
-	header["From"] = from
-	header["To"] = to
-	header["Subject"] = subject
-	header["MIME-Version"] = "1.0"
-	header["Content-Type"] = "text/plain; charset=\"utf-8\""
-	header["Content-Transfer-Encoding"] = "base64"
+	h := make(map[string]string)
+	h["From"] = from
+	h["To"] = to
+	h["Subject"] = subject
+	h["MIME-Version"] = "1.0"
+	h["Content-Type"] = "text/plain; charset=\"utf-8\""
+	h["Content-Transfer-Encoding"] = "base64"
 
-	message := ""
+	m := ""
 
-	for k, v := range header {
-		message += fmt.Sprintf("%s: %s\r\n", k, v)
+	for k, v := range h {
+		m += fmt.Sprintf("%s: %s\r\n", k, v)
 	}
-	message += "\r\n" + base64.StdEncoding.EncodeToString([]byte(body))
+	m += "\r\n" + base64.StdEncoding.EncodeToString([]byte(body))
 
-	return []byte(message)
+	return []byte(m)
+}
+
+// Returns the subject for the mail.
+func subject(j *logging.Job) string {
+	if j.Success() == true {
+		return fmt.Sprintf("Build for %s finished successfully", j.Branch)
+	}
+	return fmt.Sprintf("Build for %s finished with errors", j.Branch)
+}
+
+// Returns the body for the mail.
+func body(j *logging.Job, u string) string {
+	b := fmt.Sprintf(
+		"Repo: %s - Branch: %s\nTime: %s\nReturn: %s\n\n\n",
+		j.URL,
+		j.Branch,
+		j.Timestamp.String(),
+		j.Status(),
+	)
+
+	for _, t := range j.Tasks {
+		b = b + fmt.Sprintf(
+			"Command: %s -> %s\n",
+			t.Command,
+			t.Status(),
+		)
+	}
+
+	b = b + fmt.Sprintf("\n\n%s\n", j.StatusURL(u))
+
+	return b
 }
