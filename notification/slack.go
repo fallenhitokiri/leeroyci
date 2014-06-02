@@ -4,6 +4,7 @@ package notification
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"leeroy/config"
 	"leeroy/logging"
 	"log"
@@ -18,12 +19,12 @@ type slackPayload struct {
 
 // Send a notification to Slack
 func slack(c *config.Config, j *logging.Job) {
-	message, err := buildSlack(c, j)
+	m, err := buildSlack(c, j)
 
 	_, err = http.Post(
 		c.SlackEndpoint,
 		"application/json",
-		bytes.NewReader(message),
+		bytes.NewReader(m),
 	)
 
 	if err != nil {
@@ -33,23 +34,24 @@ func slack(c *config.Config, j *logging.Job) {
 
 // Build the payload to send to Slack.
 func buildSlack(c *config.Config, j *logging.Job) ([]byte, error) {
-	payload := slackPayload{
+	p := slackPayload{
 		Channel:  c.SlackChannel,
 		Username: "CI",
 	}
 
-	message := "Repo: " + j.URL + " Branch: " + j.Branch
-	message = message + " Pushed by " + j.Name + " <" + j.Email + "> "
+	m := fmt.Sprintf(
+		"Repo: %s - %s by %s <%s> -> %s\nBuild: %s",
+		j.URL,
+		j.Branch,
+		j.Name,
+		j.Email,
+		j.Status(),
+		j.StatusURL(c.URL),
+	)
 
-	if j.Success() == true {
-		message = message + "build was successful"
-	} else {
-		message = message + "build failed"
-	}
+	p.Text = m
 
-	payload.Text = message
-
-	marsh, err := json.Marshal(payload)
+	marsh, err := json.Marshal(p)
 
 	if err != nil {
 		log.Println(err)
