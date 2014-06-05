@@ -28,7 +28,7 @@ func main() {
 	http.HandleFunc("/callback/", web.Auth(func(w http.ResponseWriter, r *http.Request) {
 		callbacks.Callback(w, r, jobs, &c, b)
 	}, c.Secret))
-	http.HandleFunc("/status/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		web.Status(w, r, &c, b)
 	})
 	http.HandleFunc("/status/repo/", func(w http.ResponseWriter, r *http.Request) {
