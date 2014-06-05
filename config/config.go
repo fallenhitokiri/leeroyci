@@ -3,6 +3,7 @@ package config
 
 import (
 	"errors"
+	"net/url"
 	"strconv"
 )
 
@@ -19,6 +20,8 @@ type Config struct {
 	Repositories  []Repository
 	GitHubKey     string
 	URL           string
+	Cert          string
+	Key           string
 }
 
 type Repository struct {
@@ -59,4 +62,26 @@ func (c *Config) ConfigForRepo(url string) (Repository, error) {
 // Retruns the address of the mail server with the port.
 func (c *Config) MailServer() string {
 	return c.EmailHost + ":" + strconv.Itoa(c.EmailPort)
+}
+
+// Returns the URL scheme used.
+func (c *Config) Scheme() string {
+	u, err := url.Parse(c.URL)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return u.Scheme
+}
+
+// Returns the host.
+func (c *Config) Host() string {
+	u, err := url.Parse(c.URL)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return u.Host
 }

@@ -40,5 +40,12 @@ func main() {
 	http.HandleFunc("/status/commit/", func(w http.ResponseWriter, r *http.Request) {
 		web.Commit(w, r, &c, b)
 	})
-	log.Fatal(http.ListenAndServe(":8082", nil))
+
+	if c.Scheme() == "https" {
+		log.Println("HTTPS:", c.URL)
+		log.Fatal(http.ListenAndServeTLS(c.Host(), c.Cert, c.Key, nil))
+	} else {
+		log.Println("HTTP:", c.URL)
+		log.Fatal(http.ListenAndServe(c.Host(), nil))
+	}
 }
