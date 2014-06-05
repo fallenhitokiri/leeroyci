@@ -56,6 +56,7 @@ func (c *Config) ConfigForRepo(url string) (Repository, error) {
 	return r, err
 }
 
+// Retruns the address of the mail server with the port.
 func (c *Config) MailServer() string {
 	return c.EmailHost + ":" + strconv.Itoa(c.EmailPort)
 }
