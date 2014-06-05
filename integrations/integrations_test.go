@@ -1,4 +1,4 @@
-package callbacks
+package integrations
 
 import (
 	"net/http"

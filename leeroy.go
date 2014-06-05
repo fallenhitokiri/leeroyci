@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"leeroy/build"
-	"leeroy/callbacks"
 	"leeroy/config"
+	"leeroy/integrations"
 	"leeroy/logging"
 	"leeroy/web"
 	"log"
@@ -26,7 +26,7 @@ func main() {
 	log.Println("leeroy up an running!")
 
 	http.HandleFunc("/callback/", web.Auth(func(w http.ResponseWriter, r *http.Request) {
-		callbacks.Callback(w, r, jobs, &c, b)
+		integrations.Callback(w, r, jobs, &c, b)
 	}, c.Secret))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		web.Status(w, r, &c, b)

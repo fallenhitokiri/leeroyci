@@ -1,10 +1,10 @@
-// Callbacks handles receiving notifications from repository sources like
+// integrations handles receiving notifications from repository sources like
 // GitHub.
-package callbacks
+package integrations
 
 import (
-	"leeroy/callbacks/github"
 	"leeroy/config"
+	"leeroy/integrations/github"
 	"leeroy/logging"
 	"log"
 	"net/http"
