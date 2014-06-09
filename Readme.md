@@ -15,7 +15,7 @@ Currently Leeroy plays nicely with GitHub. Integrations for GitLab and Bitbucket
 - see all builds on an acceptable designed, read bootstrap, webinterface.
 
 ## Quickstart
-You can either checkout the master branch of this repository and run it via `go run leeroy.go` or you can download the binary of the latest stable release.
+For now please check out the master branch of this repository and run it via `go run leeroy.go`. Binaries will be available in some days.
 Master is always considered to be stable and ready for production.
 
 ### Build Script
