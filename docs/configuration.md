@@ -44,7 +44,7 @@ The following configuration shows all options Leeroy supports. We will go throug
 - `Secret` the secret that has to be added to the callback URL. If the secret is wrong no actions will be triggered
 - `Cert` and `Key` full path to SSL certificate and key. Required if your URL scheme is `https`
 - `BuildLogPath` full path where Leeroy can write the build log to. Every build will be written.
-- `Email*` host, part and credentials for your mail server so Leeroy can send you notifications if builds were successful or failed
+- `Email*` host, port and credentials for your mail server so Leeroy can send you notifications if builds were successful or failed
 - `GitHubKey` your personal access token
 - `SlackChannel` to which channel should build statuses be posted
 - `SlackEndpoint` the endpoint you configured in Slack
