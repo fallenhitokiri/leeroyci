@@ -77,12 +77,14 @@ While Leeroy is working and doing its job it is far from being feature complete.
 - Bitbucket integration
 - HipChat notifications
 - Basecamp notifications
-- support for custom templates
+- support for custom templates and notifications
 - user authentication (status pages)
 - configuration of repositories through the webinterface
 - configuration validation
 - individual tokens and servers for each repository
 - website with a browsable documentation and more default snippets
+- access all builds through an API that returns JSON
+- deployment (no details how it will be handled, yet)
 
 ## Contributing
 Feel free to open issues about bugs or features you want to see or open pull requests. Beside using `go fmt` and `go vet` on your code please try to keep the code length around 80 characters. This is no hard limit. If a line is 86 characters long but easy to read and understand there is no need to break it into multiple lines.
