@@ -1,5 +1,5 @@
 # Leeroy CI
-Leeroy is a self hosted, continuos integration and build service. It is designed to be easy to setup and will not require an additional ops person to keep running. It runs on your own server, so you can create the test environment you want, exactly mirroring production, without having to trust anyone else to keep your source code or eventually database images with sensitive information safe.
+Leeroy is a self hosted, continuous integration and build service. It is designed to be easy to setup and will not require an additional ops person to keep running. It runs on your own server, so you can create the test environment you want, exactly mirroring production, without having to trust anyone else to keep your source code or eventually database images with sensitive information safe.
 
 ![Leeroy](https://raw.github.com/fallenhitokiri/leeroyci/master/assets/leeroy.jpg)
 
