@@ -63,12 +63,12 @@ When you run Leeroy and push to the repository you should new see a build when v
 
 ![success](https://raw.github.com/fallenhitokiri/leeroyci/master/docs/success.png)
 
-`/status/` lists all builds in a chronological order, newest first.
-`/status/repo/<hex>` lists all builds for a repository - `<hex>` is the repository
+- `/status/` lists all builds in a chronological order, newest first.
+- `/status/repo/<hex>` lists all builds for a repository - `<hex>` is the repository
 URL in hexadecimal.
-`/status/branch/<hex>/<branch>` lists all builds for a specific branch of a
+- `/status/branch/<hex>/<branch>` lists all builds for a specific branch of a
 repository.
-`/status/commit/<hex>/<sha1>` shows the build for a specifc commit of a repository.
+- `/status/commit/<hex>/<sha1>` shows the build for a specifc commit of a repository.
 
 ## Planned Features
 While Leeroy is working and doing its job it is far from being feature complete. Before version 1.0 will be released the following features will be finished
