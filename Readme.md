@@ -19,7 +19,7 @@ You can either checkout the master branch of this repository and run it via `go 
 Master is always considered to be stable and ready for production.
 
 ### Build Script
-Before we start make sure you have a script that is able to run tests for your repository. Two arguments passed to your build script, the repository URL (first argument) and the branch name (second argument) to which was pushed. Let us es a really simple one for now
+Before you start make sure you have a script that is able to run tests for your repository. Two arguments are passed to your build script, the repository URL (first argument) and the branch name (second argument) to which was pushed. Let us use a really simple one for now
 
      #! /bin/bash
      ls
@@ -34,7 +34,7 @@ You need a GitHub personal access token and a test repository.
 
 In your repository setup a webhook pointing to `http://yourhost:8082/callback/github/superdupersecret`. Content type should be `application/json` and as events select `Push` and `Pull Request`.
 
-You can obtain a personal access token under the `Applications` menu in your settings. Permissions to access you repositories is enough.
+You can obtain a personal access token under the `Applications` menu in your settings. Permissions to access your repositories is enough.
 
 We use the most basic configuration for now
 
@@ -59,7 +59,7 @@ We use the most basic configuration for now
 Make sure to replace the GitHubKey with your personal access token. For more details and all configuration option please read `docs/configuration.md`.
 
 ### Webinterface
-When you run Leeroy and push to the repository you should see a now build when visiting the webinterface. There are several views which show you the status of your various builds.
+When you run Leeroy and push to the repository you should new see a build when visiting the webinterface. There are several views which show you the status of your various builds.
 
 ![success](https://raw.github.com/fallenhitokiri/leeroyci/master/docs/success.png)
 
