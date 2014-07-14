@@ -39,13 +39,19 @@ func buildSlack(c *config.Config, j *logging.Job) ([]byte, error) {
 		Username: "CI",
 	}
 
+	success := "success"
+
+	if j.Success() == false {
+		success = "failed"
+	}
+
 	m := fmt.Sprintf(
 		"Repo: %s - %s by %s <%s> -> %s\nBuild: %s",
 		j.URL,
 		j.Branch,
 		j.Name,
 		j.Email,
-		j.Status(),
+		success,
 		j.StatusURL(c.URL),
 	)
 
