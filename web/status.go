@@ -4,6 +4,7 @@ package web
 import (
 	"encoding/hex"
 	"html/template"
+	"io"
 	"leeroy/config"
 	"leeroy/logging"
 	"log"
@@ -49,6 +50,29 @@ func Commit(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	j := blog.JobByCommit(r, co)
 
 	render(rw, []logging.Job{j})
+}
+
+// Endpoint returning a badge showing the build status for a repository and
+// branch. It returns an SVG.
+func Badge(rw http.ResponseWriter, req *http.Request, c *config.Config,
+	blog *logging.Buildlog) {
+	r := splitFirst(req.URL.Path)
+	b := splitSecond(req.URL.Path)
+
+	j := blog.JobsForRepoBranch(r, b)
+	svg := ""
+
+	if len(j) == 0 {
+		svg = badgeNoResults
+	} else if j[0].Success() {
+		svg = badgeSuccess
+	} else {
+		svg = badgeFailed
+	}
+
+	rw.Header().Set("Content-Type", "image/svg+xml")
+	io.WriteString(rw, svg)
+	req.Body.Close()
 }
 
 // Get a template and execute it.
