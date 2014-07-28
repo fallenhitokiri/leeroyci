@@ -4,7 +4,6 @@ package web
 import (
 	"encoding/hex"
 	"html/template"
-	"io"
 	"leeroy/config"
 	"leeroy/logging"
 	"log"
@@ -60,18 +59,19 @@ func Badge(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	b := splitSecond(req.URL.Path)
 
 	j := blog.JobsForRepoBranch(r, b)
-	svg := ""
+
+	var svg []byte
 
 	if len(j) == 0 {
-		svg = badgeNoResults
+		svg = []byte(badgeNoResults)
 	} else if j[0].Success() {
-		svg = badgeSuccess
+		svg = []byte(badgeSuccess)
 	} else {
-		svg = badgeFailed
+		svg = []byte(badgeFailed)
 	}
 
 	rw.Header().Set("Content-Type", "image/svg+xml")
-	io.WriteString(rw, svg)
+	rw.Write(svg)
 	req.Body.Close()
 }
 
