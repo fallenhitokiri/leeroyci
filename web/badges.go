@@ -4,7 +4,7 @@ var badgeNoResults = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 17.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-     viewBox="0 0 150 70" enable-background="new 0 0 150 70" xml:space="preserve">
+     viewBox="0 0 150 70" style="width:7%;height:7%" enable-background="new 0 0 150 70" xml:space="preserve">
 <rect fill="#808080" width="150" height="70"/>
 <g>
     <path fill="#FFFFFF" d="M31.7,35.1l-0.4-1.4h-0.2v16.7h-4V21H31l4.2,15.3l0.4,1.4h0.2V21h4v29.4h-3.8L31.7,35.1z"/>
@@ -32,7 +32,7 @@ var badgeSuccess = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 17.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-     viewBox="0 0 150 70" enable-background="new 0 0 150 70" xml:space="preserve">
+     viewBox="0 0 150 70" style="width:7%;height:7%" enable-background="new 0 0 150 70" xml:space="preserve">
 <rect fill="#41BA00" width="150" height="70"/>
 <g>
     <path fill="#FFFFFF" d="M50.1,32.6v-22H53c1.9,0,3.4,0.4,4.4,1.3c1,0.9,1.5,2.4,1.5,4.6c0,1-0.1,1.8-0.4,2.5
@@ -88,7 +88,7 @@ var badgeFailed = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 17.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-     viewBox="0 0 150 70" enable-background="new 0 0 150 70" xml:space="preserve">
+     viewBox="0 0 150 70" style="width:7%;height:7%" enable-background="new 0 0 150 70" xml:space="preserve">
 <rect fill="#FF0000" width="150" height="70"/>
 <g>
     <path fill="#FFFFFF" d="M50.5,25.4h-6v7.7h4v4.4h-4v12.8h-4.3V21h10.3V25.4z"/>
