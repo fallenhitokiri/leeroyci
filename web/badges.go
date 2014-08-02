@@ -3,9 +3,9 @@ package web
 var badgeNoResults = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 17.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-     viewBox="0 0 150 70" style="width:7%;height:7%" enable-background="new 0 0 150 70" xml:space="preserve">
-<rect fill="#808080" width="150" height="70"/>
+<svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="0 0 150 70" preserveAspectRation="none" width="150" height="70">
+<rect fill="#808080" width="150" height="70" vector-effect="non-scaling-stroke" />
 <g>
     <path fill="#FFFFFF" d="M31.7,35.1l-0.4-1.4h-0.2v16.7h-4V21H31l4.2,15.3l0.4,1.4h0.2V21h4v29.4h-3.8L31.7,35.1z"/>
     <path fill="#FFFFFF" d="M54.2,44.4c0,1.2-0.3,2.3-0.7,3.2c-0.4,0.8-0.9,1.6-1.7,2.2c-0.8,0.6-1.9,1-3.3,1c-1.4,0-2.6-0.4-3.4-1
@@ -32,8 +32,8 @@ var badgeSuccess = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 17.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-     viewBox="0 0 150 70" style="width:7%;height:7%" enable-background="new 0 0 150 70" xml:space="preserve">
-<rect fill="#41BA00" width="150" height="70"/>
+     viewBox="0 0 150 70" preserveAspectRation="none" width="150" height="70">
+<rect fill="#41BA00" width="150" height="70" vector-effect="non-scaling-stroke" />
 <g>
     <path fill="#FFFFFF" d="M50.1,32.6v-22H53c1.9,0,3.4,0.4,4.4,1.3c1,0.9,1.5,2.4,1.5,4.6c0,1-0.1,1.8-0.4,2.5
         c-0.3,0.7-0.8,1.3-1.6,2c0.8,0.5,1.4,1.3,1.9,2.7c0.2,0.7,0.4,1.6,0.4,2.7c0,1.6-0.3,3.1-1.1,4.3c-0.7,1.1-2,1.9-4,2H50.1z
@@ -88,8 +88,8 @@ var badgeFailed = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 17.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-     viewBox="0 0 150 70" style="width:7%;height:7%" enable-background="new 0 0 150 70" xml:space="preserve">
-<rect fill="#FF0000" width="150" height="70"/>
+     viewBox="0 0 150 70" preserveAspectRation="none" width="150" height="70">
+<rect fill="#FF0000" width="150" height="70" vector-effect="non-scaling-stroke" />
 <g>
     <path fill="#FFFFFF" d="M50.5,25.4h-6v7.7h4v4.4h-4v12.8h-4.3V21h10.3V25.4z"/>
     <path fill="#FFFFFF" d="M51,50.4L55.5,21h5.3l4.4,29.4H61l-0.8-6H56l-0.8,6H51z M58.4,30.6l-0.1-0.8H58l-0.1,0.8l-1.2,9.3h3
