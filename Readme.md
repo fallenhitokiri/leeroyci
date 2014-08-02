@@ -69,6 +69,7 @@ URL in hexadecimal.
 - `/status/branch/<hex>/<branch>` lists all builds for a specific branch of a
 repository.
 - `/status/commit/<hex>/<sha1>` shows the build for a specifc commit of a repository.
+- `/status/badge/<hex>/<branch>` returns a SVG with the status of the last build for a specific branch
 
 ## Planned Features
 While Leeroy is working and doing its job it is far from being feature complete. Before version 1.0 will be released the following features will be finished
