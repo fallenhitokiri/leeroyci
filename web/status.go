@@ -51,6 +51,30 @@ func Commit(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	render(rw, []logging.Job{j})
 }
 
+// Endpoint returning a badge showing the build status for a repository and
+// branch. It returns an SVG.
+func Badge(rw http.ResponseWriter, req *http.Request, c *config.Config,
+	blog *logging.Buildlog) {
+	r := splitFirst(req.URL.Path)
+	b := splitSecond(req.URL.Path)
+
+	j := blog.JobsForRepoBranch(r, b)
+
+	var svg []byte
+
+	if len(j) == 0 {
+		svg = []byte(badgeNoResults)
+	} else if j[0].Success() {
+		svg = []byte(badgeSuccess)
+	} else {
+		svg = []byte(badgeFailed)
+	}
+
+	rw.Header().Set("Content-Type", "image/svg+xml")
+	rw.Write(svg)
+	req.Body.Close()
+}
+
 // Get a template and execute it.
 func render(rw http.ResponseWriter, jobs []logging.Job) {
 	t := template.New("status")

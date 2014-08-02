@@ -40,6 +40,9 @@ func main() {
 	http.HandleFunc("/status/commit/", func(w http.ResponseWriter, r *http.Request) {
 		web.Commit(w, r, &c, b)
 	})
+	http.HandleFunc("/status/badge/", func(w http.ResponseWriter, r *http.Request) {
+		web.Badge(w, r, &c, b)
+	})
 
 	if c.Scheme() == "https" {
 		log.Println("HTTPS:", c.URL)
