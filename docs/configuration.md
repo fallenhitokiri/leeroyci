@@ -15,6 +15,8 @@ The following configuration shows all options Leeroy supports. We will go throug
        "GitHubKey": "bar",
        "SlackChannel": "#devel",
        "SlackEndpoint": "baz",
+       "HipChatKey":     "abc",
+       "HipChatChannel": "1",
        "Repositories": [
          {
            "URL": "https://github.com/fallenhitokiri/pushtest",
@@ -48,6 +50,8 @@ The following configuration shows all options Leeroy supports. We will go throug
 - `GitHubKey` your personal access token
 - `SlackChannel` to which channel should build statuses be posted
 - `SlackEndpoint` the endpoint you configured in Slack
+- `HipChatKey` your HipChat API key (APIv1)
+- `HipChatChannel` HipChat channel to send the notifications to
 - `Repositories` list of all repositories Leeroy will run builds for
 
 #### Repositories
