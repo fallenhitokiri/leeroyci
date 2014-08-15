@@ -8,20 +8,22 @@ import (
 )
 
 type Config struct {
-	Secret        string
-	BuildLogPath  string
-	EmailFrom     string
-	EmailHost     string
-	EmailPort     int
-	EmailUser     string
-	EmailPassword string
-	SlackChannel  string
-	SlackEndpoint string
-	Repositories  []Repository
-	GitHubKey     string
-	URL           string
-	Cert          string
-	Key           string
+	Secret         string
+	BuildLogPath   string
+	EmailFrom      string
+	EmailHost      string
+	EmailPort      int
+	EmailUser      string
+	EmailPassword  string
+	SlackChannel   string
+	SlackEndpoint  string
+	Repositories   []Repository
+	GitHubKey      string
+	URL            string
+	Cert           string
+	Key            string
+	HipChatKey     string
+	HipChatChannel string
 }
 
 type Repository struct {

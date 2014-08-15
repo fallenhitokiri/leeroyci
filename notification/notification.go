@@ -33,5 +33,11 @@ func Notify(c *config.Config, j *logging.Job) {
 			go slack(c, j)
 			continue
 		}
+
+		if n.Service == "hipchat" {
+			// No arguments for HipChat
+			go hipchat(c, j)
+			continue
+		}
 	}
 }
