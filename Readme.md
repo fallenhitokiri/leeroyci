@@ -11,7 +11,7 @@ Currently Leeroy plays nicely with GitHub. Integrations for GitLab and Bitbucket
 - comment on GitHub pull requests
 - close GitHub pull requests if the build for HEAD fails
 - send notifications about the build via email
-- post results to a Slack channel
+- post results to a Slack or HipChat channel
 - see all builds on an acceptable designed, read bootstrap, webinterface.
 
 ## Quickstart
@@ -76,7 +76,6 @@ While Leeroy is working and doing its job it is far from being feature complete.
 
 - GitLab integration
 - Bitbucket integration
-- HipChat notifications
 - Basecamp notifications
 - support for custom templates and notifications
 - user authentication (status pages)
