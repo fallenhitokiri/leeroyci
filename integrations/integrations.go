@@ -5,6 +5,7 @@ package integrations
 import (
 	"leeroy/config"
 	"leeroy/integrations/github"
+	"leeroy/integrations/gitlab"
 	"leeroy/logging"
 	"log"
 	"net/http"
@@ -18,6 +19,8 @@ func Callback(rw http.ResponseWriter, req *http.Request, jobs chan logging.Job,
 	switch s {
 	case "github":
 		github.Parse(jobs, req, blog, c)
+	case "gitlab":
+		gitlab.Parse(jobs, req, blog, c)
 	default:
 		log.Println("serivce", s, "not supported")
 	}
