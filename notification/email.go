@@ -31,8 +31,8 @@ func email(c *config.Config, j *logging.Job, to string) {
 
 // Notify the person who pushed the changes
 func buildEmail(c *config.Config, j *logging.Job) []byte {
-	f := mail.Address{"leeroy", c.EmailFrom}
-	t := mail.Address{j.Name, j.Email}
+	f := mail.Address{Name: "leeroy", Address: c.EmailFrom}
+	t := mail.Address{Name: j.Name, Address: j.Email}
 	s := subject(j)
 	b := body(j, c.URL)
 	m := addHeaders(f.String(), t.String(), s, b)
