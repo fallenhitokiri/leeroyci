@@ -7,6 +7,7 @@ var standard = `
         <title>leeroy Status</title>
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     </head>
     <body>
@@ -19,21 +20,38 @@ var standard = `
         </div>
 
         <div class="container" style="padding:80px 0 0 0;">
-            {{range .Jobs}}
-            <div class="panel {{if .Success}}panel-success{{else}}panel-danger{{end}}">
+            {{range $ji, $job := .Jobs}}
+            <div class="panel {{if $job.Success}}panel-success{{else}}panel-danger{{end}}">
                 <div class="panel-heading">
-                    <h3 class="panel-title">{{.URL}} - {{.Branch}}</h3>
+                    <h3 class="panel-title">{{$job.URL}} - {{$job.Branch}}</h3>
                 </div>
+
                 <div class="panel-body">
-                    {{range .Tasks}}
-                    <h6>{{.Command}} {{if .Return}}- {{.Return}}{{end}}</h6>
-                    <pre><code>{{.Output}}</code></pre>
-                    {{end}}
+                    <div class="panel-group" id="accordion{{$ji}}">
+                        {{range $ti, $task := $job.Tasks}}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{$ji}}{{$ti}}">
+                                        {{$task.Command}} {{if $task.Return}}- {{$task.Return}}{{end}}
+                                    </a>
+                                </h4>
+                            </div>
+
+                            <div id="collapse{{$ji}}{{$ti}}" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <pre><code>{{$task.Output}}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        {{end}}
+                    </div>
                 </div>
+
                 <div class="panel-footer">
-                    <a href="{{.CommitURL}}"><span class="label label-primary">{{.Commit}}</span></a>
-                    <span class="label label-default">{{.Timestamp}}</span>
-                    <span class="label label-default">{{.Name}} <{{.Email}}></span>
+                    <a href="{{$job.CommitURL}}"><span class="label label-primary">{{$job.Commit}}</span></a>
+                    <span class="label label-default">{{$job.Timestamp}}</span>
+                    <span class="label label-default">{{$job.Name}} <{{$job.Email}}></span>
                 </div>
             </div>
             {{end}}
