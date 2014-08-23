@@ -8,12 +8,13 @@ import (
 	"leeroy/logging"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
 // Returns the format for the response.
-func responseFormat(req *http.Request) string {
-	if val, ok := req.URL.Query()["format"]; ok {
+func responseFormat(val url.Values) string {
+	if val, ok := val["format"]; ok {
 		return strings.Join(val, "")
 	}
 
@@ -22,7 +23,7 @@ func responseFormat(req *http.Request) string {
 
 // Get a template and execute it.
 func render(rw http.ResponseWriter, req *http.Request, jobs []logging.Job) {
-	f := responseFormat(req)
+	f := responseFormat(req.URL.Query())
 
 	if f == "json" {
 		res, err := json.Marshal(jobs)
