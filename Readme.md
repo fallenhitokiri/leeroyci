@@ -93,4 +93,4 @@ While Leeroy is working and doing its job it is far from being feature complete.
 Feel free to open issues about bugs or features you want to see or open pull requests. Beside using `go fmt` and `go vet` on your code please try to keep the code length around 80 characters. This is no hard limit. If a line is 86 characters long but easy to read and understand there is no need to break it into multiple lines.
 
 ## License
-Leeroy is released under the BSD license.
+Leeroy is released under the MIT license.
