@@ -27,7 +27,7 @@ func TestResponseFormat(t *testing.T) {
 	v := url.Values{}
 	f := responseFormat(v)
 
-	if f != "" {
+	if f != "html" {
 		t.Error("Wrong format", f)
 	}
 

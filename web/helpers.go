@@ -12,35 +12,46 @@ import (
 	"strings"
 )
 
-// Returns the format for the response.
+// Returns the format for the response. Default is HTML.
 func responseFormat(val url.Values) string {
 	if val, ok := val["format"]; ok {
 		return strings.Join(val, "")
 	}
 
-	return ""
+	return "html"
 }
 
 // Get a template and execute it.
 func render(rw http.ResponseWriter, req *http.Request, jobs []logging.Job) {
 	f := responseFormat(req.URL.Query())
 
-	if f == "json" {
-		res, err := json.Marshal(jobs)
-
-		if err != nil {
-			log.Println("error marshal", err)
-			rw.Header().Set("Content-Type", "application/json")
-			rw.Write([]byte(`{"error": "marshal not possible"}`))
-			req.Body.Close()
-		} else {
-			rw.Header().Set("Content-Type", "application/json")
-			rw.Write(res)
-			req.Body.Close()
-		}
-		return
+	switch f {
+	case "json":
+		renderJSON(rw, jobs)
+	case "html":
+		renderHTML(rw, jobs)
+	default:
+		log.Println("unsupported render format", f)
 	}
+}
 
+// Render and write json response.
+func renderJSON(rw http.ResponseWriter, jobs []logging.Job) {
+	res, err := json.Marshal(jobs)
+
+	if err != nil {
+		log.Println("error marshal", err)
+		rw.Header().Set("Content-Type", "application/json")
+		rw.Write([]byte(`{"error": "marshal not possible"}`))
+	} else {
+		rw.Header().Set("Content-Type", "application/json")
+		rw.Write(res)
+	}
+	return
+}
+
+// Render and write HTML response.
+func renderHTML(rw http.ResponseWriter, jobs []logging.Job) {
 	t := template.New("status")
 	t, _ = t.Parse(standard)
 	t.Execute(
