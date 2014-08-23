@@ -31,7 +31,7 @@ func TestResponseFormat(t *testing.T) {
 		t.Error("Wrong format", f)
 	}
 
-	v.Add("format", "json")
+	v.Add("format", "JSON")
 	f = responseFormat(v)
 
 	if f != "json" {

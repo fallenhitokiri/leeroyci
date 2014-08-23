@@ -15,7 +15,8 @@ import (
 // Returns the format for the response. Default is HTML.
 func responseFormat(val url.Values) string {
 	if val, ok := val["format"]; ok {
-		return strings.Join(val, "")
+		f := strings.Join(val, "")
+		return strings.ToLower(f)
 	}
 
 	return "html"
