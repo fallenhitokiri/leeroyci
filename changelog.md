@@ -1,3 +1,8 @@
+2014-08-23 Timo Zimmermann <timo@screamingatmyscreen.com>
+
+* add JSON support to all endpoints
+  triggered by appending `?format=json` to the URL
+
 2014-08-21 Timo Zimmermann <timo@screamingatmyscreen.com>
 
 * update web interface
