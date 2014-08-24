@@ -39,5 +39,11 @@ func Notify(c *config.Config, j *logging.Job) {
 			go hipchat(c, j)
 			continue
 		}
+
+		if n.Service == "campfire" {
+			// No arguments for Campfire
+			go campfire(c, j)
+			continue
+		}
 	}
 }
