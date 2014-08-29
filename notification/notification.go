@@ -20,24 +20,20 @@ func Notify(c *config.Config, j *logging.Job) {
 	}
 
 	for _, n := range repo.Notify {
-		if n.Service == "email" {
+		switch n.Service {
+		case "email":
 			// Arguments for email are the mail addresses to notify
 			for _, mail := range n.Arguments {
 				go email(c, j, mail)
 			}
-			continue
-		}
-
-		if n.Service == "slack" {
-			// No arguments for Slack
-			go slack(c, j)
-			continue
-		}
-
-		if n.Service == "hipchat" {
-			// No arguments for HipChat
-			go hipchat(c, j)
-			continue
+		case "slack":
+			go slack(c, j) // No arguments for Slack
+		case "hipchat":
+			go hipchat(c, j) // No arguments for HipChat
+		case "campfire":
+			go campfire(c, j) // No arguments for Campfire
+		default:
+			log.Println("Notification not supported", n.Service)
 		}
 	}
 }

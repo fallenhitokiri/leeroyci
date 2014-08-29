@@ -24,6 +24,9 @@ type Config struct {
 	Key            string
 	HipChatKey     string
 	HipChatChannel string
+	CampfireId     string
+	CampfireRoom   string
+	CampfireKey    string
 }
 
 type Repository struct {
