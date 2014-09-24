@@ -22,21 +22,19 @@ func Notify(c *config.Config, j *logging.Job) {
 	for _, n := range repo.Notify {
 		if n.Service == "email" {
 			// Arguments for email are the mail addresses to notify
-			for _, mail := range n.Arguments {
+			for mail, _ := range n.Arguments {
 				go email(c, j, mail)
 			}
 			continue
 		}
 
 		if n.Service == "slack" {
-			// No arguments for Slack
-			go slack(c, j)
+			go slack(c, j, n.Arguments["endpoint"], n.Arguments["channel"])
 			continue
 		}
 
 		if n.Service == "hipchat" {
-			// No arguments for HipChat
-			go hipchat(c, j)
+			go hipchat(c, j, n.Arguments["key"], n.Arguments["channel"])
 			continue
 		}
 	}
