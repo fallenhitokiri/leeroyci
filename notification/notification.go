@@ -37,18 +37,3 @@ func Notify(c *config.Config, j *logging.Job) {
 		}
 	}
 }
-
-
-<<<<<<< HEAD
-			continue
-		}
-
-		if n.Service == "slack" {
-			go slack(c, j, n.Arguments["endpoint"], n.Arguments["channel"])
-			continue
-		}
-
-		if n.Service == "hipchat" {
-			go hipchat(c, j, n.Arguments["key"], n.Arguments["channel"])
-			continue
-=======
