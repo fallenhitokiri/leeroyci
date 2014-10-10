@@ -13,10 +13,6 @@ The following configuration shows all options Leeroy supports. We will go throug
        "EmailUser": "onlyaspamaccount@gmail.com",
        "EmailPassword": "foo",
        "GitHubKey": "bar",
-       "SlackChannel": "#devel",
-       "SlackEndpoint": "baz",
-       "HipChatKey":     "abc",
-       "HipChatChannel": "1",
        "Repositories": [
          {
            "URL": "https://github.com/fallenhitokiri/pushtest",
@@ -35,7 +31,10 @@ The following configuration shows all options Leeroy supports. We will go throug
            "Notify": [
              {
                "Service": "slack",
-               "Arguments": []
+               "Arguments": {
+                 "endpoint": "foo"
+                 "channel": "bar"
+               }
              }
            ]
          }
@@ -67,16 +66,41 @@ The following configuration shows all options Leeroy supports. We will go throug
 
 #### Notify
 - `Service` name of the service
-- `Arguments` arguments to pass
+- `Arguments` arguments to pass (dictionary)
 
 Currently supported notifications are `slack` and `email`. Slack takes no arguments, email expects a list of email addresses to send the build status to. Remember that the person who pushed or opened the pull request will always get an email, so only configure additional people here.
 
 ##### Email
-If you want to notify `ops@example.tld` and `devops@example.tld` when someone triggered a build so they immediately know not to deploy a branch you can use the following configuration
+If you want to notify `ops@example.tld` and `devops@example.tld` when someone triggered a build so they immediately know not to deploy a branch if a build failed e.x. you can use the following configuration
 
      {
        "Service": "email",
-       "Arguments": ["ops@example.tld", "devops@example.tld"]
+       "Arguments": {
+          "ops@example.tld": "",
+          "devops@example.tld": ""
+        ]
+     }
+
+##### Slack
+To send the results of builds to a Slack channel use the following configuration. You get the endpoint when setting up a new integration in Slack.
+
+     {
+       "Service": "slack",
+       "Arguments": {
+          "endpoint": "foo",
+          "channel": "bar"
+        ]
+     }
+
+##### HipChat
+To send the results of builds to a HipChat channel use the following configuration. Currently only version 1 of the HipChat API is supported.
+
+     {
+       "Service": "hipchat",
+       "Arguments": {
+          "channel": "foo",
+          "key": "bar"
+        ]
      }
 
 ## SSL
