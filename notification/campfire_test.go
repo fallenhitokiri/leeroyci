@@ -7,11 +7,7 @@ import (
 )
 
 func TestBuildCampfire(t *testing.T) {
-	c := config.Config{
-		CampfireId:   "c",
-		CampfireRoom: "b",
-		CampfireKey:  "a",
-	}
+	c := config.Config{}
 
 	task := logging.Task{
 		Return: "",
