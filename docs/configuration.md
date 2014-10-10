@@ -87,8 +87,8 @@ To send the results of builds to a Slack channel use the following configuration
      {
        "Service": "slack",
        "Arguments": {
-          "endpoint": "foo",
-          "channel": "bar"
+          "endpoint": "endpoint",
+          "channel": "channel name"
         ]
      }
 
@@ -98,8 +98,20 @@ To send the results of builds to a HipChat channel use the following configurati
      {
        "Service": "hipchat",
        "Arguments": {
-          "channel": "foo",
-          "key": "bar"
+          "channel": "channel name",
+          "key": "api key"
+        ]
+     }
+
+##### Campfire
+To send the results of builds to a Campfire room use the following configuration.
+
+     {
+       "Service": "campfire",
+       "Arguments": {
+          "id": "CampfireID",
+          "room": "room",
+          "key": "api key"
         ]
      }
 
