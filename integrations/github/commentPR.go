@@ -33,6 +33,12 @@ func newComment(job logging.Job, base string) Comment {
 // Post a new comment on a pull request.
 func PostPR(c *config.Config, job logging.Job, pc PRCallback) {
 	comment := newComment(job, c.URL)
+	rp, err := c.ConfigForRepo(job.URL)
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
 
 	m, err := json.Marshal(&comment)
 
@@ -53,7 +59,7 @@ func PostPR(c *config.Config, job logging.Job, pc PRCallback) {
 		return
 	}
 
-	t := base64.URLEncoding.EncodeToString([]byte(c.GitHubKey))
+	t := base64.URLEncoding.EncodeToString([]byte(rp.AccessKey))
 
 	r.Header.Add("content-type", "application/json")
 	r.Header.Add("Authorization", "Basic "+t)

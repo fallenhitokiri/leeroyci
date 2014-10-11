@@ -29,6 +29,7 @@ type Repository struct {
 	Notify    []Notify
 	CommentPR bool
 	ClosePR   bool
+	AccessKey string
 }
 
 type Command struct {
