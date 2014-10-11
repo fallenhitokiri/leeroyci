@@ -12,10 +12,11 @@ The following configuration shows all options Leeroy supports. We will go throug
        "EmailPort": 587,
        "EmailUser": "onlyaspamaccount@gmail.com",
        "EmailPassword": "foo",
-       "GitHubKey": "bar",
        "Repositories": [
          {
+           "Name": "Awesome Project"
            "URL": "https://github.com/fallenhitokiri/pushtest",
+           "AccessKey": "bar",
            "CommentPR": true,
            "ClosePR": true,
            "Commands": [
@@ -46,15 +47,12 @@ The following configuration shows all options Leeroy supports. We will go throug
 - `Cert` and `Key` full path to SSL certificate and key. Required if your URL scheme is `https`
 - `BuildLogPath` full path where Leeroy can write the build log to. Every build will be written.
 - `Email*` host, port and credentials for your mail server so Leeroy can send you notifications if builds were successful or failed
-- `GitHubKey` your personal access token
-- `SlackChannel` to which channel should build statuses be posted
-- `SlackEndpoint` the endpoint you configured in Slack
-- `HipChatKey` your HipChat API key (APIv1)
-- `HipChatChannel` HipChat channel to send the notifications to
 - `Repositories` list of all repositories Leeroy will run builds for
 
 #### Repositories
+- `Name` Name for this project
 - `URL` URL on which your repository is hosted. It is required that it matches your repository URL or Leeroy will not run any builds
+- `AccessKey` You will likely need an access key to interact with your version control system, like a GitHub access token.
 - `CommentPR` if you open a pull request Leeroy will post a comment with the build status for HEAD
 - `ClosePR` if the build for HEAD failed Leeroy will close a pull request
 - `Commands` list of commands to run when a build is triggered (push / PR)
