@@ -14,7 +14,10 @@ func FromFile(name string) Config {
 		panic(err)
 	}
 
-	json.Unmarshal(file, &c)
+	err = json.Unmarshal(file, &c)
+	if err != nil {
+		panic(err)
+	}
 
 	return c
 }

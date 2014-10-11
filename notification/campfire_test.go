@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestBuildHipChat(t *testing.T) {
+func TestBuildCampfire(t *testing.T) {
 	c := config.Config{}
 
 	task := logging.Task{
@@ -20,9 +20,9 @@ func TestBuildHipChat(t *testing.T) {
 		Tasks:  []logging.Task{task},
 	}
 
-	payload := buildHipChat(&c, &job, "foo")
+	_, err := buildCampfire(&c, &job)
 
-	if payload.Color != "green" {
-		t.Error("Wrong color", payload.Color)
+	if err != nil {
+		t.Error(err)
 	}
 }

@@ -40,10 +40,10 @@ func (h *hipchatPayload) toURLEncoded() []byte {
 	return []byte(d.Encode())
 }
 
-func hipchat(c *config.Config, j *logging.Job) {
-	endpoint := fmt.Sprintf(api, c.HipChatKey)
+func hipchat(c *config.Config, j *logging.Job, key string, chl string) {
+	endpoint := fmt.Sprintf(api, key)
 
-	p := buildHipChat(c, j)
+	p := buildHipChat(c, j, chl)
 
 	_, err := http.Post(
 		endpoint,
@@ -57,12 +57,12 @@ func hipchat(c *config.Config, j *logging.Job) {
 }
 
 // Build the struct holding all information about the notification.
-func buildHipChat(c *config.Config, j *logging.Job) hipchatPayload {
+func buildHipChat(c *config.Config, j *logging.Job, chl string) hipchatPayload {
 	p := hipchatPayload{
 		Color:  "green",
 		Notify: true,
 		Format: "text",
-		Room:   c.HipChatChannel,
+		Room:   chl,
 		From:   "Leeroy",
 	}
 

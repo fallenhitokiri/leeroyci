@@ -18,6 +18,12 @@ func main() {
 
 	c := config.FromFile(*cfgFlag)
 
+	err := c.Validate()
+
+	if err != nil {
+		log.Fatal("Configuration error: ", err)
+	}
+
 	jobs := make(chan logging.Job, 100)
 	b := logging.New(c.BuildLogPath)
 

@@ -23,7 +23,7 @@ var standard = `
             {{range $ji, $job := .Jobs}}
             <div class="panel {{if $job.Success}}panel-success{{else}}panel-danger{{end}}">
                 <div class="panel-heading">
-                    <h3 class="panel-title">{{$job.URL}} - {{$job.Branch}}</h3>
+                    <h3 class="panel-title">{{$job.Identifier}} - {{$job.Branch}}</h3>
                 </div>
 
                 <div class="panel-body">

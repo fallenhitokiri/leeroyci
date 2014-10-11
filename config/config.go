@@ -8,30 +8,27 @@ import (
 )
 
 type Config struct {
-	Secret         string
-	BuildLogPath   string
-	EmailFrom      string
-	EmailHost      string
-	EmailPort      int
-	EmailUser      string
-	EmailPassword  string
-	SlackChannel   string
-	SlackEndpoint  string
-	Repositories   []Repository
-	GitHubKey      string
-	URL            string
-	Cert           string
-	Key            string
-	HipChatKey     string
-	HipChatChannel string
+	Secret        string
+	BuildLogPath  string
+	EmailFrom     string
+	EmailHost     string
+	EmailPort     int
+	EmailUser     string
+	EmailPassword string
+	Repositories  []Repository
+	URL           string
+	Cert          string
+	Key           string
 }
 
 type Repository struct {
+	Name      string
 	URL       string
 	Commands  []Command
 	Notify    []Notify
 	CommentPR bool
 	ClosePR   bool
+	AccessKey string
 }
 
 type Command struct {
@@ -41,7 +38,7 @@ type Command struct {
 
 type Notify struct {
 	Service   string
-	Arguments []string
+	Arguments map[string]string
 }
 
 // ConfigForRepo returns the configuration for a repository that matches
@@ -86,4 +83,12 @@ func (c *Config) Host() string {
 	}
 
 	return u.Host
+}
+
+// Returns the name or the URL
+func (r *Repository) Identifier() string {
+	if r.Name != "" {
+		return r.Name
+	}
+	return r.URL
 }

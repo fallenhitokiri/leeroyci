@@ -13,6 +13,7 @@ Currently Leeroy plays nicely with GitHub. Integrations for GitLab and Bitbucket
 - send notifications about the build via email
 - post results to a Slack or HipChat channel
 - see all builds on an acceptable designed, read bootstrap, webinterface.
+- get all builds, branchs or single commits as JSON
 
 ## Quickstart
 For now please check out the master branch of this repository and run it via `go run leeroy.go`. Binaries will be available in some days.
@@ -71,6 +72,8 @@ repository.
 - `/status/commit/<hex>/<sha1>` shows the build for a specifc commit of a repository.
 - `/status/badge/<hex>/<branch>` returns a SVG with the status of the last build for a specific branch
 
+By appending `?format=json` to one of the URLs a JSON object will be returned making it easy to integrate Leeroy with other tools.
+
 ## Planned Features
 While Leeroy is working and doing its job it is far from being feature complete. Before version 1.0 will be released the following features will be finished
 
@@ -90,4 +93,4 @@ While Leeroy is working and doing its job it is far from being feature complete.
 Feel free to open issues about bugs or features you want to see or open pull requests. Beside using `go fmt` and `go vet` on your code please try to keep the code length around 80 characters. This is no hard limit. If a line is 86 characters long but easy to read and understand there is no need to break it into multiple lines.
 
 ## License
-Leeroy is released under the BSD license.
+Leeroy is released under the MIT license.

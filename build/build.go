@@ -20,7 +20,8 @@ func Build(jobs chan logging.Job, c *config.Config, b *logging.Buildlog) {
 
 // Run a build porcess.
 func run(j logging.Job, c *config.Config, b *logging.Buildlog) {
-	config, err := c.ConfigForRepo(j.URL)
+	r, err := c.ConfigForRepo(j.URL)
+	j.Identifier = r.Identifier()
 
 	if err != nil {
 		log.Println("could not find repo", j.URL)
@@ -29,17 +30,17 @@ func run(j logging.Job, c *config.Config, b *logging.Buildlog) {
 
 	log.Println("Starting build process for", j.URL, j.Branch)
 
-	for _, cmd := range config.Commands {
+	for _, cmd := range r.Commands {
 		log.Println("Building", cmd.Name)
 
-		o, c := call(cmd.Execute, j.URL, j.Branch)
+		o, err := call(cmd.Execute, j.URL, j.Branch)
 		t := logging.Task{
 			Command: cmd.Name,
 			Output:  o,
 		}
 
-		if c != nil {
-			t.Return = c.Error()
+		if err != nil {
+			t.Return = err.Error()
 		}
 
 		j.Add(t)

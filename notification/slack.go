@@ -18,11 +18,11 @@ type slackPayload struct {
 }
 
 // Send a notification to Slack
-func slack(c *config.Config, j *logging.Job) {
-	m, err := buildSlack(c, j)
+func slack(c *config.Config, j *logging.Job, ep string, chl string) {
+	m, err := buildSlack(c, j, chl)
 
 	_, err = http.Post(
-		c.SlackEndpoint,
+		ep,
 		"application/json",
 		bytes.NewReader(m),
 	)
@@ -33,9 +33,9 @@ func slack(c *config.Config, j *logging.Job) {
 }
 
 // Build the payload to send to Slack.
-func buildSlack(c *config.Config, j *logging.Job) ([]byte, error) {
+func buildSlack(c *config.Config, j *logging.Job, chl string) ([]byte, error) {
 	p := slackPayload{
-		Channel:  c.SlackChannel,
+		Channel:  chl,
 		Username: "CI",
 	}
 
