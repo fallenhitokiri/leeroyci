@@ -23,6 +23,7 @@ type Config struct {
 }
 
 type Repository struct {
+	Name      string
 	URL       string
 	Commands  []Command
 	Notify    []Notify
