@@ -21,6 +21,7 @@ func Build(jobs chan logging.Job, c *config.Config, b *logging.Buildlog) {
 // Run a build porcess.
 func run(j logging.Job, c *config.Config, b *logging.Buildlog) {
 	config, err := c.ConfigForRepo(j.URL)
+	j.Identifier = config.Identifier()
 
 	if err != nil {
 		log.Println("could not find repo", j.URL)
