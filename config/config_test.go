@@ -60,3 +60,21 @@ func TestHost(t *testing.T) {
 		t.Error("Wrong host", c.Host())
 	}
 }
+
+func TestIdentifier(t *testing.T) {
+	r1 := Repository{
+		Name: "foobar",
+		URL:  "baz",
+	}
+	r2 := Repository{
+		URL: "baz",
+	}
+
+	if r1.identifier() != "foobar" {
+		t.Error("Wrong identifier", r1.identifier())
+	}
+
+	if r2.identifier() != "baz" {
+		t.Error("Wrong identifier", r2.identifier())
+	}
+}
