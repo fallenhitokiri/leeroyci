@@ -16,7 +16,6 @@ type Config struct {
 	EmailUser     string
 	EmailPassword string
 	Repositories  []Repository
-	GitHubKey     string
 	URL           string
 	Cert          string
 	Key           string
