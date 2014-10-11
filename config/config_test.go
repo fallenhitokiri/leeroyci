@@ -70,11 +70,11 @@ func TestIdentifier(t *testing.T) {
 		URL: "baz",
 	}
 
-	if r1.identifier() != "foobar" {
-		t.Error("Wrong identifier", r1.identifier())
+	if r1.Identifier() != "foobar" {
+		t.Error("Wrong identifier", r1.Identifier())
 	}
 
-	if r2.identifier() != "baz" {
-		t.Error("Wrong identifier", r2.identifier())
+	if r2.Identifier() != "baz" {
+		t.Error("Wrong identifier", r2.Identifier())
 	}
 }

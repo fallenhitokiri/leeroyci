@@ -86,7 +86,7 @@ func (c *Config) Host() string {
 }
 
 // Returns the name or the URL
-func (r *Repository) identifier() string {
+func (r *Repository) Identifier() string {
 	if r.Name != "" {
 		return r.Name
 	}
