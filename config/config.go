@@ -29,6 +29,7 @@ type Repository struct {
 	CommentPR bool
 	ClosePR   bool
 	AccessKey string
+	Deploy    []Deploy
 }
 
 type Command struct {
@@ -38,6 +39,13 @@ type Command struct {
 
 type Notify struct {
 	Service   string
+	Arguments map[string]string
+}
+
+type Deploy struct {
+	Name      string
+	Branch    string
+	Execute   string
 	Arguments map[string]string
 }
 
