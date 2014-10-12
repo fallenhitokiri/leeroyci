@@ -3,6 +3,7 @@ package build
 
 import (
 	"leeroy/config"
+	"leeroy/deployment"
 	"leeroy/logging"
 	"leeroy/notification"
 	"log"
@@ -48,6 +49,7 @@ func run(j logging.Job, c *config.Config, b *logging.Buildlog) {
 
 	b.Add(j)
 	go notification.Notify(c, &j)
+	go deployment.ContinuousDeploy(&j, c)
 
 	log.Println("Finished building", j.URL, j.Branch)
 }

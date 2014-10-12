@@ -14,14 +14,14 @@ func ContinuousDeploy(j *logging.Job, c *config.Config) bool {
 	r, err := c.ConfigForRepo(j.URL)
 
 	if err != nil {
-		log.Println("Cannot deploy ", j.Branch, " repository not found.")
+		log.Println("Cannot deploy", j.Branch, "repository not found.")
 		return false
 	}
 
 	for _, d := range r.Deploy {
 		if d.Branch == j.Branch {
-			log.Println("deploying ", d.Branch)
-			go Deploy()
+			log.Println("deploying", d.Branch)
+			go Deploy(j, c)
 			return true
 		}
 	}
