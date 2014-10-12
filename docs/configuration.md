@@ -37,6 +37,17 @@ The following configuration shows all options Leeroy supports. We will go throug
                  "channel": "bar"
                }
              }
+           ],
+           "Deploy": [
+             {
+               "Name": "production",
+               "Branch": "master",
+               "Execute": "/Users/timo/tmp/leeroy/deploy_master.sh"
+               "Arguments": {
+                 "access_key": "foo",
+                 "access_secret": "bar"
+               }
+             }
            ]
          }
        ]
@@ -67,6 +78,9 @@ The following configuration shows all options Leeroy supports. We will go throug
 - `Arguments` arguments to pass (dictionary)
 
 Currently supported notifications are `slack` and `email`. Slack takes no arguments, email expects a list of email addresses to send the build status to. Remember that the person who pushed or opened the pull request will always get an email, so only configure additional people here.
+
+#### Deploy
+TODO: add deployment documentation
 
 ##### Email
 If you want to notify `ops@example.tld` and `devops@example.tld` when someone triggered a build so they immediately know not to deploy a branch if a build failed e.x. you can use the following configuration
