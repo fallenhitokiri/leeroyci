@@ -38,7 +38,7 @@ func Deploy(j *logging.Job, c *config.Config) {
 		log.Println(err.Error())
 	}
 
-	//announceComplete(j, c, &d, o)
+	announceComplete(j, c, &d, o)
 }
 
 // Log and announce a started deployment.
