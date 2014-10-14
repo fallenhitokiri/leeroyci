@@ -18,13 +18,15 @@ func ContinuousDeploy(j *logging.Job, c *config.Config) bool {
 		return false
 	}
 
-	for _, d := range r.Deploy {
-		if d.Branch == j.Branch {
-			log.Println("deploying", d.Branch)
-			go Deploy(j, c)
-			return true
-		}
+	_, err = r.DeployTarget(j.Branch)
+
+	if err != nil {
+		return false
 	}
 
-	return false
+	log.Println("deploying", j.Branch)
+
+	go Deploy(j, c)
+
+	return true
 }
