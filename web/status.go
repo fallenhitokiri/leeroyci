@@ -43,8 +43,10 @@ func Commit(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	co := splitSecond(req.URL.Path)
 
 	j := blog.JobByCommit(r, co)
+	log := make([]*logging.Job, 0)
+	log = append(log, j)
 
-	render(rw, req, []logging.Job{j})
+	render(rw, req, log)
 }
 
 // Endpoint returning a badge showing the build status for a repository and

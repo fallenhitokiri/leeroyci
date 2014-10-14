@@ -45,7 +45,7 @@ var standard = `
                             </div>
                         </div>
                         {{end}}
-                        {{$job.Deployed}}
+
                         {{if $job.Deployed}}
                         <div class="panel panel-default">
                             <div class="panel-heading">

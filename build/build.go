@@ -47,7 +47,7 @@ func run(j logging.Job, c *config.Config, b *logging.Buildlog) {
 		j.Add(t)
 	}
 
-	b.Add(j)
+	b.Add(&j)
 	go notification.Notify(c, &j)
 	go deployment.ContinuousDeploy(&j, c)
 
