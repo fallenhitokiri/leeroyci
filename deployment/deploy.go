@@ -32,6 +32,8 @@ func Deploy(j *logging.Job, c *config.Config) {
 	announceStart(j, c, &d)
 
 	o, err := call(d.Execute, r.URL, j.Branch)
+	log.Println(o)
+	j.Deployed = o
 
 	if err != nil {
 		log.Println(err.Error())
