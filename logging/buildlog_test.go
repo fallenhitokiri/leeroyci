@@ -20,7 +20,7 @@ func TestBuildlogAdd(t *testing.T) {
 		Email:  "email",
 		Tasks:  []Task{task},
 	}
-	log.Add(job)
+	log.Add(&job)
 
 	if len(log.Jobs) != 1 {
 		t.Error("build not added")
@@ -79,8 +79,8 @@ func TestBuildlogSorted(t *testing.T) {
 		Email:     "email",
 		Timestamp: time.Now(),
 	}
-	log.Add(j1)
-	log.Add(j2)
+	log.Add(&j1)
+	log.Add(&j2)
 
 	log.Sort()
 
@@ -111,8 +111,8 @@ func TestBuildlogJobsForRepo(t *testing.T) {
 		Email:     "email",
 		Timestamp: time.Now(),
 	}
-	log.Add(j1)
-	log.Add(j2)
+	log.Add(&j1)
+	log.Add(&j2)
 
 	j := log.JobsForRepo("url")
 
@@ -143,8 +143,8 @@ func TestBuildlogJobsForRepoBranch(t *testing.T) {
 		Email:     "email",
 		Timestamp: time.Now(),
 	}
-	log.Add(j1)
-	log.Add(j2)
+	log.Add(&j1)
+	log.Add(&j2)
 
 	j := log.JobsForRepoBranch("url", "foo")
 
@@ -175,8 +175,8 @@ func TestBuildlogJobByCommit(t *testing.T) {
 		Email:     "email",
 		Timestamp: time.Now(),
 	}
-	log.Add(j1)
-	log.Add(j2)
+	log.Add(&j1)
+	log.Add(&j2)
 
 	j := log.JobByCommit("url", "commit1")
 

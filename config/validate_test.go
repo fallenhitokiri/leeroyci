@@ -115,3 +115,34 @@ func TestValidateNotify(t *testing.T) {
 		t.Error("n2 is valid, should be invalid", e2)
 	}
 }
+
+func TestValidateDeployment(t *testing.T) {
+	d1 := Deploy{
+		Name:    "foo",
+		Execute: "bar",
+	}
+
+	d2 := Deploy{
+		Execute: "bar",
+	}
+
+	d3 := Deploy{
+		Name: "foo",
+	}
+
+	e1 := validateDeploy(&d1)
+	e2 := validateDeploy(&d2)
+	e3 := validateDeploy(&d3)
+
+	if e1 != nil {
+		t.Error("d1 is invalid, should be valid", e1)
+	}
+
+	if e2 == nil {
+		t.Error("d2 is valid, should be invalid", e2)
+	}
+
+	if e3 == nil {
+		t.Error("d3 is valid, should be invalid", e3)
+	}
+}

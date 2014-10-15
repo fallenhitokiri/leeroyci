@@ -14,14 +14,14 @@ type Update struct {
 }
 
 // Returns a new Comment with the status of the job as body.
-func newUpdate(job logging.Job) Update {
+func newUpdate(job *logging.Job) Update {
 	u := Update{}
 	u.State = "closed"
 	return u
 }
 
 // Close a pull request if a build failed
-func ClosePR(token string, job logging.Job, pc PRCallback) {
+func ClosePR(token string, job *logging.Job, pc PRCallback) {
 	// just return if the build did not fail
 	if job.Success() {
 		return

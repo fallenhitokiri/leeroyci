@@ -11,7 +11,7 @@ import (
 
 type Buildlog struct {
 	Path  string
-	Jobs  []Job
+	Jobs  []*Job
 	mutex sync.Mutex
 }
 
@@ -26,7 +26,7 @@ func New(path string) *Buildlog {
 }
 
 // Add adds a new job to the buildlog.
-func (b *Buildlog) Add(j Job) {
+func (b *Buildlog) Add(j *Job) {
 	b.mutex.Lock()
 	b.Jobs = append(b.Jobs, j)
 	b.mutex.Unlock()
@@ -91,13 +91,13 @@ func (b *Buildlog) Sort() {
 }
 
 // Returns a slice of Jobs for a specific repo.
-func (b *Buildlog) JobsForRepo(repo string) []Job {
+func (b *Buildlog) JobsForRepo(repo string) []*Job {
 	b.Sort()
 
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 
-	var jobs = make([]Job, 0)
+	var jobs = make([]*Job, 0)
 
 	for _, j := range b.Jobs {
 		if j.URL == repo {
@@ -109,13 +109,13 @@ func (b *Buildlog) JobsForRepo(repo string) []Job {
 }
 
 // Returns a slice of Jobs for a specific repo and branch.
-func (b *Buildlog) JobsForRepoBranch(repo, branch string) []Job {
+func (b *Buildlog) JobsForRepoBranch(repo, branch string) []*Job {
 	b.Sort()
 
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 
-	var jobs = make([]Job, 0)
+	var jobs = make([]*Job, 0)
 
 	for _, j := range b.Jobs {
 		if j.URL == repo && j.Branch == branch {
@@ -127,16 +127,15 @@ func (b *Buildlog) JobsForRepoBranch(repo, branch string) []Job {
 }
 
 // Returns commit for a repo.
-func (b *Buildlog) JobByCommit(repo, commit string) Job {
+func (b *Buildlog) JobByCommit(repo, commit string) *Job {
 	jobs := b.JobsForRepo(repo)
 	job := Job{}
 
 	for _, j := range jobs {
 		if j.Commit == commit {
-			job = j
-			break
+			return j
 		}
 	}
 
-	return job
+	return &job
 }

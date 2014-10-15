@@ -58,6 +58,14 @@ func validateRepository(r *Repository) error {
 		}
 	}
 
+	for _, d := range r.Deploy {
+		err := validateDeploy(&d)
+
+		if err != nil {
+			return err
+		}
+	}
+
 	if r.URL == "" {
 		return errors.New("No URL for repository")
 	}
@@ -82,6 +90,19 @@ func validateCommand(c *Command) error {
 func validateNotify(n *Notify) error {
 	if n.Service == "" {
 		return errors.New("No service for notification")
+	}
+
+	return nil
+}
+
+// Validate a deployment. Returns an error if there is a problem.
+func validateDeploy(d *Deploy) error {
+	if d.Name == "" {
+		return errors.New("No name")
+	}
+
+	if d.Execute == "" {
+		return errors.New("No command to execute")
 	}
 
 	return nil
