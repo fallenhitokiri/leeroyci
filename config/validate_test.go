@@ -115,3 +115,111 @@ func TestValidateNotify(t *testing.T) {
 		t.Error("n2 is valid, should be invalid", e2)
 	}
 }
+
+func TestValidateNotifySlack(t *testing.T) {
+	n := Notify{
+		Service:   "slack",
+		Arguments: make(map[string]string),
+	}
+
+	n.Arguments["endpoint"] = "foo"
+
+	err := validateNotify(&n)
+
+	if err == nil {
+		t.Error("Error should not be nil, no channel")
+	}
+
+	n.Arguments = make(map[string]string)
+	n.Arguments["channel"] = "foo"
+
+	err = validateNotify(&n)
+
+	if err == nil {
+		t.Error("Error should not be nil, no endpoint")
+	}
+
+	n.Arguments["endpoint"] = "bar"
+
+	err = validateNotify(&n)
+
+	if err != nil {
+		t.Error("Slack configuration is invalid, should be valid")
+	}
+}
+
+func TestValidateNotifyHipChat(t *testing.T) {
+	n := Notify{
+		Service:   "hipchat",
+		Arguments: make(map[string]string),
+	}
+
+	n.Arguments["channel"] = "foo"
+
+	err := validateNotify(&n)
+
+	if err == nil {
+		t.Error("Error should not be nil, no key")
+	}
+
+	n.Arguments = make(map[string]string)
+	n.Arguments["key"] = "foo"
+
+	err = validateNotify(&n)
+
+	if err == nil {
+		t.Error("Error should not be nil, no channel")
+	}
+
+	n.Arguments["channel"] = "bar"
+
+	err = validateNotify(&n)
+
+	if err != nil {
+		t.Error("HipChat configuration is invalid, should be valid")
+	}
+}
+
+func TestValidateNotifyCampfire(t *testing.T) {
+	n := Notify{
+		Service:   "campfire",
+		Arguments: make(map[string]string),
+	}
+
+	n.Arguments["id"] = "foo"
+	n.Arguments["room"] = "bar"
+
+	err := validateNotify(&n)
+
+	if err == nil {
+		t.Error("Error should not be nil, no key")
+	}
+
+	n.Arguments = make(map[string]string)
+	n.Arguments["id"] = "foo"
+	n.Arguments["key"] = "bar"
+
+	err = validateNotify(&n)
+
+	if err == nil {
+		t.Error("Error should not be nil, no room")
+	}
+
+	n.Arguments = make(map[string]string)
+	n.Arguments["room"] = "foo"
+	n.Arguments["key"] = "bar"
+
+	err = validateNotify(&n)
+
+	if err == nil {
+		t.Error("Error should not be nil, no id")
+	}
+
+	n.Arguments["id"] = "bar"
+
+	err = validateNotify(&n)
+
+	if err != nil {
+		t.Error("Campfire configuration is invalid, should be valid")
+	}
+}

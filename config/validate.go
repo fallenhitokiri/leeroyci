@@ -84,5 +84,39 @@ func validateNotify(n *Notify) error {
 		return errors.New("No service for notification")
 	}
 
+	if n.Service == "slack" {
+		if _, ok := n.Arguments["channel"]; ok == false {
+			return errors.New("No channel configured for Slack")
+		}
+
+		if _, ok := n.Arguments["endpoint"]; ok == false {
+			return errors.New("No endpoint configured for Slack")
+		}
+	}
+
+	if n.Service == "hipchat" {
+		if _, ok := n.Arguments["channel"]; ok == false {
+			return errors.New("No channel configured for HipChat")
+		}
+
+		if _, ok := n.Arguments["key"]; ok == false {
+			return errors.New("No key configured for HipChat")
+		}
+	}
+
+	if n.Service == "campfire" {
+		if _, ok := n.Arguments["room"]; ok == false {
+			return errors.New("No room configured for Campfire")
+		}
+
+		if _, ok := n.Arguments["key"]; ok == false {
+			return errors.New("No key configured for Campfire")
+		}
+
+		if _, ok := n.Arguments["id"]; ok == false {
+			return errors.New("No id configured for Campfire")
+		}
+	}
+
 	return nil
 }
