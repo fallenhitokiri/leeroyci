@@ -90,7 +90,7 @@ If you want to notify `ops@example.tld` and `devops@example.tld` when someone tr
        "Arguments": {
           "ops@example.tld": "",
           "devops@example.tld": ""
-        ]
+        }
      }
 
 ##### Slack
@@ -101,7 +101,7 @@ To send the results of builds to a Slack channel use the following configuration
        "Arguments": {
           "endpoint": "endpoint",
           "channel": "channel name"
-        ]
+        }
      }
 
 ##### HipChat
@@ -112,7 +112,7 @@ To send the results of builds to a HipChat channel use the following configurati
        "Arguments": {
           "channel": "channel name",
           "key": "api key"
-        ]
+        }
      }
 
 ##### Campfire
@@ -124,7 +124,7 @@ To send the results of builds to a Campfire room use the following configuration
           "id": "CampfireID",
           "room": "room",
           "key": "api key"
-        ]
+        }
      }
 
 ## SSL
