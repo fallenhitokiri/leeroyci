@@ -7,9 +7,7 @@ import (
 )
 
 func TestBuildSlack(t *testing.T) {
-	c := config.Config{
-		SlackChannel: "#devel",
-	}
+	c := config.Config{}
 
 	task := logging.Task{
 		Return: "",
@@ -22,7 +20,7 @@ func TestBuildSlack(t *testing.T) {
 		Tasks:  []logging.Task{task},
 	}
 
-	_, err := buildSlack(&c, &job)
+	_, err := buildSlack(&c, &job, "foo")
 
 	if err != nil {
 		t.Error(err)

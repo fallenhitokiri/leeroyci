@@ -7,10 +7,7 @@ import (
 )
 
 func TestBuildHipChat(t *testing.T) {
-	c := config.Config{
-		HipChatKey:     "abc",
-		HipChatChannel: "1",
-	}
+	c := config.Config{}
 
 	task := logging.Task{
 		Return: "",
@@ -23,7 +20,7 @@ func TestBuildHipChat(t *testing.T) {
 		Tasks:  []logging.Task{task},
 	}
 
-	payload := buildHipChat(&c, &job)
+	payload := buildHipChat(&c, &job, "foo")
 
 	if payload.Color != "green" {
 		t.Error("Wrong color", payload.Color)

@@ -20,14 +20,14 @@ type campfireMessage struct {
 }
 
 // Send a notification to Campfire
-func campfire(c *config.Config, j *logging.Job) {
+func campfire(c *config.Config, j *logging.Job, id string, room string, key string) {
 	m, _ := buildCampfire(c, j)
 
 	// Campfire endpoint
 	e := fmt.Sprintf(
 		"https://%s.campfirenow.com/room/%s/speak.json",
-		c.CampfireId,
-		c.CampfireRoom,
+		id,
+		room,
 	)
 
 	client := &http.Client{}
@@ -37,7 +37,7 @@ func campfire(c *config.Config, j *logging.Job) {
 	// There is no need for a password. Campire API documentation suggests
 	// to use X so a password is present in case a component of the
 	// implementation has problems without one.
-	req.SetBasicAuth(c.CampfireKey, "X")
+	req.SetBasicAuth(key, "X")
 	req.Header.Add("Content-Type", "application/json")
 
 	client.Do(req)

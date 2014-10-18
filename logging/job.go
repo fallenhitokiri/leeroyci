@@ -8,14 +8,15 @@ import (
 )
 
 type Job struct {
-	URL       string
-	Branch    string
-	Commit    string
-	CommitURL string
-	Timestamp time.Time
-	Name      string
-	Email     string
-	Tasks     []Task
+	Identifier string
+	URL        string
+	Branch     string
+	Commit     string
+	CommitURL  string
+	Timestamp  time.Time
+	Name       string
+	Email      string
+	Tasks      []Task
 }
 
 // Returns either the exit code of the triggered command or 0 if the command

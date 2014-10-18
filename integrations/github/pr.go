@@ -28,7 +28,17 @@ type PRPullRequest struct {
 }
 
 type PRCommit struct {
-	Commit string `json:"sha"`
+	Commit     string `json:"sha"`
+	Repository PRRepo `json:"repo"`
+}
+
+type PRRepo struct {
+	Html_url string `json:"html_url"`
+}
+
+// Returns base URL for repository (HTML, not API)
+func (p *PRCallback) RepoURL() string {
+	return p.PR.Head.Repository.Html_url
 }
 
 // Handle GitHub pull requests.
@@ -69,7 +79,7 @@ func updatePR(pc PRCallback, blog *logging.Buildlog, c *config.Config) {
 				}
 
 				if r.ClosePR {
-					ClosePR(c.GitHubKey, j, pc)
+					ClosePR(r.AccessKey, j, pc)
 				}
 
 				return
@@ -101,7 +111,14 @@ func prIsCurrent(pc PRCallback, c *config.Config) bool {
 		return true
 	}
 
-	t := base64.URLEncoding.EncodeToString([]byte(c.GitHubKey))
+	rp, err := c.ConfigForRepo(pc.RepoURL())
+
+	if err != nil {
+		log.Println(err)
+		return true
+	}
+
+	t := base64.URLEncoding.EncodeToString([]byte(rp.AccessKey))
 
 	r.Header.Add("content-type", "application/json")
 	r.Header.Add("Authorization", "Basic "+t)

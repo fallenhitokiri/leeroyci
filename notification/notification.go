@@ -23,15 +23,15 @@ func Notify(c *config.Config, j *logging.Job) {
 		switch n.Service {
 		case "email":
 			// Arguments for email are the mail addresses to notify
-			for _, mail := range n.Arguments {
+			for mail, _ := range n.Arguments {
 				go email(c, j, mail)
 			}
 		case "slack":
-			go slack(c, j) // No arguments for Slack
+			go slack(c, j, n.Arguments["endpoint"], n.Arguments["channel"])
 		case "hipchat":
-			go hipchat(c, j) // No arguments for HipChat
+			go hipchat(c, j, n.Arguments["key"], n.Arguments["channel"])
 		case "campfire":
-			go campfire(c, j) // No arguments for Campfire
+			go campfire(c, j, n.Arguments["id"], n.Arguments["room"], n.Arguments["key"])
 		default:
 			log.Println("Notification not supported", n.Service)
 		}
