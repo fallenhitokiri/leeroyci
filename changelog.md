@@ -1,3 +1,9 @@
+2014-10-18 Timo Zimmermann <timo@screamingatmyscreen.com>
+
+* add configuration validation
+* individual tokens for repositories
+* new configuration format
+
 2014-08-23 Timo Zimmermann <timo@screamingatmyscreen.com>
 
 * add JSON support to all endpoints
