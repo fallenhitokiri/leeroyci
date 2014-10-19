@@ -20,6 +20,7 @@ type Config struct {
 	Cert          string
 	Key           string
 	path          string
+	Templates     string
 }
 
 type Repository struct {
