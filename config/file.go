@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 )
 
+// Read a configuration file and create a new Config instance.
 func FromFile(name string) Config {
 	var c Config
 
@@ -20,4 +21,15 @@ func FromFile(name string) Config {
 	}
 
 	return c
+}
+
+// Write the current configuration to the standard configuration file.
+func (c *Config) ToFile() error {
+	data, err := json.Marshal(c)
+
+	if err != nil {
+		return err
+	}
+
+	return ioutil.WriteFile(c.path, data, 0600)
 }
