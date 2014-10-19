@@ -19,6 +19,7 @@ type Config struct {
 	URL           string
 	Cert          string
 	Key           string
+	path          string
 }
 
 type Repository struct {
