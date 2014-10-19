@@ -24,7 +24,8 @@ func responseFormat(val url.Values) string {
 }
 
 // Get a template and execute it.
-func render(rw http.ResponseWriter, req *http.Request, jobs []logging.Job, c *config.Config, template string) {
+func render(rw http.ResponseWriter, req *http.Request, jobs []logging.Job,
+	c *config.Config, template string) {
 	f := responseFormat(req.URL.Query())
 
 	switch f {
@@ -53,7 +54,8 @@ func renderJSON(rw http.ResponseWriter, jobs []logging.Job) {
 }
 
 // Render and write HTML response.
-func renderHTML(rw http.ResponseWriter, jobs []logging.Job, c *config.Config, template string) {
+func renderHTML(rw http.ResponseWriter, jobs []logging.Job, c *config.Config,
+	template string) {
 	t, err := templates.Get(template, c)
 
 	if err != nil {
