@@ -4,8 +4,9 @@ package web
 import (
 	"encoding/hex"
 	"encoding/json"
-	"html/template"
+	"leeroy/config"
 	"leeroy/logging"
+	"leeroy/web/templates"
 	"log"
 	"net/http"
 	"net/url"
@@ -23,14 +24,14 @@ func responseFormat(val url.Values) string {
 }
 
 // Get a template and execute it.
-func render(rw http.ResponseWriter, req *http.Request, jobs []logging.Job) {
+func render(rw http.ResponseWriter, req *http.Request, jobs []logging.Job, c *config.Config, template string) {
 	f := responseFormat(req.URL.Query())
 
 	switch f {
 	case "json":
 		renderJSON(rw, jobs)
 	case "html":
-		renderHTML(rw, jobs)
+		renderHTML(rw, jobs, c, template)
 	default:
 		log.Println("unsupported render format", f)
 	}
@@ -52,15 +53,19 @@ func renderJSON(rw http.ResponseWriter, jobs []logging.Job) {
 }
 
 // Render and write HTML response.
-func renderHTML(rw http.ResponseWriter, jobs []logging.Job) {
-	t := template.New("status")
-	t, _ = t.Parse(standard)
-	t.Execute(
-		rw,
-		map[string]interface{}{
-			"Jobs": jobs,
-		},
-	)
+func renderHTML(rw http.ResponseWriter, jobs []logging.Job, c *config.Config, template string) {
+	t, err := templates.Get(template, c)
+
+	if err != nil {
+		http.Error(rw, "500: Error rendering template.", 500)
+	} else {
+		t.Execute(
+			rw,
+			map[string]interface{}{
+				"Jobs": jobs,
+			},
+		)
+	}
 }
 
 // Splits a request path and returns the first part after the endpoint.

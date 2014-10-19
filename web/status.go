@@ -12,7 +12,7 @@ func Status(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	blog *logging.Buildlog) {
 	blog.Sort()
 
-	render(rw, req, blog.Jobs)
+	render(rw, req, blog.Jobs, c, "status")
 }
 
 // View to show builds for a specific repository.
@@ -22,7 +22,7 @@ func Repo(rw http.ResponseWriter, req *http.Request, c *config.Config,
 
 	j := blog.JobsForRepo(r)
 
-	render(rw, req, j)
+	render(rw, req, j, c, "repo")
 }
 
 // View to show builds for a specific repository and branch.
@@ -33,7 +33,7 @@ func Branch(rw http.ResponseWriter, req *http.Request, c *config.Config,
 
 	j := blog.JobsForRepoBranch(r, b)
 
-	render(rw, req, j)
+	render(rw, req, j, c, "branch")
 }
 
 // View to show the build for a commit in a repository.
@@ -44,7 +44,7 @@ func Commit(rw http.ResponseWriter, req *http.Request, c *config.Config,
 
 	j := blog.JobByCommit(r, co)
 
-	render(rw, req, []logging.Job{j})
+	render(rw, req, []logging.Job{j}, c, "commit")
 }
 
 // Endpoint returning a badge showing the build status for a repository and
