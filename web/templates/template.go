@@ -5,6 +5,7 @@ import (
 	"errors"
 	"html/template"
 	"leeroy/config"
+	"path"
 )
 
 // Define standard templates to use if no external source is given.
@@ -25,5 +26,14 @@ func Get(name string, c *config.Config) (*template.Template, error) {
 			return nil, errors.New("Standard template does not exist.")
 		}
 	}
-	return nil, nil
+
+	tmpl := fullPath(name, c.Templates)
+
+	return template.ParseFiles(tmpl)
+}
+
+// Build full template path.
+func fullPath(name string, tmplPath string) string {
+	name = name + ".html"
+	return path.Join(tmplPath, name)
 }

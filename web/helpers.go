@@ -57,6 +57,7 @@ func renderHTML(rw http.ResponseWriter, jobs []logging.Job, c *config.Config, te
 	t, err := templates.Get(template, c)
 
 	if err != nil {
+		log.Println(err)
 		http.Error(rw, "500: Error rendering template.", 500)
 	} else {
 		t.Execute(
