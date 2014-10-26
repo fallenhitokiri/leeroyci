@@ -43,10 +43,6 @@ The following configuration shows all options Leeroy supports. We will go throug
                "Name": "production",
                "Branch": "master",
                "Execute": "/Users/timo/tmp/leeroy/deploy_master.sh"
-               "Arguments": {
-                 "access_key": "foo",
-                 "access_secret": "bar"
-               }
              }
            ]
          }
@@ -61,9 +57,9 @@ The following configuration shows all options Leeroy supports. We will go throug
 - `Repositories` list of all repositories Leeroy will run builds for
 
 #### Repositories
-- `Name` Name for this project
+- `Name` name for this project
 - `URL` URL on which your repository is hosted. It is required that it matches your repository URL or Leeroy will not run any builds
-- `AccessKey` You will likely need an access key to interact with your version control system, like a GitHub access token.
+- `AccessKey` you will likely need an access key to interact with your version control system, like a GitHub access token.
 - `CommentPR` if you open a pull request Leeroy will post a comment with the build status for HEAD
 - `ClosePR` if the build for HEAD failed Leeroy will close a pull request
 - `Commands` list of commands to run when a build is triggered (push / PR)
@@ -80,7 +76,14 @@ The following configuration shows all options Leeroy supports. We will go throug
 Currently supported notifications are `slack` and `email`. Slack takes no arguments, email expects a list of email addresses to send the build status to. Remember that the person who pushed or opened the pull request will always get an email, so only configure additional people here.
 
 #### Deploy
-TODO: add deployment documentation
+Deploying is currently being developed and a bit limited but it is working and used in production. It is
+working the same was as tests, it calls an external command and provides the repository and branch as argument.
+
+- `Name` an identifier for the deployment, like "testing deploy" or "deploy to staging". Used to display what is going on
+- `Branch` branch that should be deployed
+- `Execute` script to execute
+
+Deployments will only be triggered if the build was successful.
 
 ##### Email
 If you want to notify `ops@example.tld` and `devops@example.tld` when someone triggered a build so they immediately know not to deploy a branch if a build failed e.x. you can use the following configuration
