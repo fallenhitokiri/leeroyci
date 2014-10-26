@@ -1,5 +1,5 @@
 # Leeroy CI
-Leeroy is a self hosted, continuous integration and build service. It is designed to be easy to setup and will not require an additional ops person to keep running. It runs on your own server, so you can create the test environment you want, exactly mirroring production, without having to trust anyone else to keep your source code or eventually database images with sensitive information safe.
+Leeroy is a self hosted, continuous integration, build and deployment service. It is designed to be easy to setup and will not require an additional ops person to keep running. It runs on your own server, so you can create the test environment you want, exactly mirroring production, without having to trust anyone else to keep your source code or eventually database images with sensitive information safe.
 
 ![Leeroy](https://raw.github.com/fallenhitokiri/leeroyci/master/assets/leeroy.jpg)
 
@@ -14,6 +14,7 @@ Currently Leeroy plays nicely with GitHub. Integrations for GitLab and Bitbucket
 - post results to a Slack, Campfire or HipChat channel
 - see all builds on an acceptable designed, read bootstrap, webinterface.
 - get all builds, branchs or single commits as JSON
+- continuous deployment
 
 ## Quickstart
 For now please check out the master branch of this repository and run it via `go run leeroy.go`. Binaries will be available in some days.
@@ -83,7 +84,6 @@ While Leeroy is working and doing its job it is far from being feature complete.
 - user authentication (status pages)
 - configuration of repositories through the webinterface
 - website with a browsable documentation and more default snippets
-- deployment
 
 ## Contributing
 Feel free to open issues about bugs or features you want to see or open pull requests. Beside using `go fmt` and `go vet` on your code please try to keep the code length around 80 characters. This is no hard limit. If a line is 86 characters long but easy to read and understand there is no need to break it into multiple lines.
