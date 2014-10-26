@@ -58,6 +58,14 @@ func validateRepository(r *Repository) error {
 		}
 	}
 
+	for _, d := range r.Deploy {
+		err := validateDeploy(&d)
+
+		if err != nil {
+			return err
+		}
+	}
+
 	if r.URL == "" {
 		return errors.New("No URL for repository")
 	}
@@ -116,6 +124,19 @@ func validateNotify(n *Notify) error {
 		if _, ok := n.Arguments["id"]; ok == false {
 			return errors.New("No id configured for Campfire")
 		}
+	}
+
+	return nil
+}
+
+// Validate a deployment. Returns an error if there is a problem.
+func validateDeploy(d *Deploy) error {
+	if d.Name == "" {
+		return errors.New("No name")
+	}
+
+	if d.Execute == "" {
+		return errors.New("No command to execute")
 	}
 
 	return nil

@@ -15,7 +15,7 @@ type Comment struct {
 }
 
 // Returns a new Comment with the status of the job as body.
-func newComment(job logging.Job, base string) Comment {
+func newComment(job *logging.Job, base string) Comment {
 	c := Comment{}
 
 	if job.Success() {
@@ -31,7 +31,7 @@ func newComment(job logging.Job, base string) Comment {
 }
 
 // Post a new comment on a pull request.
-func PostPR(c *config.Config, job logging.Job, pc PRCallback) {
+func PostPR(c *config.Config, job *logging.Job, pc PRCallback) {
 	comment := newComment(job, c.URL)
 	rp, err := c.ConfigForRepo(job.URL)
 

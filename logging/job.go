@@ -17,6 +17,7 @@ type Job struct {
 	Name       string
 	Email      string
 	Tasks      []Task
+	Deployed   string
 }
 
 // Returns either the exit code of the triggered command or 0 if the command

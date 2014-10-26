@@ -30,6 +30,7 @@ type Repository struct {
 	CommentPR bool
 	ClosePR   bool
 	AccessKey string
+	Deploy    []Deploy
 }
 
 type Command struct {
@@ -39,6 +40,13 @@ type Command struct {
 
 type Notify struct {
 	Service   string
+	Arguments map[string]string
+}
+
+type Deploy struct {
+	Name      string
+	Branch    string
+	Execute   string
 	Arguments map[string]string
 }
 
@@ -92,4 +100,14 @@ func (r *Repository) Identifier() string {
 		return r.Name
 	}
 	return r.URL
+}
+
+// Returns the deployment target for a branch
+func (r *Repository) DeployTarget(branch string) (Deploy, error) {
+	for _, d := range r.Deploy {
+		if d.Branch == branch {
+			return d, nil
+		}
+	}
+	return Deploy{}, errors.New("No deployment target for branch")
 }

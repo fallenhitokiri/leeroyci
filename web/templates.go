@@ -45,6 +45,24 @@ var standard = `
                             </div>
                         </div>
                         {{end}}
+
+                        {{if $job.Deployed}}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse-deployment-{{$ji}}">
+                                        Deployment
+                                    </a>
+                                </h4>
+                            </div>
+
+                            <div id="collapse-deployment-{{$ji}}" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <pre>{{$job.Deployed}}</pre>
+                                </div>
+                            </div>
+                        </div>
+                        {{end}}
                     </div>
                 </div>
 
