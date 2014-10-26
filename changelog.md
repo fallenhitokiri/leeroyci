@@ -1,3 +1,8 @@
+2014-10-26 Timo Zimmermann <timo@screamingatmyscreen.com>
+
+* update web interface
+* add option for deploying code after successfully building a branch
+
 2014-10-18 Timo Zimmermann <timo@screamingatmyscreen.com>
 
 * add configuration validation
