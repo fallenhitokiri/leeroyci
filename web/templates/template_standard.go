@@ -1,7 +1,7 @@
-// Define default templates for all views.
-package web
+// Defines the standard template that covers most use cases.
+package templates
 
-var standard = `
+var tmpl_standard = `
 <html>
     <head>
         <title>leeroy Status</title>

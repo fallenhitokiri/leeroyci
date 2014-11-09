@@ -1,3 +1,7 @@
+2014-11-09 Timo Zimmermann <timo@screamingatmyscreen.com>
+
+* add support for custom templates
+
 2014-10-26 Timo Zimmermann <timo@screamingatmyscreen.com>
 
 * update web interface
