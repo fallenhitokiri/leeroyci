@@ -4,14 +4,15 @@ The following configuration shows all options Leeroy supports. We will go throug
      {
        "URL": "https://localhost:8082/",
        "Secret": "superdupersecret",
-       "Cert": "/Users/tizi/tmp/leeroy.crt",
-       "Key": "/Users/tizi/tmp/leeroy.key",
-       "BuildLogPath": "/Users/tizi/tmp/build.json",
+       "Cert": "/Users/timo/tmp/leeroy.crt",
+       "Key": "/Users/timo/tmp/leeroy.key",
+       "BuildLogPath": "/Users/timo/tmp/leeroy/build.json",
        "EmailFrom": "Leeroy CI",
        "EmailHost": "smtp.gmail.com",
        "EmailPort": 587,
        "EmailUser": "onlyaspamaccount@gmail.com",
        "EmailPassword": "foo",
+       "Templates": "/Users/timo/tmp/leeroy/templates"
        "Repositories": [
          {
            "Name": "Awesome Project"
@@ -22,11 +23,11 @@ The following configuration shows all options Leeroy supports. We will go throug
            "Commands": [
              {
                "Name": "pass",
-               "Execute": "/Users/tizi/tmp/leeroy/test.sh"
+               "Execute": "/Users/timo/tmp/leeroy/test.sh"
              },
              {
                "Name": "fail",
-               "Execute": "/Users/tizi/tmp/leeroy/test2.sh"
+               "Execute": "/Users/timo/tmp/leeroy/test2.sh"
              }
            ],
            "Notify": [
@@ -134,3 +135,17 @@ To send the results of builds to a Campfire room use the following configuration
 If you want to use a self-signed certificate make sure to disable GitHubs SSL verification. You can generate a certificate and key with the following command
 
       openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout leeroy.key -out leeroy.crt
+
+## Custom Templates
+You can use custom templates to style your CI the way you like it. First of all you have to create a directory in which you store the templates and add this to your configuration.
+
+     "Templates": "path/to/your/templates"
+
+You have to add one template for each view
+
+- `status.html` is the index
+- `repo.html` for all jobs belonging to a repository
+- `commit.html` for one job
+- `branch.html` for all jobs belonging to a branch
+
+If you use custom templates you have to create templates for *all* views. As a starting point you can just use `leeroy/web/templates/template_standard.go` - this template works for all views.
