@@ -19,6 +19,11 @@ var kinds = [...]string{KindBuild, KindDeployStart, KindDeployDone}
 
 // Run all notifications configured for a job.
 func Notify(c *config.Config, j *logging.Job, kind string) {
+	if kindSupported(kind) == false {
+		log.Fatal("unsupported notification type", kind)
+		return
+	}
+
 	// always notify the person who comitted
 	go email(c, j, j.Email)
 
@@ -46,4 +51,14 @@ func Notify(c *config.Config, j *logging.Job, kind string) {
 			log.Println("Notification not supported", n.Service)
 		}
 	}
+}
+
+// Check if kind is a supported notification type.
+func kindSupported(kind string) bool {
+	for _, k := range kinds {
+		if k == kind {
+			return true
+		}
+	}
+	return false
 }
