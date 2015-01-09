@@ -1,19 +1,46 @@
 package notification
 
 import (
+	"leeroy/config"
+	"leeroy/logging"
 	"testing"
 )
 
-func TestKindSupported(t *testing.T) {
-	s := kindSupported(KindBuild)
-
-	if s == false {
-		t.Error(s, "not supported, but should.")
+func TestNotificationFromJob(t *testing.T) {
+	c := config.Config{}
+	j := logging.Job{
+		Identifier: "ident",
+		URL:        "url",
+		Branch:     "branch",
+		Commit:     "commit",
+		CommitURL:  "curl",
+		Name:       "name",
+		Email:      "email",
 	}
 
-	s = kindSupported("foo")
+	n := notificationFromJob(&j, &c)
 
-	if s == true {
-		t.Error(s, "supported, but should not.")
+	if n.Status != true {
+		t.Error("Status false, should be true")
+	}
+}
+
+func TestRender(t *testing.T) {
+	n := notification{
+		Repo:   "repo",
+		Branch: "branch",
+		Name:   "name",
+		Email:  "email",
+		Status: true,
+		Url:    "url",
+		kind:   "build",
+	}
+
+	n.render()
+
+	exp := "Repository: repo Branch: branch by name <email> -> Build success\nDetails: url"
+
+	if n.rendered != exp {
+		t.Error("Got ", n.rendered, "Expected ", exp)
 	}
 }

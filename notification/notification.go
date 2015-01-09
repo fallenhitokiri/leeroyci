@@ -1,10 +1,12 @@
-// Notifications to send after a build process finished.
+// Notification for various targets.
 package notification
 
 import (
+	"bytes"
 	"leeroy/config"
 	"leeroy/logging"
 	"log"
+	"text/template"
 )
 
 // Define default template names that are used for various notifications.
@@ -17,48 +19,45 @@ const (
 // List of all valid notification types.
 var kinds = [...]string{KindBuild, KindDeployStart, KindDeployDone}
 
-// Run all notifications configured for a job.
-func Notify(c *config.Config, j *logging.Job, kind string) {
-	if kindSupported(kind) == false {
-		log.Fatal("unsupported notification type", kind)
-		return
-	}
+// Everything related to a notification.
+type notification struct {
+	Repo     string
+	Branch   string
+	Name     string
+	Email    string
+	Status   bool
+	Url      string
+	kind     string
+	rendered string
+}
 
-	// always notify the person who comitted
-	go email(c, j, j.Email)
-
-	repo, err := c.ConfigForRepo(j.URL)
-
-	if err != nil {
-		log.Println("could not find repo", j.URL)
-		return
-	}
-
-	for _, n := range repo.Notify {
-		switch n.Service {
-		case "email":
-			// Arguments for email are the mail addresses to notify
-			for mail, _ := range n.Arguments {
-				go email(c, j, mail)
-			}
-		case "slack":
-			go slack(c, j, n.Arguments["endpoint"], n.Arguments["channel"])
-		case "hipchat":
-			go hipchat(c, j, n.Arguments["key"], n.Arguments["channel"])
-		case "campfire":
-			go campfire(c, j, n.Arguments["id"], n.Arguments["room"], n.Arguments["key"])
-		default:
-			log.Println("Notification not supported", n.Service)
-		}
+// Create a notification from a job.
+func notificationFromJob(j *logging.Job, c *config.Config) *notification {
+	return &notification{
+		Repo:   j.URL,
+		Branch: j.Branch,
+		Name:   j.Name,
+		Email:  j.Email,
+		Status: j.Success(),
+		Url:    j.StatusURL(c.URL),
 	}
 }
 
-// Check if kind is a supported notification type.
-func kindSupported(kind string) bool {
-	for _, k := range kinds {
-		if k == kind {
-			return true
-		}
+// Render a notification.
+func (n *notification) render() {
+	t := template.New(n.kind)
+	t, err := t.Parse(templates[n.kind])
+
+	if err != nil {
+		log.Fatal(err)
 	}
-	return false
+
+	var r bytes.Buffer
+	err = t.Execute(&r, n)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	n.rendered = r.String()
 }
