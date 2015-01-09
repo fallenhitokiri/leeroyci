@@ -7,8 +7,18 @@ import (
 	"log"
 )
 
-// Run all notifications configured for a
-func Notify(c *config.Config, j *logging.Job) {
+// Define default template names that are used for various notifications.
+const (
+	KindBuild       = "build"
+	KindDeployStart = "deploy-start"
+	KindDeployDone  = "deploy-done"
+)
+
+// List of all valid notification types.
+var kinds = [...]string{KindBuild, KindDeployStart, KindDeployDone}
+
+// Run all notifications configured for a job.
+func Notify(c *config.Config, j *logging.Job, kind string) {
 	// always notify the person who comitted
 	go email(c, j, j.Email)
 
