@@ -34,7 +34,7 @@ func buildEmail(c *config.Config, n *notification) []byte {
 	f := mail.Address{Name: "leeroy", Address: c.EmailFrom}
 	t := mail.Address{Name: n.Name, Address: n.Email}
 	s := subject(n)
-	b := n.rendered
+	b := n.message
 	m := addHeaders(f.String(), t.String(), s, b)
 	return m
 }

@@ -6,14 +6,14 @@ import (
 
 func TestBuildCampfire(t *testing.T) {
 	n := notification{
-		Repo:     "repo",
-		Branch:   "branch",
-		Name:     "name",
-		Email:    "email",
-		Status:   true,
-		Url:      "url",
-		kind:     "build",
-		rendered: "foo",
+		Repo:    "repo",
+		Branch:  "branch",
+		Name:    "name",
+		Email:   "email",
+		Status:  true,
+		Url:     "url",
+		kind:    "build",
+		message: "foo",
 	}
 
 	_, err := buildCampfire(&n)

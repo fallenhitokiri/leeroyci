@@ -40,7 +40,7 @@ func TestRender(t *testing.T) {
 
 	exp := "Repository: repo Branch: branch by name <email> -> Build success\nDetails: url"
 
-	if n.rendered != exp {
-		t.Error("Got ", n.rendered, "Expected ", exp)
+	if n.message != exp {
+		t.Error("Got ", n.message, "Expected ", exp)
 	}
 }

@@ -36,7 +36,7 @@ func buildSlack(n *notification, channel string) ([]byte, error) {
 	p := slackPayload{
 		Channel:  channel,
 		Username: "CI",
-		Text:     n.rendered,
+		Text:     n.message,
 	}
 
 	marsh, err := json.Marshal(p)

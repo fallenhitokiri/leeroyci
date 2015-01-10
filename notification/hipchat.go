@@ -68,7 +68,7 @@ func notToHipChapt(n *notification, channel string) hipchatPayload {
 		Format:  "text",
 		Room:    channel,
 		From:    "Leeroy",
-		Message: n.rendered,
+		Message: n.message,
 		Status:  n.Status,
 	}
 

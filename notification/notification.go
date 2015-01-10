@@ -22,14 +22,14 @@ var kinds = [...]string{KindBuild, KindDeployStart, KindDeployDone}
 
 // Everything related to a notification.
 type notification struct {
-	Repo     string
-	Branch   string
-	Name     string
-	Email    string
-	Status   bool
-	Url      string
-	kind     string
-	rendered string
+	Repo    string
+	Branch  string
+	Name    string
+	Email   string
+	Status  bool
+	Url     string
+	kind    string
+	message string
 }
 
 // Create a notification from a job.
@@ -60,5 +60,5 @@ func (n *notification) render() {
 		log.Fatal(err)
 	}
 
-	n.rendered = r.String()
+	n.message = r.String()
 }

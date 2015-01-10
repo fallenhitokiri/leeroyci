@@ -38,7 +38,7 @@ func campfire(n *notification, id string, room string, key string) {
 func buildCampfire(n *notification) ([]byte, error) {
 	p := campfirePayload{
 		Message: &campfireMessage{
-			Body: n.rendered,
+			Body: n.message,
 		},
 	}
 
