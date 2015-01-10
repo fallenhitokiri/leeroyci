@@ -10,10 +10,12 @@ import (
 	"net/http"
 )
 
+// Payload Campfire expects to be POSTed to their API.
 type campfirePayload struct {
 	Message *campfireMessage `json:"message"`
 }
 
+// Message part of the payload Campfire expects.
 type campfireMessage struct {
 	Body string `json:"body"`
 }
