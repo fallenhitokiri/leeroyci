@@ -1,4 +1,5 @@
-// Notification for various targets.
+// Package notification handles all notifications for a job. This includes
+// build and deployment notifications.
 package notification
 
 import (

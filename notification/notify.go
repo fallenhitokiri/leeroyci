@@ -1,4 +1,5 @@
-// Handle sending notifications.
+// Package notification handles all notifications for a job. This includes
+// build and deployment notifications.
 package notification
 
 import (
@@ -7,7 +8,7 @@ import (
 	"log"
 )
 
-// Run all notifications configured for a job.
+// Notify send build and deployment notifications for a job.
 func Notify(c *config.Config, j *logging.Job, kind string) {
 	if kindSupported(kind) == false {
 		log.Fatal("unsupported notification type", kind)
@@ -18,7 +19,7 @@ func Notify(c *config.Config, j *logging.Job, kind string) {
 	not.kind = kind
 
 	// always notify the person who comitted
-	go email(c, j, j.Email)
+	go email(c, not, j.Email)
 
 	repo, err := c.ConfigForRepo(j.URL)
 
@@ -31,15 +32,15 @@ func Notify(c *config.Config, j *logging.Job, kind string) {
 		switch n.Service {
 		case "email":
 			// Arguments for email are the mail addresses to notify
-			for mail, _ := range n.Arguments {
-				go email(c, j, mail)
+			for mail := range n.Arguments {
+				go email(c, not, mail)
 			}
 		case "slack":
-			go slack(c, j, n.Arguments["endpoint"], n.Arguments["channel"])
+			go slack(not, n.Arguments["endpoint"], n.Arguments["channel"])
 		case "hipchat":
-			go hipchat(c, j, n.Arguments["key"], n.Arguments["channel"])
+			go hipchat(not, n.Arguments["key"], n.Arguments["channel"])
 		case "campfire":
-			go campfire(c, j, n.Arguments["id"], n.Arguments["room"], n.Arguments["key"])
+			go campfire(not, n.Arguments["id"], n.Arguments["room"], n.Arguments["key"])
 		default:
 			log.Println("Notification not supported", n.Service)
 		}
