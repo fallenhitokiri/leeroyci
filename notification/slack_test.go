@@ -1,26 +1,21 @@
 package notification
 
 import (
-	"leeroy/config"
-	"leeroy/logging"
 	"testing"
 )
 
 func TestBuildSlack(t *testing.T) {
-	c := config.Config{}
-
-	task := logging.Task{
-		Return: "",
-	}
-	job := logging.Job{
-		URL:    "foo",
-		Branch: "bar",
-		Name:   "baz",
-		Email:  "zab",
-		Tasks:  []logging.Task{task},
+	n := notification{
+		Repo:   "repo",
+		Branch: "branch",
+		Name:   "name",
+		Email:  "email",
+		Status: true,
+		Url:    "url",
+		kind:   "build",
 	}
 
-	_, err := buildSlack(&c, &job, "foo")
+	_, err := buildSlack(&n, "foo")
 
 	if err != nil {
 		t.Error(err)

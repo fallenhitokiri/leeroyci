@@ -4,9 +4,6 @@ package notification
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
-	"leeroy/config"
-	"leeroy/logging"
 	"log"
 	"net/http"
 )
@@ -18,11 +15,11 @@ type slackPayload struct {
 }
 
 // Send a notification to Slack
-func slack(c *config.Config, j *logging.Job, ep string, chl string) {
-	m, err := buildSlack(c, j, chl)
+func slack(n *notification, endpoint string, channel string) {
+	m, err := buildSlack(n, channel)
 
 	_, err = http.Post(
-		ep,
+		endpoint,
 		"application/json",
 		bytes.NewReader(m),
 	)
@@ -33,29 +30,12 @@ func slack(c *config.Config, j *logging.Job, ep string, chl string) {
 }
 
 // Build the payload to send to Slack.
-func buildSlack(c *config.Config, j *logging.Job, chl string) ([]byte, error) {
+func buildSlack(n *notification, channel string) ([]byte, error) {
 	p := slackPayload{
-		Channel:  chl,
+		Channel:  channel,
 		Username: "CI",
+		Text:     n.rendered,
 	}
-
-	success := "success"
-
-	if j.Success() == false {
-		success = "failed"
-	}
-
-	m := fmt.Sprintf(
-		"Repo: %s - %s by %s <%s> -> %s\nBuild: %s",
-		j.URL,
-		j.Branch,
-		j.Name,
-		j.Email,
-		success,
-		j.StatusURL(c.URL),
-	)
-
-	p.Text = m
 
 	marsh, err := json.Marshal(p)
 
