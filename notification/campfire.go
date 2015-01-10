@@ -1,12 +1,11 @@
-// Implement Campfire notifications.
+// Package notification handles all notifications for a job. This includes
+// build and deployment notifications.
 package notification
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"leeroy/config"
-	"leeroy/logging"
 	"log"
 	"net/http"
 )
@@ -20,15 +19,9 @@ type campfireMessage struct {
 }
 
 // Send a notification to Campfire
-func campfire(c *config.Config, j *logging.Job, id string, room string, key string) {
-	m, _ := buildCampfire(c, j)
-
-	// Campfire endpoint
-	e := fmt.Sprintf(
-		"https://%s.campfirenow.com/room/%s/speak.json",
-		id,
-		room,
-	)
+func campfire(n *notification, id string, room string, key string) {
+	m, _ := buildCampfire(n)
+	e := endpointCampfire(id, room)
 
 	client := &http.Client{}
 
@@ -48,31 +41,27 @@ func campfire(c *config.Config, j *logging.Job, id string, room string, key stri
 }
 
 // Build the payload to send to Campfire.
-func buildCampfire(c *config.Config, j *logging.Job) ([]byte, error) {
-	m := campfireMessage{}
-	p := campfirePayload{Message: &m}
-
-	success := "success"
-
-	if j.Success() == false {
-		success = "failed"
+func buildCampfire(n *notification) ([]byte, error) {
+	p := campfirePayload{
+		Message: &campfireMessage{
+			Body: n.rendered,
+		},
 	}
-
-	p.Message.Body = fmt.Sprintf(
-		"Repo: %s - %s by %s <%s> -> %s\nBuild: %s",
-		j.URL,
-		j.Branch,
-		j.Name,
-		j.Email,
-		success,
-		j.StatusURL(c.URL),
-	)
 
 	marsh, err := json.Marshal(p)
 
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
 	}
 
 	return marsh, err
+}
+
+// Build the endpoint for campfire
+func endpointCampfire(id, room string) string {
+	return fmt.Sprintf(
+		"https://%s.campfirenow.com/room/%s/speak.json",
+		id,
+		room,
+	)
 }
