@@ -1,19 +1,19 @@
-// Implement email notifications.
+// Package notification handles all notifications for a job. This includes
+// build and deployment notifications.
 package notification
 
 import (
 	"encoding/base64"
 	"fmt"
 	"leeroy/config"
-	"leeroy/logging"
 	"log"
 	"net/mail"
 	"net/smtp"
 )
 
 // Send an email to `toName <toEmail>` with the details of the failed build.
-func email(c *config.Config, j *logging.Job, to string) {
-	message := buildEmail(c, j)
+func email(c *config.Config, n *notification, to string) {
+	message := buildEmail(c, n)
 	auth := smtp.PlainAuth("", c.EmailUser, c.EmailPassword, c.EmailHost)
 
 	err := smtp.SendMail(
@@ -30,11 +30,11 @@ func email(c *config.Config, j *logging.Job, to string) {
 }
 
 // Notify the person who pushed the changes
-func buildEmail(c *config.Config, j *logging.Job) []byte {
+func buildEmail(c *config.Config, n *notification) []byte {
 	f := mail.Address{Name: "leeroy", Address: c.EmailFrom}
-	t := mail.Address{Name: j.Name, Address: j.Email}
-	s := subject(j)
-	b := body(j, c.URL)
+	t := mail.Address{Name: n.Name, Address: n.Email}
+	s := subject(n)
+	b := n.rendered
 	m := addHeaders(f.String(), t.String(), s, b)
 	return m
 }
@@ -60,32 +60,9 @@ func addHeaders(from, to, subject, body string) []byte {
 }
 
 // Returns the subject for the mail.
-func subject(j *logging.Job) string {
-	if j.Success() == true {
-		return fmt.Sprintf("Build for %s finished successfully", j.Branch)
+func subject(n *notification) string {
+	if n.Status == true {
+		return fmt.Sprintf("%s: success", n.Branch)
 	}
-	return fmt.Sprintf("Build for %s finished with errors", j.Branch)
-}
-
-// Returns the body for the mail.
-func body(j *logging.Job, u string) string {
-	b := fmt.Sprintf(
-		"Repo: %s - Branch: %s\nTime: %s\nReturn: %s\n\n\n",
-		j.URL,
-		j.Branch,
-		j.Timestamp.String(),
-		j.Status(),
-	)
-
-	for _, t := range j.Tasks {
-		b = b + fmt.Sprintf(
-			"Command: %s -> %s\n",
-			t.Command,
-			t.Status(),
-		)
-	}
-
-	b = b + fmt.Sprintf("\n\n%s\n", j.StatusURL(u))
-
-	return b
+	return fmt.Sprintf("%s: failed", n.Branch)
 }
