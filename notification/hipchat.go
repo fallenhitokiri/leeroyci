@@ -1,4 +1,5 @@
-// Implement HipChat notifications.
+// Package notification handles all notifications for a job. This includes
+// build and deployment notifications.
 package notification
 
 import (
@@ -9,8 +10,10 @@ import (
 	"net/url"
 )
 
+// API endpoint for HipChat
 var api = "https://www.hipchat.com/v1/rooms/message?auth_token=%s"
 
+// Payload HipChat expects to be POSTed to the API.
 type hipchatPayload struct {
 	Room    string
 	From    string
@@ -44,6 +47,7 @@ func (h *hipchatPayload) toURLEncoded() []byte {
 	return []byte(d.Encode())
 }
 
+// Send a notification to HipChat.
 func hipchat(n *notification, key string, chl string) {
 	e := fmt.Sprintf(api, key)
 	p := notToHipChapt(n, chl)

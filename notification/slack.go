@@ -1,4 +1,5 @@
-// Implement Slack notifications.
+// Package notification handles all notifications for a job. This includes
+// build and deployment notifications.
 package notification
 
 import (
@@ -8,6 +9,7 @@ import (
 	"net/http"
 )
 
+// Payload Slack expects to be POSTed to their API.
 type slackPayload struct {
 	Channel  string `json:"channel"`
 	Username string `json:"username"`
