@@ -31,3 +31,17 @@ func TestEndpointCampfire(t *testing.T) {
 		t.Error("Expected ", exp, " got ", e)
 	}
 }
+
+func TestRequestCampfire(t *testing.T) {
+	r := requestCampfire("foo", "bar", []byte("baz"))
+
+	if r.Method != "POST" {
+		t.Error("Wrong method ", r.Method)
+	}
+
+	u, _, _ := r.BasicAuth()
+
+	if u != "bar" {
+		t.Error("Wrong username", u)
+	}
+}

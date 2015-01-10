@@ -22,21 +22,13 @@ type campfireMessage struct {
 func campfire(n *notification, id string, room string, key string) {
 	m, _ := buildCampfire(n)
 	e := endpointCampfire(id, room)
+	r := requestCampfire(e, key, m)
+	c := &http.Client{}
 
-	client := &http.Client{}
-
-	req, err := http.NewRequest("POST", e, bytes.NewReader(m))
-
-	// There is no need for a password. Campire API documentation suggests
-	// to use X so a password is present in case a component of the
-	// implementation has problems without one.
-	req.SetBasicAuth(key, "X")
-	req.Header.Add("Content-Type", "application/json")
-
-	client.Do(req)
+	_, err := c.Do(r)
 
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
 	}
 }
 
@@ -64,4 +56,21 @@ func endpointCampfire(id, room string) string {
 		id,
 		room,
 	)
+}
+
+// Build the request for the campfire API.
+func requestCampfire(endpoint string, key string, message []byte) *http.Request {
+	req, err := http.NewRequest("POST", endpoint, bytes.NewReader(message))
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// There is no need for a password. Campire API documentation suggests
+	// to use X so a password is present in case a component of the
+	// implementation has problems without one.
+	req.SetBasicAuth(key, "X")
+	req.Header.Add("Content-Type", "application/json")
+
+	return req
 }
