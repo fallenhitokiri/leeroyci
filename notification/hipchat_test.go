@@ -12,7 +12,7 @@ func TestBuildHipChat(t *testing.T) {
 		Name:   "name",
 		Email:  "email",
 		Status: false,
-		Url:    "url",
+		URL:    "url",
 		kind:   "build",
 	}
 

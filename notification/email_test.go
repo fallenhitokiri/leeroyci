@@ -21,7 +21,7 @@ func TestSubject(t *testing.T) {
 		Name:   "name",
 		Email:  "email",
 		Status: true,
-		Url:    "url",
+		URL:    "url",
 		kind:   "build",
 	}
 
@@ -46,7 +46,7 @@ func TestBuildEmail(t *testing.T) {
 		Name:    "name",
 		Email:   "email",
 		Status:  true,
-		Url:     "url",
+		URL:     "url",
 		kind:    "build",
 		message: "foo",
 	}
