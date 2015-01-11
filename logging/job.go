@@ -18,7 +18,7 @@ type Job struct {
 	Name       string
 	Email      string
 	Tasks      []Task
-	Deployed   string
+	Deployed   *Task
 }
 
 // Status returns either the exit code of the triggered command or 0 if the
@@ -60,7 +60,11 @@ func (j *Job) StatusURL(base string) string {
 
 // DeploySuccess returns if the deploy was successful.
 func (j *Job) DeploySuccess() bool {
-	if j.Deployed == "0" {
+	if j.Deployed == nil {
+		return false
+	}
+
+	if j.Deployed.Return == "" {
 		return true
 	}
 	return false

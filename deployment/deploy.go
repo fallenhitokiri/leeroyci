@@ -1,9 +1,10 @@
-// Deploy implements the actual deployment process for successfully build jobs.
+// Package deployment deploys code that passed all tests.
 package deployment
 
 import (
 	"leeroy/config"
 	"leeroy/logging"
+	"leeroy/notification"
 	"log"
 	"os/exec"
 )
@@ -29,26 +30,26 @@ func Deploy(j *logging.Job, c *config.Config) {
 		return
 	}
 
-	announceStart(j, c, &d)
+	notification.Notify(c, j, notification.KindDeployStart)
 
 	o, err := call(d.Execute, r.URL, j.Branch)
-	j.Deployed = o
+
+	t := logging.Task{
+		Command: d.Execute,
+		Output:  o,
+	}
+
+	if err != nil {
+		t.Return = err.Error()
+	}
+
+	j.Deployed = &t
 
 	if err != nil {
 		log.Println(err.Error())
 	}
 
-	announceComplete(j, c, &d, o)
-}
-
-// Log and announce a started deployment.
-func announceStart(j *logging.Job, c *config.Config, d *config.Deploy) {
-	log.Println(j.Name, "triggered a deploy for", j.Branch, "to", d.Name)
-}
-
-// Log and announce a completed deployment.
-func announceComplete(j *logging.Job, c *config.Config, d *config.Deploy, output string) {
-	log.Println("finished deploying", j.Branch, "to", d.Name, "with", output)
+	notification.Notify(c, j, notification.KindDeployDone)
 }
 
 // Call a deployment script and return the output.
