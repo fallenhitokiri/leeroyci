@@ -17,6 +17,7 @@ func Notify(c *config.Config, j *logging.Job, kind string) {
 
 	not := notificationFromJob(j, c)
 	not.kind = kind
+	not.render()
 
 	// always notify the person who comitted
 	go email(c, not, j.Email)
