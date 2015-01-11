@@ -5,8 +5,8 @@ package notification
 // Map of all available templates.
 // Key = identifier used by LeeroyCI, value = template string.
 var templates = map[string]string{
-	"build": build,
+	KindBuild: templateBuild,
 }
 
 // Template for build notifications.
-var build = "Repository: {{.Repo}} Branch: {{.Branch}} by {{.Name}} <{{.Email}}> -> Build {{if .Status}}success{{else}}failed{{end}}\nDetails: {{.URL}}"
+var templateBuild = "Repository: {{.Repo}} Branch: {{.Branch}} by {{.Name}} <{{.Email}}> -> Build {{if .Status}}success{{else}}failed{{end}}\nDetails: {{.URL}}"
