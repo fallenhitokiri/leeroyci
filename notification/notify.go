@@ -11,8 +11,7 @@ import (
 // Notify send build and deployment notifications for a job.
 func Notify(c *config.Config, j *logging.Job, kind string) {
 	if kindSupported(kind) == false {
-		log.Fatal("unsupported notification type", kind)
-		return
+		log.Fatalln("unsupported notification type", kind)
 	}
 
 	not := notificationFromJob(j, c)
@@ -25,8 +24,7 @@ func Notify(c *config.Config, j *logging.Job, kind string) {
 	repo, err := c.ConfigForRepo(j.URL)
 
 	if err != nil {
-		log.Println("could not find repo", j.URL)
-		return
+		log.Fatalln("could not find repo", j.URL)
 	}
 
 	for _, n := range repo.Notify {
