@@ -14,12 +14,12 @@ func Notify(c *config.Config, j *logging.Job, kind string) {
 		log.Fatalln("unsupported notification type", kind)
 	}
 
-	not := notificationFromJob(j, c)
-	not.kind = kind
-	not.render()
+	n := notificationFromJob(j, c)
+	n.kind = kind
+	n.render()
 
 	// always notify the person who comitted
-	go email(c, not, j.Email)
+	go email(c, n, j.Email)
 
 	repo, err := c.ConfigForRepo(j.URL)
 
@@ -27,23 +27,7 @@ func Notify(c *config.Config, j *logging.Job, kind string) {
 		log.Fatalln("could not find repo", j.URL)
 	}
 
-	for _, n := range repo.Notify {
-		switch n.Service {
-		case "email":
-			// Arguments for email are the mail addresses to notify
-			for mail := range n.Arguments {
-				go email(c, not, mail)
-			}
-		case "slack":
-			go slack(not, n.Arguments["endpoint"], n.Arguments["channel"])
-		case "hipchat":
-			go hipchat(not, n.Arguments["key"], n.Arguments["channel"])
-		case "campfire":
-			go campfire(not, n.Arguments["id"], n.Arguments["room"], n.Arguments["key"])
-		default:
-			log.Println("Notification not supported", n.Service)
-		}
-	}
+	sendNotifications(n, repo.Notify, c)
 }
 
 // Check if kind is a supported notification type.
@@ -54,4 +38,25 @@ func kindSupported(kind string) bool {
 		}
 	}
 	return false
+}
+
+// Send all notifications which are configured for a repository.
+func sendNotifications(n *notification, nots []config.Notify, c *config.Config) {
+	for _, not := range nots {
+		switch not.Service {
+		case "email":
+			// Arguments for email are the mail addresses to notify
+			for mail := range not.Arguments {
+				go email(c, n, mail)
+			}
+		case "slack":
+			go slack(n, not.Arguments["endpoint"], not.Arguments["channel"])
+		case "hipchat":
+			go hipchat(n, not.Arguments["key"], not.Arguments["channel"])
+		case "campfire":
+			go campfire(n, not.Arguments["id"], not.Arguments["room"], not.Arguments["key"])
+		default:
+			log.Println("Notification not supported", not.Service)
+		}
+	}
 }
