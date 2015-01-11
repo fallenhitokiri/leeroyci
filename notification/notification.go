@@ -27,7 +27,7 @@ type notification struct {
 	Name    string
 	Email   string
 	Status  bool
-	Url     string
+	URL     string
 	kind    string
 	message string
 }
@@ -40,7 +40,7 @@ func notificationFromJob(j *logging.Job, c *config.Config) *notification {
 		Name:   j.Name,
 		Email:  j.Email,
 		Status: j.Success(),
-		Url:    j.StatusURL(c.URL),
+		URL:    j.StatusURL(c.URL),
 	}
 }
 
