@@ -51,6 +51,8 @@ func ClosePR(token string, job *logging.Job, pc PRCallback) {
 		return
 	}
 
+	addHeaders(token, r)
+
 	_, err = client.Do(r)
 
 	if err != nil {
