@@ -1,3 +1,5 @@
+// Package github integrates everything necessary to test commits, comment on
+// pull requests and close them if the build failed.
 package github
 
 import (
@@ -10,13 +12,14 @@ import (
 	"net/http"
 )
 
-type Comment struct {
+// Everything needed to comment on a GitHub pull request.
+type comment struct {
 	Body string `json:"body"`
 }
 
 // Returns a new Comment with the status of the job as body.
-func newComment(job *logging.Job, base string) Comment {
-	c := Comment{}
+func newComment(job *logging.Job, base string) comment {
+	c := comment{}
 
 	if job.Success() {
 		c.Body = "build successful"
@@ -30,7 +33,7 @@ func newComment(job *logging.Job, base string) Comment {
 	return c
 }
 
-// Post a new comment on a pull request.
+// PostPR posts a new comment on a pull request.
 func PostPR(c *config.Config, job *logging.Job, pc PRCallback) {
 	comment := newComment(job, c.URL)
 	rp, err := c.ConfigForRepo(job.URL)
@@ -50,7 +53,7 @@ func PostPR(c *config.Config, job *logging.Job, pc PRCallback) {
 	client := &http.Client{}
 	r, err := http.NewRequest(
 		"POST",
-		pc.PR.Comments_url,
+		pc.PR.CommentsURL,
 		bytes.NewReader(m),
 	)
 

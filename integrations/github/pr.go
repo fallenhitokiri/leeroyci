@@ -1,4 +1,5 @@
-// Structs and methods used to process a pull request.
+// Package github integrates everything necessary to test commits, comment on
+// pull requests and close them if the build failed.
 package github
 
 import (
@@ -14,31 +15,35 @@ import (
 
 // TODO: parse full body, not just the fields needed
 
+// PRCallback handles pull requests coming from GitHubs webhook.
 type PRCallback struct {
 	Number int
 	Action string
 	PR     PRPullRequest `json:"pull_request"`
 }
 
+// PRPullRequest stores the most basic information about a pull request.
 type PRPullRequest struct {
-	Url          string
-	State        string
-	Comments_url string
-	Head         PRCommit
+	URL         string `json:"url"`
+	State       string
+	CommentsURL string `json:"comments_url"`
+	Head        PRCommit
 }
 
+// PRCommit points to the latest commit and repository of a pull request.
 type PRCommit struct {
 	Commit     string `json:"sha"`
 	Repository PRRepo `json:"repo"`
 }
 
+// PRRepo stores the repository URL of a pull request.
 type PRRepo struct {
-	Html_url string `json:"html_url"`
+	HTMLURL string `json:"html_url"`
 }
 
-// Returns base URL for repository (HTML, not API)
+// RepoURL returns the base URL for repository (HTML, not API)
 func (p *PRCallback) RepoURL() string {
-	return p.PR.Head.Repository.Html_url
+	return p.PR.Head.Repository.HTMLURL
 }
 
 // Handle GitHub pull requests.
@@ -94,7 +99,7 @@ func updatePR(pc PRCallback, blog *logging.Buildlog, c *config.Config) {
 			}
 			counter = 0
 		} else {
-			counter += 1
+			counter++
 		}
 
 		time.Sleep(10 * time.Second)
@@ -104,7 +109,7 @@ func updatePR(pc PRCallback, blog *logging.Buildlog, c *config.Config) {
 // Returns if PRCallback is for the latest commit.
 func prIsCurrent(pc PRCallback, c *config.Config) bool {
 	cl := &http.Client{}
-	r, err := http.NewRequest("GET", pc.PR.Url, nil)
+	r, err := http.NewRequest("GET", pc.PR.URL, nil)
 
 	if err != nil {
 		log.Println(err)
