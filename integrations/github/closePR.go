@@ -3,12 +3,9 @@
 package github
 
 import (
-	"bytes"
-	"encoding/base64"
 	"encoding/json"
 	"leeroy/logging"
 	"log"
-	"net/http"
 )
 
 // Payload to close a GitHub pull request.
@@ -35,34 +32,12 @@ func ClosePR(token string, job *logging.Job, pc PRCallback) {
 	m, err := json.Marshal(&u)
 
 	if err != nil {
-		log.Println(err)
-		return
+		log.Fatalln(err)
 	}
 
-	client := &http.Client{}
-	r, err := http.NewRequest(
-		"PATCH",
-		pc.PR.URL,
-		bytes.NewReader(m),
-	)
+	_, err = githubRequest("PATCH", pc.PR.URL, token, m)
 
 	if err != nil {
-		log.Println(err)
-		return
+		log.Fatalln(err)
 	}
-
-	addHeaders(token, r)
-
-	_, err = client.Do(r)
-
-	if err != nil {
-		log.Println(err)
-	}
-}
-
-func addHeaders(token string, req *http.Request) {
-	t := base64.URLEncoding.EncodeToString([]byte(token))
-
-	req.Header.Add("content-type", "application/json")
-	req.Header.Add("Authorization", "Basic "+t)
 }

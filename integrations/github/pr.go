@@ -3,9 +3,7 @@
 package github
 
 import (
-	"encoding/base64"
 	"encoding/json"
-	"io/ioutil"
 	"leeroy/config"
 	"leeroy/logging"
 	"log"
@@ -54,8 +52,7 @@ func handlePR(req *http.Request, blog *logging.Buildlog, c *config.Config) {
 	err := json.Unmarshal(b, &pc)
 
 	if err != nil {
-		log.Println(string(b))
-		panic("Could not unmarshal request")
+		log.Fatalln("Could not unmarshal PR request")
 	}
 
 	if pc.Action != "closed" {
@@ -75,8 +72,7 @@ func updatePR(pc PRCallback, blog *logging.Buildlog, c *config.Config) {
 				r, err := c.ConfigForRepo(j.URL)
 
 				if err != nil {
-					log.Println(err)
-					return
+					log.Fatalln(err)
 				}
 
 				if r.CommentPR {
@@ -108,42 +104,19 @@ func updatePR(pc PRCallback, blog *logging.Buildlog, c *config.Config) {
 
 // Returns if PRCallback is for the latest commit.
 func prIsCurrent(pc PRCallback, c *config.Config) bool {
-	cl := &http.Client{}
-	r, err := http.NewRequest("GET", pc.PR.URL, nil)
-
-	if err != nil {
-		log.Println(err)
-		return true
-	}
-
 	rp, err := c.ConfigForRepo(pc.RepoURL())
 
-	if err != nil {
-		log.Println(err)
-		return true
-	}
-
-	t := base64.URLEncoding.EncodeToString([]byte(rp.AccessKey))
-
-	r.Header.Add("content-type", "application/json")
-	r.Header.Add("Authorization", "Basic "+t)
-
-	resp, err := cl.Do(r)
+	r, err := githubRequest("GET", pc.PR.URL, rp.AccessKey, nil)
 
 	if err != nil {
-		log.Println(err)
-		return true
+		log.Fatalln(err)
 	}
-
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
 
 	var pr PRPullRequest
-	err = json.Unmarshal(body, &pr)
+	err = json.Unmarshal(r, &pr)
 
 	if err != nil {
-		log.Println(err)
-		return true
+		log.Fatalln(err)
 	}
 
 	if pr.Head.Commit != pc.PR.Head.Commit {

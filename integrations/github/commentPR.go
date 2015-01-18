@@ -3,13 +3,10 @@
 package github
 
 import (
-	"bytes"
-	"encoding/base64"
 	"encoding/json"
 	"leeroy/config"
 	"leeroy/logging"
 	"log"
-	"net/http"
 )
 
 // Everything needed to comment on a GitHub pull request.
@@ -39,37 +36,18 @@ func PostPR(c *config.Config, job *logging.Job, pc PRCallback) {
 	rp, err := c.ConfigForRepo(job.URL)
 
 	if err != nil {
-		log.Println(err)
-		return
+		log.Fatalln(err)
 	}
 
 	m, err := json.Marshal(&comment)
 
 	if err != nil {
-		log.Println(err)
-		return
+		log.Fatalln(err)
 	}
 
-	client := &http.Client{}
-	r, err := http.NewRequest(
-		"POST",
-		pc.PR.CommentsURL,
-		bytes.NewReader(m),
-	)
+	_, err = githubRequest("POST", pc.PR.CommentsURL, rp.AccessKey, m)
 
 	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	t := base64.URLEncoding.EncodeToString([]byte(rp.AccessKey))
-
-	r.Header.Add("content-type", "application/json")
-	r.Header.Add("Authorization", "Basic "+t)
-
-	_, err = client.Do(r)
-
-	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 	}
 }
