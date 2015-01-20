@@ -74,3 +74,27 @@ func TestStatusURL(t *testing.T) {
 		t.Error("Wrong URL", u)
 	}
 }
+
+func TestDeploySuccess(t *testing.T) {
+	j := Job{}
+
+	if j.DeploySuccess() != false {
+		t.Error("DeploySuccess is not false but should be.")
+	}
+
+	ta := Task{
+		Return: "",
+	}
+
+	j.Deployed = &ta
+
+	if j.DeploySuccess() != true {
+		t.Error("DeploySuccess is not true but should be.")
+	}
+
+	j.Deployed.Return = "1"
+
+	if j.DeploySuccess() != false {
+		t.Error("DeploySuccess is not false but should be.")
+	}
+}

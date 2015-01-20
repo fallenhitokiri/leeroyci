@@ -48,7 +48,7 @@ func run(j logging.Job, c *config.Config, b *logging.Buildlog) {
 	}
 
 	b.Add(&j)
-	go notification.Notify(c, &j)
+	go notification.Notify(c, &j, notification.KindBuild)
 	go deployment.ContinuousDeploy(&j, c)
 
 	log.Println("Finished building", j.URL, j.Branch)
