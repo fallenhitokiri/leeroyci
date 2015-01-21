@@ -1,4 +1,4 @@
-// Config takes care of the whole configuration.
+// Package config takes care of the whole configuration.
 package config
 
 import (
@@ -7,6 +7,7 @@ import (
 	"strconv"
 )
 
+// Config represents the complete configuration for the CI.
 type Config struct {
 	Secret        string
 	BuildLogPath  string
@@ -21,8 +22,11 @@ type Config struct {
 	Key           string
 	path          string
 	Templates     string
+	Users         []User
 }
 
+// Repository holds all information needed to identify a repository and run
+// tests and builds.
 type Repository struct {
 	Name      string
 	URL       string
@@ -35,21 +39,36 @@ type Repository struct {
 	Deploy    []Deploy
 }
 
+// Command stores a short name and the path or command to execute when a users
+// pushes to a repository.
 type Command struct {
 	Name    string
 	Execute string
 }
 
+// Notify stores the configuration needed for a notification plugin to work. All
+// optiones required by the services are stored as map - it is the job of the
+// notification plugin to access them correctly and handle missing ones.
 type Notify struct {
 	Service   string
 	Arguments map[string]string
 }
 
+// Deploy stores the command to execute and arguments to pass to the command
+// when a users pushes to a certain branch.
 type Deploy struct {
 	Name      string
 	Branch    string
 	Execute   string
 	Arguments map[string]string
+}
+
+// User stores a user account including the password using bcrypt.
+type User struct {
+	Email     string
+	FirstName string
+	LastName  string
+	Password  string
 }
 
 // ConfigForRepo returns the configuration for a repository that matches
@@ -69,12 +88,12 @@ func (c *Config) ConfigForRepo(url string) (Repository, error) {
 	return r, err
 }
 
-// Retruns the address of the mail server with the port.
+// MailServer retruns the address of the mail server with the port.
 func (c *Config) MailServer() string {
 	return c.EmailHost + ":" + strconv.Itoa(c.EmailPort)
 }
 
-// Returns the URL scheme used.
+// Scheme returns the URL scheme used.
 func (c *Config) Scheme() string {
 	u, err := url.Parse(c.URL)
 
@@ -85,7 +104,7 @@ func (c *Config) Scheme() string {
 	return u.Scheme
 }
 
-// Returns the host.
+// Host returns the host.
 func (c *Config) Host() string {
 	u, err := url.Parse(c.URL)
 
@@ -96,7 +115,7 @@ func (c *Config) Host() string {
 	return u.Host
 }
 
-// Returns the name or the URL
+// Identifier returns the name or the URL
 func (r *Repository) Identifier() string {
 	if r.Name != "" {
 		return r.Name
@@ -104,7 +123,7 @@ func (r *Repository) Identifier() string {
 	return r.URL
 }
 
-// Returns the deployment target for a branch
+// DeployTarget returns the deployment target for a branch
 func (r *Repository) DeployTarget(branch string) (Deploy, error) {
 	for _, d := range r.Deploy {
 		if d.Branch == branch {
