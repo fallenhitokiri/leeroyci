@@ -1,4 +1,4 @@
-xxxx-xx-xx Timo Zimmermann <timo@screamingatmyscreen.com>
+2015-01-21 Timo Zimmermann <timo@screamingatmyscreen.com>
 
 * update notifications to use text/template
 * introduce one template for all notification types
