@@ -1,4 +1,4 @@
-// Config based on a JSON formatted file.
+// Package config takes care of the whole configuration.
 package config
 
 import (
@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 )
 
-// Read a configuration file and create a new Config instance.
+// FromFile reads a configuration file and creates a new Config instance.
 func FromFile(name string) Config {
 	var c Config
 
@@ -20,10 +20,12 @@ func FromFile(name string) Config {
 		panic(err)
 	}
 
+	c.path = name
+
 	return c
 }
 
-// Write the current configuration to the standard configuration file.
+// ToFile writes the current configuration to the standard configuration file.
 func (c *Config) ToFile() error {
 	data, err := json.Marshal(c)
 

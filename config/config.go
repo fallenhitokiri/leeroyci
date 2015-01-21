@@ -22,7 +22,7 @@ type Config struct {
 	Key           string
 	path          string
 	Templates     string
-	Users         []User
+	Users         []*User
 }
 
 // Repository holds all information needed to identify a repository and run
@@ -61,14 +61,6 @@ type Deploy struct {
 	Branch    string
 	Execute   string
 	Arguments map[string]string
-}
-
-// User stores a user account including the password using bcrypt.
-type User struct {
-	Email     string
-	FirstName string
-	LastName  string
-	Password  string
 }
 
 // ConfigForRepo returns the configuration for a repository that matches

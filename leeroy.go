@@ -12,6 +12,7 @@ import (
 )
 
 var cfgFlag = flag.String("config", "leeroy.json", "JSON formatted config")
+var addUser = flag.Bool("addUser", false, "add a new user to leeroy")
 
 func main() {
 	flag.Parse()
@@ -22,6 +23,11 @@ func main() {
 
 	if err != nil {
 		log.Fatal("Configuration error: ", err)
+	}
+
+	if *addUser == true {
+		c.AddUser(nil)
+		return
 	}
 
 	jobs := make(chan logging.Job, 100)
