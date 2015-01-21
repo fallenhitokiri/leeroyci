@@ -1,18 +1,16 @@
-// Implement HipChat notifications.
+// Package notification handles all notifications for a job. This includes
+// build and deployment notifications.
 package notification
 
 import (
 	"bytes"
 	"fmt"
-	"leeroy/config"
-	"leeroy/logging"
 	"log"
 	"net/http"
 	"net/url"
 )
 
-var api = "https://www.hipchat.com/v1/rooms/message?auth_token=%s"
-
+// Payload HipChat expects to be POSTed to the API.
 type hipchatPayload struct {
 	Room    string
 	From    string
@@ -20,6 +18,7 @@ type hipchatPayload struct {
 	Message string
 	Notify  bool
 	Format  string
+	Status  bool
 }
 
 // HipChat expects www-form-urlencoded - prepare the struct.
@@ -29,7 +28,6 @@ func (h *hipchatPayload) toURLEncoded() []byte {
 	d.Add("from", h.From)
 	d.Add("message", h.Message)
 	d.Add("message_format", h.Format)
-	d.Add("color", h.Color)
 
 	if h.Notify == true {
 		d.Add("notify", "1")
@@ -37,16 +35,22 @@ func (h *hipchatPayload) toURLEncoded() []byte {
 		d.Add("notify", "2")
 	}
 
+	if h.Status == true {
+		d.Add("color", "green")
+	} else {
+		d.Add("color", "red")
+	}
+
 	return []byte(d.Encode())
 }
 
-func hipchat(c *config.Config, j *logging.Job, key string, chl string) {
-	endpoint := fmt.Sprintf(api, key)
-
-	p := buildHipChat(c, j, chl)
+// Send a notification to HipChat.
+func hipchat(n *notification, key string, chl string) {
+	e := endpointHipChat(key)
+	p := notToHipChapt(n, chl)
 
 	_, err := http.Post(
-		endpoint,
+		e,
 		"application/x-www-form-urlencoded",
 		bytes.NewReader(p.toURLEncoded()),
 	)
@@ -56,34 +60,25 @@ func hipchat(c *config.Config, j *logging.Job, key string, chl string) {
 	}
 }
 
-// Build the struct holding all information about the notification.
-func buildHipChat(c *config.Config, j *logging.Job, chl string) hipchatPayload {
+// Convert a notification to a hipchat payload.
+func notToHipChapt(n *notification, channel string) hipchatPayload {
 	p := hipchatPayload{
-		Color:  "green",
-		Notify: true,
-		Format: "text",
-		Room:   chl,
-		From:   "Leeroy",
+		Color:   "green",
+		Notify:  true,
+		Format:  "text",
+		Room:    channel,
+		From:    "Leeroy",
+		Message: n.message,
+		Status:  n.Status,
 	}
-
-	success := "success"
-
-	if j.Success() == false {
-		success = "failed"
-		p.Color = "red"
-	}
-
-	m := fmt.Sprintf(
-		"Repo: %s - %s by %s <%s> -> %s\nBuild: %s",
-		j.URL,
-		j.Branch,
-		j.Name,
-		j.Email,
-		success,
-		j.StatusURL(c.URL),
-	)
-
-	p.Message = m
 
 	return p
+}
+
+// Build the endpoint for HipChat
+func endpointHipChat(key string) string {
+	return fmt.Sprintf(
+		"https://www.hipchat.com/v1/rooms/message?auth_token=%s",
+		key,
+	)
 }

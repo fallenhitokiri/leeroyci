@@ -1,3 +1,9 @@
+2015-01-21 Timo Zimmermann <timo@screamingatmyscreen.com>
+
+* update notifications to use text/template
+* introduce one template for all notification types
+* add deployment notifications
+
 2014-11-09 Timo Zimmermann <timo@screamingatmyscreen.com>
 
 * add support for custom templates

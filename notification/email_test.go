@@ -1,7 +1,8 @@
 package notification
 
 import (
-	"leeroy/logging"
+	"leeroy/config"
+	"strings"
 	"testing"
 )
 
@@ -14,41 +15,49 @@ func TestAddHeaders(t *testing.T) {
 }
 
 func TestSubject(t *testing.T) {
-	ta := logging.Task{
-		Command: "foo",
-	}
-	j := logging.Job{
-		Tasks:  []logging.Task{ta},
-		Branch: "foo",
+	n := notification{
+		Repo:   "repo",
+		Branch: "branch",
+		Name:   "name",
+		Email:  "email",
+		Status: true,
+		URL:    "url",
+		kind:   "build",
 	}
 
-	s := subject(&j)
+	s := subject(&n)
 
-	if s != "Build for foo finished successfully" {
+	if s != "branch: success" {
 		t.Error("Wrong subject", s)
 	}
 
-	ta.Return = "123"
-	j.Tasks = []logging.Task{ta}
-	s = subject(&j)
+	n.Status = false
+	s = subject(&n)
 
-	if s != "Build for foo finished with errors" {
+	if s != "branch: failed" {
 		t.Error("Wrong subject", s)
 	}
 }
 
-func TestBody(t *testing.T) {
-	ta := logging.Task{
-		Command: "foo",
-	}
-	j := logging.Job{
-		Tasks:  []logging.Task{ta},
-		Branch: "foo",
+func TestBuildEmail(t *testing.T) {
+	n := notification{
+		Repo:    "repo",
+		Branch:  "branch",
+		Name:    "name",
+		Email:   "email",
+		Status:  true,
+		URL:     "url",
+		kind:    "build",
+		message: "foo",
 	}
 
-	b := body(&j, "foo")
+	c := config.Config{
+		EmailFrom: "foo@bar.tld",
+	}
 
-	if len(b) != 114 {
-		t.Error("Wrong body", b)
+	m := buildEmail(&c, &n)
+
+	if strings.Contains(string(m), "foo@bar.tld") == false {
+		t.Error("Sender email not found")
 	}
 }
