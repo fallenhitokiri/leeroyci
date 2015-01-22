@@ -30,6 +30,7 @@ type Repository struct {
 	Notify    []Notify
 	CommentPR bool
 	ClosePR   bool
+	StatusPR  bool
 	AccessKey string
 	Deploy    []Deploy
 }
