@@ -7,6 +7,7 @@ import (
 	"log"
 )
 
+// Payload GitHub expects to create a new status.
 type status struct {
 	State       string `json:"state"`
 	TargetURL   string `json:"target_url"`
@@ -20,6 +21,7 @@ var (
 	statusPending = 3
 )
 
+// status messages linked to their status code.
 var statusMessages = map[int]map[string]string{
 	statusSuccess: map[string]string{
 		"state":       "success",
@@ -35,6 +37,7 @@ var statusMessages = map[int]map[string]string{
 	},
 }
 
+// NewStatus returns a status struct with the correct URL and messages.
 func newStatus(state int, target string) *status {
 	s := status{
 		State:       statusMessages[state]["state"],
