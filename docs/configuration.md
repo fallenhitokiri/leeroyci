@@ -20,6 +20,7 @@ The following configuration shows all options Leeroy supports. We will go throug
            "AccessKey": "bar",
            "CommentPR": true,
            "ClosePR": true,
+           "StatusPR": true,
            "Commands": [
              {
                "Name": "pass",
@@ -65,6 +66,7 @@ The following configuration shows all options Leeroy supports. We will go throug
 - `ClosePR` if the build for HEAD failed Leeroy will close a pull request
 - `Commands` list of commands to run when a build is triggered (push / PR)
 - `Notify` list of notifications which will be triggered after a build finished
+- `StatusPR` use GitHubs status API to add success, pending, failure flags to commits / PRs
 
 #### Commands
 - `Name` a name for the command. Just so you can easily identify what failed if you run multiple commands

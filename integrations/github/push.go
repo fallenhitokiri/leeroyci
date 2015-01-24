@@ -1,4 +1,5 @@
-// Structs and methods used to process a push.
+// Package github integrates everything necessary to test commits, comment on
+// pull requests and close them if the build failed.
 package github
 
 import (
