@@ -1,3 +1,7 @@
+2015-01-24 Timo Zimmermann <timo@screamingatmyscreen.com>
+
+* add support for GitHubs status API
+
 2015-01-21 Timo Zimmermann <timo@screamingatmyscreen.com>
 
 * update notifications to use text/template

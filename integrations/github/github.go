@@ -1,4 +1,5 @@
-// GitHub provides all structs to unmarshal a GitHub webhook.
+// Package github integrates everything necessary to test commits, comment on
+// pull requests and close them if the build failed.
 package github
 
 import (

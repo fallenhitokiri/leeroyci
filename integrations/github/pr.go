@@ -25,6 +25,7 @@ type PRPullRequest struct {
 	URL         string `json:"url"`
 	State       string
 	CommentsURL string `json:"comments_url"`
+	StatusURL   string `json:"statuses_url"`
 	Head        PRCommit
 }
 
@@ -81,6 +82,14 @@ func updatePR(pc PRCallback, blog *logging.Buildlog, c *config.Config) {
 
 				if r.ClosePR {
 					ClosePR(r.AccessKey, j, pc)
+				}
+
+				if r.StatusPR {
+					if j.Success() {
+						PostStatus(statusSuccess, j.StatusURL(c.URL), pc.PR.StatusURL, r.AccessKey)
+					} else {
+						PostStatus(statusFailed, j.StatusURL(c.URL), pc.PR.StatusURL, r.AccessKey)
+					}
 				}
 
 				return
