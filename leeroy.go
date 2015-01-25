@@ -12,7 +12,10 @@ import (
 )
 
 var cfgFlag = flag.String("config", "leeroy.json", "JSON formatted config")
-var addUser = flag.Bool("addUser", false, "add a new user to leeroy")
+var createUser = flag.Bool("createUser", false, "create a new user")
+var updateUser = flag.Bool("updateUser", false, "update user information")
+var deleteUser = flag.Bool("deleteUser", false, "delete a user")
+var listUsers = flag.Bool("listUsers", false, "list all users")
 
 func main() {
 	flag.Parse()
@@ -25,35 +28,50 @@ func main() {
 		log.Fatal("Configuration error: ", err)
 	}
 
-	if *addUser == true {
-		c.AddUser(nil)
+	if *createUser == true {
+		c.CreateUserCMD()
+		return
+	}
+
+	if *updateUser == true {
+		c.UpdateUserCMD()
+		return
+	}
+
+	if *deleteUser == true {
+		c.DeleteUserCMD()
+		return
+	}
+
+	if *listUsers == true {
+		c.ListUserCMD()
 		return
 	}
 
 	jobs := make(chan logging.Job, 100)
 	b := logging.New(c.BuildLogPath)
 
-	go build.Build(jobs, &c, b)
+	go build.Build(jobs, c, b)
 
 	log.Println("leeroy up an running!")
 
 	http.HandleFunc("/callback/", web.Auth(func(w http.ResponseWriter, r *http.Request) {
-		integrations.Callback(w, r, jobs, &c, b)
+		integrations.Callback(w, r, jobs, c, b)
 	}, c.Secret))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		web.Status(w, r, &c, b)
+		web.Status(w, r, c, b)
 	})
 	http.HandleFunc("/status/repo/", func(w http.ResponseWriter, r *http.Request) {
-		web.Repo(w, r, &c, b)
+		web.Repo(w, r, c, b)
 	})
 	http.HandleFunc("/status/branch/", func(w http.ResponseWriter, r *http.Request) {
-		web.Branch(w, r, &c, b)
+		web.Branch(w, r, c, b)
 	})
 	http.HandleFunc("/status/commit/", func(w http.ResponseWriter, r *http.Request) {
-		web.Commit(w, r, &c, b)
+		web.Commit(w, r, c, b)
 	})
 	http.HandleFunc("/status/badge/", func(w http.ResponseWriter, r *http.Request) {
-		web.Badge(w, r, &c, b)
+		web.Badge(w, r, c, b)
 	})
 
 	if c.Scheme() == "https" {

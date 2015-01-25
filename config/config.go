@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/url"
 	"strconv"
+	"sync"
 )
 
 // Config represents the complete configuration for the CI.
@@ -23,6 +24,7 @@ type Config struct {
 	path          string
 	Templates     string
 	Users         []*User
+	mutex         sync.Mutex
 }
 
 // Repository holds all information needed to identify a repository and run
