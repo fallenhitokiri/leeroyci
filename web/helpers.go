@@ -84,12 +84,19 @@ func renderHTML(rw http.ResponseWriter, jobs []*logging.Job, c *config.Config,
 		log.Println(err)
 		http.Error(rw, "500: Error rendering template.", 500)
 	} else {
-		t.Execute(
-			rw,
-			map[string]interface{}{
-				"Jobs": jobs,
-			},
-		)
+		ctx := map[string]interface{}{
+			"Jobs": jobs,
+		}
+
+		if next > 0 {
+			ctx["next"] = strconv.Itoa(next)
+		}
+
+		if next-10 > 0 {
+			ctx["previous"] = strconv.Itoa(next - 20)
+		}
+
+		t.Execute(rw, ctx)
 	}
 }
 
