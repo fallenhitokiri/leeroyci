@@ -105,5 +105,4 @@ func Badge(rw http.ResponseWriter, req *http.Request, c *config.Config,
 
 	rw.Header().Set("Content-Type", "image/svg+xml")
 	rw.Write(svg)
-	req.Body.Close()
 }

@@ -113,8 +113,6 @@ func paginateGetLast(first, count int) int {
 func getParameter(req *http.Request, key, def string) string {
 	params, err := url.ParseQuery(req.URL.RawQuery)
 
-	log.Println(req.URL.RawQuery)
-
 	if err != nil {
 		log.Fatalln(err)
 	}
