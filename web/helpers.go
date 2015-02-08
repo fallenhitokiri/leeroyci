@@ -45,6 +45,7 @@ func paginatedJobs(jobs []*logging.Job, start string) ([]*logging.Job, string, s
 }
 
 // paginateGetPrevious returns the previous index for a paginated job list.
+// Always add 1 to the first element because humans usually do not start counting from 0.
 func paginateGetPrevious(first int) string {
 	p := first - paginateBy + 1 // slice index vs. count
 
@@ -60,15 +61,14 @@ func paginateGetPrevious(first int) string {
 }
 
 // paginateGetNext returns the next index for a paginated job list.
+// Always add 1 if the first element is not 0 because humans usually do not
+// start counting from 0.
 func paginateGetNext(first, count int) string {
-	log.Println(first)
 	n := first + paginateBy
 
 	if first != 0 {
 		n += 1
 	}
-
-	log.Println(n)
 
 	if n >= count {
 		return ""
@@ -78,6 +78,7 @@ func paginateGetNext(first, count int) string {
 }
 
 // paginateGetFirst returns the first element of the job slice to return.
+// Always subscract 1 from start because humans usually do not start counting from 0.
 func paginateGetFirst(start string, count int) int {
 	f, err := strconv.Atoi(start)
 
@@ -111,6 +112,8 @@ func paginateGetLast(first, count int) int {
 // is not possible 'def' will be returned.
 func getParameter(req *http.Request, key, def string) string {
 	params, err := url.ParseQuery(req.URL.RawQuery)
+
+	log.Println(req.URL.RawQuery)
 
 	if err != nil {
 		log.Fatalln(err)
