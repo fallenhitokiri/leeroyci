@@ -3,10 +3,7 @@ package web
 
 import (
 	"encoding/hex"
-	"encoding/json"
-	"leeroy/config"
 	"leeroy/logging"
-	"leeroy/web/templates"
 	"log"
 	"net/http"
 	"net/url"
@@ -14,91 +11,9 @@ import (
 	"strings"
 )
 
-// Returns the format for the response. Default is HTML.
-func responseFormat(val string) string {
-	if val != "" {
-		return strings.ToLower(val)
-	}
-
-	return "html"
-}
-
-// Get a template and execute it.
-func render(rw http.ResponseWriter, req *http.Request, jobs []*logging.Job,
-	c *config.Config, template string) {
-	params, err := url.ParseQuery(req.URL.RawQuery)
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	var f string
-	var j []*logging.Job
-	var n int
-
-	_, e := params["format"]
-	if e {
-		f = responseFormat(params["format"][0])
-	} else {
-		f = responseFormat("")
-	}
-
-	_, e = params["start"]
-	if e {
-		j, n = paginatedJobs(jobs, params["start"][0])
-	} else {
-		j, n = paginatedJobs(jobs, "0")
-	}
-
-	switch f {
-	case "json":
-		renderJSON(rw, j, n)
-	case "html":
-		renderHTML(rw, j, c, template, n)
-	default:
-		log.Println("unsupported render format", f)
-	}
-}
-
-// Render and write json response.
-func renderJSON(rw http.ResponseWriter, jobs []*logging.Job, next int) {
-	res, err := json.Marshal(jobs)
-
-	if err != nil {
-		log.Println("error marshal", err)
-		rw.Header().Set("Content-Type", "application/json")
-		rw.Write([]byte(`{"error": "marshal not possible"}`))
-	} else {
-		rw.Header().Set("Content-Type", "application/json")
-		rw.Write(res)
-	}
-	return
-}
-
-// Render and write HTML response.
-func renderHTML(rw http.ResponseWriter, jobs []*logging.Job, c *config.Config,
-	template string, next int) {
-	t, err := templates.Get(template, c)
-
-	if err != nil {
-		log.Println(err)
-		http.Error(rw, "500: Error rendering template.", 500)
-	} else {
-		ctx := map[string]interface{}{
-			"Jobs": jobs,
-		}
-
-		if next > 0 {
-			ctx["next"] = strconv.Itoa(next)
-		}
-
-		if next-10 > 0 {
-			ctx["previous"] = strconv.Itoa(next - 20)
-		}
-
-		t.Execute(rw, ctx)
-	}
-}
+var (
+	paginateBy = 10
+)
 
 // Splits a request path and returns the first part after the endpoint.
 // This is usually the hex string of the repository.
@@ -119,33 +34,91 @@ func splitSecond(path string) string {
 	return strings.Split(path, "/")[4]
 }
 
-func paginatedJobs(jobs []*logging.Job, start string) ([]*logging.Job, int) {
+// paginatedJobs returns a part of the jobs slices starting at 'start', the next
+// start element and the previous element.
+func paginatedJobs(jobs []*logging.Job, start string) ([]*logging.Job, string, string) {
 	c := len(jobs) - 1
+	f := paginateGetFirst(start, c)
+	l := paginateGetLast(f, c)
+
+	return jobs[f:l], paginateGetNext(f, c), paginateGetPrevious(f)
+}
+
+// paginateGetPrevious returns the previous index for a paginated job list.
+func paginateGetPrevious(first int) string {
+	p := first - paginateBy + 1 // slice index vs. count
+
+	if p-1 == paginateBy*-1 {
+		return ""
+	}
+
+	if p < 0 {
+		return "0"
+	}
+
+	return strconv.Itoa(p)
+}
+
+// paginateGetNext returns the next index for a paginated job list.
+func paginateGetNext(first, count int) string {
+	log.Println(first)
+	n := first + paginateBy
+
+	if first != 0 {
+		n += 1
+	}
+
+	log.Println(n)
+
+	if n >= count {
+		return ""
+	}
+
+	return strconv.Itoa(n)
+}
+
+// paginateGetFirst returns the first element of the job slice to return.
+func paginateGetFirst(start string, count int) int {
 	f, err := strconv.Atoi(start)
 
 	if err != nil {
-		return jobs, c
+		log.Fatalln("Could not convert start to int: ", start)
 	}
-
-	p := 10    // default pagination is 10 jobs
-	n := f + p // next start is current start + paginate count
 
 	if f > 0 {
 		f -= 1
 	}
 
-	l := f + p // default for last slice index is start + paginate count
-
-	// handle start out of range
-	if f > c {
-		return jobs, 0
+	if f > count {
+		log.Fatalln("Start index out of range: ", f)
 	}
 
-	// if the end would be out of range set a new end and return no next
-	if l >= c {
-		l = f + c - f
-		n = 0
+	return f
+}
+
+// paginateGetLast returns the last element of the job slice to return.
+func paginateGetLast(first, count int) int {
+	l := first + paginateBy
+
+	if l > count {
+		l = count
 	}
 
-	return jobs[f:l], n
+	return l
+}
+
+// getParameter tries to get key form the URL parameters and returns it. If this
+// is not possible 'def' will be returned.
+func getParameter(req *http.Request, key, def string) string {
+	params, err := url.ParseQuery(req.URL.RawQuery)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	if val, ok := params[key]; ok == true {
+		return val[0]
+	}
+
+	return def
 }
