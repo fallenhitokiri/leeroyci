@@ -52,7 +52,7 @@ func (r *Response) render() {
 	case formatJSON:
 		r.renderJSON()
 	default:
-		log.Fatalln("unsupported render format: ", r.Format)
+		http.Error(r.Writer, "500: Unkown response format.", 500)
 	}
 }
 

@@ -1,4 +1,4 @@
-// Expose the build status over http.
+// Web exposes build logs through a web interface.
 package web
 
 import (
