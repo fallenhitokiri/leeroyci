@@ -1,4 +1,6 @@
-// Expose the build status over http.
+// Package web implements the complete web interface for LeeroyCI. This includes
+// exposing the build log to the web and implementing different actions like
+// rerunning jobs, deploying or administrative tasks.
 package web
 
 import (
@@ -7,48 +9,89 @@ import (
 	"net/http"
 )
 
-// View that shows all builds ever done.
+// Status shows all builds ever done.
 func Status(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	blog *logging.Buildlog) {
 	blog.Sort()
 
-	render(rw, req, blog.Jobs, c, "status")
+	j, n, p := paginatedJobs(blog.Jobs, getParameter(req, "start", "0"))
+
+	r := newResponse(rw, req)
+	r.Context.Jobs = j
+	r.Context.Next = n
+	r.Context.URL = c.URL
+	r.Template = "status"
+	r.TemplatePath = c.Templates
+
+	if p != "" {
+		r.Context.Previous = p
+	}
+
+	r.render()
 }
 
-// View to show builds for a specific repository.
+// Repo shows builds for a specific repository.
 func Repo(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	blog *logging.Buildlog) {
-	r := splitFirst(req.URL.Path)
+	re := splitFirst(req.URL.Path)
 
-	j := blog.JobsForRepo(r)
+	j, n, p := paginatedJobs(blog.JobsForRepo(re), getParameter(req, "start", "0"))
 
-	render(rw, req, j, c, "repo")
+	r := newResponse(rw, req)
+	r.Context.Jobs = j
+	r.Context.Next = n
+	r.Context.URL = c.URL
+	r.Template = "repo"
+	r.TemplatePath = c.Templates
+
+	if p != "" {
+		r.Context.Previous = p
+	}
+
+	r.render()
 }
 
-// View to show builds for a specific repository and branch.
+// Branch shows builds for a specific repository and branch.
 func Branch(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	blog *logging.Buildlog) {
-	r := splitFirst(req.URL.Path)
+	re := splitFirst(req.URL.Path)
 	b := splitSecond(req.URL.Path)
 
-	j := blog.JobsForRepoBranch(r, b)
+	j, n, p := paginatedJobs(blog.JobsForRepoBranch(re, b), getParameter(req, "start", "0"))
 
-	render(rw, req, j, c, "branch")
+	r := newResponse(rw, req)
+	r.Context.Jobs = j
+	r.Context.Next = n
+	r.Context.URL = c.URL
+	r.Template = "branch"
+	r.TemplatePath = c.Templates
+
+	if p != "" {
+		r.Context.Previous = p
+	}
+
+	r.render()
 }
 
-// View to show the build for a commit in a repository.
+// Commit shows the build for a commit in a repository.
 func Commit(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	blog *logging.Buildlog) {
-	r := splitFirst(req.URL.Path)
+	re := splitFirst(req.URL.Path)
 	co := splitSecond(req.URL.Path)
 
-	j := blog.JobByCommit(r, co)
+	j := blog.JobByCommit(re, co)
 
-	render(rw, req, []*logging.Job{j}, c, "commit")
+	r := newResponse(rw, req)
+	r.Context.Jobs = []*logging.Job{j}
+	r.Context.URL = c.URL
+	r.Template = "commit"
+	r.TemplatePath = c.Templates
+
+	r.render()
 }
 
-// Endpoint returning a badge showing the build status for a repository and
-// branch. It returns an SVG.
+// Badge returns a badge - as SVG - showing the build status for a repository and
+// branch.
 func Badge(rw http.ResponseWriter, req *http.Request, c *config.Config,
 	blog *logging.Buildlog) {
 	r := splitFirst(req.URL.Path)
@@ -68,5 +111,4 @@ func Badge(rw http.ResponseWriter, req *http.Request, c *config.Config,
 
 	rw.Header().Set("Content-Type", "image/svg+xml")
 	rw.Write(svg)
-	req.Body.Close()
 }

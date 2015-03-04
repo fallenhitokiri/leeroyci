@@ -4,7 +4,6 @@ package templates
 import (
 	"errors"
 	"html/template"
-	"leeroy/config"
 	"path"
 )
 
@@ -17,8 +16,8 @@ var templates = map[string]string{
 }
 
 // Get returns a template either from an external source or the default.
-func Get(name string, c *config.Config) (*template.Template, error) {
-	if c.Templates == "" {
+func Get(name string, tmplPath string) (*template.Template, error) {
+	if tmplPath == "" {
 		if tmpl, exists := templates[name]; exists == true {
 			t := template.New(name)
 			return t.Parse(tmpl)
@@ -27,7 +26,7 @@ func Get(name string, c *config.Config) (*template.Template, error) {
 		}
 	}
 
-	tmpl := fullPath(name, c.Templates)
+	tmpl := fullPath(name, tmplPath)
 
 	return template.ParseFiles(tmpl)
 }

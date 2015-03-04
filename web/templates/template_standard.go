@@ -73,6 +73,15 @@ var tmpl_standard = `
                 </div>
             </div>
             {{end}}
+
+            <div class="row">
+                <div class="col-md-6">
+                    {{if .Previous}}<a href="/?start={{.Previous}}" class="btn btn-primary">Previous</a>{{end}}
+                </div>
+                <div class="col-md-6">
+                    {{if .Next}}<a href="/?start={{.Next}}" class="btn btn-primary pull-right">Next</a>{{end}}
+                </div>
+            </div>
         </div>
     </body>
 </html>

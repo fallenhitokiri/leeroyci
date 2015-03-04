@@ -1,75 +1,21 @@
-// Provide helpers for requests.
+// Package web implements the complete web interface for LeeroyCI. This includes
+// exposing the build log to the web and implementing different actions like
+// rerunning jobs, deploying or administrative tasks.
 package web
 
 import (
 	"encoding/hex"
-	"encoding/json"
-	"leeroy/config"
 	"leeroy/logging"
-	"leeroy/web/templates"
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 )
 
-// Returns the format for the response. Default is HTML.
-func responseFormat(val url.Values) string {
-	if val, ok := val["format"]; ok {
-		f := strings.Join(val, "")
-		return strings.ToLower(f)
-	}
-
-	return "html"
-}
-
-// Get a template and execute it.
-func render(rw http.ResponseWriter, req *http.Request, jobs []*logging.Job,
-	c *config.Config, template string) {
-	f := responseFormat(req.URL.Query())
-
-	switch f {
-	case "json":
-		renderJSON(rw, jobs)
-	case "html":
-		renderHTML(rw, jobs, c, template)
-	default:
-		log.Println("unsupported render format", f)
-	}
-}
-
-// Render and write json response.
-func renderJSON(rw http.ResponseWriter, jobs []*logging.Job) {
-	res, err := json.Marshal(jobs)
-
-	if err != nil {
-		log.Println("error marshal", err)
-		rw.Header().Set("Content-Type", "application/json")
-		rw.Write([]byte(`{"error": "marshal not possible"}`))
-	} else {
-		rw.Header().Set("Content-Type", "application/json")
-		rw.Write(res)
-	}
-	return
-}
-
-// Render and write HTML response.
-func renderHTML(rw http.ResponseWriter, jobs []*logging.Job, c *config.Config,
-	template string) {
-	t, err := templates.Get(template, c)
-
-	if err != nil {
-		log.Println(err)
-		http.Error(rw, "500: Error rendering template.", 500)
-	} else {
-		t.Execute(
-			rw,
-			map[string]interface{}{
-				"Jobs": jobs,
-			},
-		)
-	}
-}
+var (
+	paginateBy = 10
+)
 
 // Splits a request path and returns the first part after the endpoint.
 // This is usually the hex string of the repository.
@@ -88,4 +34,98 @@ func splitFirst(path string) string {
 // This is likely the branch name or commit sha1.
 func splitSecond(path string) string {
 	return strings.Split(path, "/")[4]
+}
+
+// paginatedJobs returns a part of the jobs slices starting at 'start', the next
+// start element and the previous element.
+func paginatedJobs(jobs []*logging.Job, start string) ([]*logging.Job, string, string) {
+	if len(jobs) == 0 {
+		return jobs, "", ""
+	}
+
+	c := len(jobs) - 1
+	f := paginateGetFirst(start, c)
+	l := paginateGetLast(f, c)
+
+	return jobs[f:l], paginateGetNext(f, c), paginateGetPrevious(f)
+}
+
+// paginateGetPrevious returns the previous index for a paginated job list.
+// Always add 1 to the first element because humans usually do not start counting from 0.
+func paginateGetPrevious(first int) string {
+	p := first - paginateBy + 1 // slice index vs. count
+
+	if p-1 == paginateBy*-1 {
+		return ""
+	}
+
+	if p < 0 {
+		return "0"
+	}
+
+	return strconv.Itoa(p)
+}
+
+// paginateGetNext returns the next index for a paginated job list.
+// Always add 1 if the first element is not 0 because humans usually do not
+// start counting from 0.
+func paginateGetNext(first, count int) string {
+	n := first + paginateBy
+
+	if first != 0 {
+		n++
+	}
+
+	if n >= count {
+		return ""
+	}
+
+	return strconv.Itoa(n)
+}
+
+// paginateGetFirst returns the first element of the job slice to return.
+// Always subscract 1 from start because humans usually do not start counting from 0.
+func paginateGetFirst(start string, count int) int {
+	f, err := strconv.Atoi(start)
+
+	if err != nil {
+		log.Fatalln("Could not convert start to int: ", start)
+	}
+
+	if f > 0 {
+		f--
+	}
+
+	if f > count {
+		log.Fatalln("Start index out of range: ", f)
+	}
+
+	return f
+}
+
+// paginateGetLast returns the last element of the job slice to return.
+func paginateGetLast(first, count int) int {
+	l := first + paginateBy
+
+	if l > count {
+		l = count
+	}
+
+	return l
+}
+
+// getParameter tries to get key form the URL parameters and returns it. If this
+// is not possible 'def' will be returned.
+func getParameter(req *http.Request, key, def string) string {
+	params, err := url.ParseQuery(req.URL.RawQuery)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	if val, ok := params[key]; ok == true {
+		return val[0]
+	}
+
+	return def
 }
