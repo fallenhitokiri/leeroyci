@@ -1,4 +1,6 @@
-// Provide helpers for requests.
+// Package web implements the complete web interface for LeeroyCI. This includes
+// exposing the build log to the web and implementing different actions like
+// rerunning jobs, deploying or administrative tasks.
 package web
 
 import (
@@ -37,6 +39,10 @@ func splitSecond(path string) string {
 // paginatedJobs returns a part of the jobs slices starting at 'start', the next
 // start element and the previous element.
 func paginatedJobs(jobs []*logging.Job, start string) ([]*logging.Job, string, string) {
+	if len(jobs) == 0 {
+		return jobs, "", ""
+	}
+
 	c := len(jobs) - 1
 	f := paginateGetFirst(start, c)
 	l := paginateGetLast(f, c)
@@ -67,7 +73,7 @@ func paginateGetNext(first, count int) string {
 	n := first + paginateBy
 
 	if first != 0 {
-		n += 1
+		n++
 	}
 
 	if n >= count {
@@ -87,7 +93,7 @@ func paginateGetFirst(start string, count int) int {
 	}
 
 	if f > 0 {
-		f -= 1
+		f--
 	}
 
 	if f > count {

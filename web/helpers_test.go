@@ -150,3 +150,16 @@ func TestPaginatedJobs(t *testing.T) {
 		t.Error("Wrong job identifier: ", jobs[0].Identifier)
 	}
 }
+
+func TestPaginatedJobsEmpty(t *testing.T) {
+	orig := []*logging.Job{}
+	j, n, p := paginatedJobs(orig, "10")
+
+	if len(j) != 0 {
+		t.Error("Wrong job list returned")
+	}
+
+	if n != "" || p != "" {
+		t.Error("Wrong n or p - n: ", n, " p: ", p)
+	}
+}
