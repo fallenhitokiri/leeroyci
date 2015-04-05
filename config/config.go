@@ -1,12 +1,14 @@
-// Config takes care of the whole configuration.
+// Package config takes care of the whole configuration.
 package config
 
 import (
 	"errors"
 	"net/url"
 	"strconv"
+	"sync"
 )
 
+// Config represents the complete configuration for the CI.
 type Config struct {
 	Secret        string
 	BuildLogPath  string
@@ -21,35 +23,8 @@ type Config struct {
 	Key           string
 	path          string
 	Templates     string
-}
-
-type Repository struct {
-	Name      string
-	URL       string
-	Commands  []Command
-	Notify    []Notify
-	CommentPR bool
-	ClosePR   bool
-	StatusPR  bool
-	AccessKey string
-	Deploy    []Deploy
-}
-
-type Command struct {
-	Name    string
-	Execute string
-}
-
-type Notify struct {
-	Service   string
-	Arguments map[string]string
-}
-
-type Deploy struct {
-	Name      string
-	Branch    string
-	Execute   string
-	Arguments map[string]string
+	Users         []*User
+	mutex         sync.Mutex
 }
 
 // ConfigForRepo returns the configuration for a repository that matches
@@ -69,12 +44,12 @@ func (c *Config) ConfigForRepo(url string) (Repository, error) {
 	return r, err
 }
 
-// Retruns the address of the mail server with the port.
+// MailServer retruns the address of the mail server with the port.
 func (c *Config) MailServer() string {
 	return c.EmailHost + ":" + strconv.Itoa(c.EmailPort)
 }
 
-// Returns the URL scheme used.
+// Scheme returns the URL scheme used.
 func (c *Config) Scheme() string {
 	u, err := url.Parse(c.URL)
 
@@ -85,7 +60,7 @@ func (c *Config) Scheme() string {
 	return u.Scheme
 }
 
-// Returns the host.
+// Host returns the host.
 func (c *Config) Host() string {
 	u, err := url.Parse(c.URL)
 
@@ -94,22 +69,4 @@ func (c *Config) Host() string {
 	}
 
 	return u.Host
-}
-
-// Returns the name or the URL
-func (r *Repository) Identifier() string {
-	if r.Name != "" {
-		return r.Name
-	}
-	return r.URL
-}
-
-// Returns the deployment target for a branch
-func (r *Repository) DeployTarget(branch string) (Deploy, error) {
-	for _, d := range r.Deploy {
-		if d.Branch == branch {
-			return d, nil
-		}
-	}
-	return Deploy{}, errors.New("No deployment target for branch")
 }
