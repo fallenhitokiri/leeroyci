@@ -9,25 +9,25 @@ import (
 )
 
 // Notify send build and deployment notifications for a job.
-func Notify(c *config.Config, j *logging.Job, kind string) {
+func Notify(j *logging.Job, kind string) {
 	if kindSupported(kind) == false {
 		log.Fatalln("unsupported notification type", kind)
 	}
 
-	n := notificationFromJob(j, c)
+	n := notificationFromJob(j)
 	n.kind = kind
 	n.render()
 
 	// always notify the person who comitted
-	go email(c, n, j.Email)
+	go email(n, j.Email)
 
-	repo, err := c.ConfigForRepo(j.URL)
+	repo, err := config.CONFIG.ConfigForRepo(j.URL)
 
 	if err != nil {
 		log.Fatalln("could not find repo", j.URL)
 	}
 
-	sendNotifications(n, repo.Notify, c)
+	sendNotifications(n, repo.Notify)
 }
 
 // Check if kind is a supported notification type.
@@ -41,13 +41,13 @@ func kindSupported(kind string) bool {
 }
 
 // Send all notifications which are configured for a repository.
-func sendNotifications(n *notification, nots []config.Notify, c *config.Config) {
+func sendNotifications(n *notification, nots []config.Notify) {
 	for _, not := range nots {
 		switch not.Service {
 		case "email":
 			// Arguments for email are the mail addresses to notify
 			for mail := range not.Arguments {
-				go email(c, n, mail)
+				go email(n, mail)
 			}
 		case "slack":
 			go slack(n, not.Arguments["endpoint"], not.Arguments["channel"])

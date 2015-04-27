@@ -1,9 +1,8 @@
-// integrations handles receiving notifications from repository sources like
-// GitHub.
+// Package integrations handles receiving notifications from repository sources
+// like GitHub.
 package integrations
 
 import (
-	"leeroy/config"
 	"leeroy/integrations/github"
 	"leeroy/logging"
 	"log"
@@ -11,13 +10,13 @@ import (
 	"strings"
 )
 
-func Callback(rw http.ResponseWriter, req *http.Request, jobs chan logging.Job,
-	c *config.Config, blog *logging.Buildlog) {
+// Callback handles callbacks and webhooks sent by code hosting serivces.
+func Callback(rw http.ResponseWriter, req *http.Request, jobs chan logging.Job) {
 	s := getService(req)
 
 	switch s {
 	case "github":
-		github.Parse(jobs, req, blog, c)
+		github.Parse(jobs, req)
 	default:
 		log.Println("serivce", s, "not supported")
 	}

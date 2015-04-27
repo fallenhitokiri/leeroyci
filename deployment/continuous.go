@@ -1,4 +1,5 @@
-// Handle finished build jobs and trigger a deployment if configured.
+// Package deployment handles finished build jobs and triggers a deployment
+// script if configured.
 package deployment
 
 import (
@@ -7,11 +8,11 @@ import (
 	"log"
 )
 
-// Check if the branch that was just build is configured for continuous
-// deployment and trigger a deploy.
+// ContinuousDeploy checks if the branch that was just built is configured for
+// continuous deployment and triggers a deploy if that is the case.
 // Returns true if a deployment is triggered.
-func ContinuousDeploy(j *logging.Job, c *config.Config) bool {
-	r, err := c.ConfigForRepo(j.URL)
+func ContinuousDeploy(j *logging.Job) bool {
+	r, err := config.CONFIG.ConfigForRepo(j.URL)
 
 	if err != nil {
 		log.Println("Cannot deploy", j.Branch, "repository not found.")
@@ -26,7 +27,7 @@ func ContinuousDeploy(j *logging.Job, c *config.Config) bool {
 
 	log.Println("deploying", j.Branch)
 
-	go Deploy(j, c)
+	go Deploy(j)
 
 	return true
 }

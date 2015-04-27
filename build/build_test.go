@@ -16,8 +16,6 @@ func TestCall(t *testing.T) {
 }
 
 func TestRun(t *testing.T) {
-	b := logging.Buildlog{}
-
 	cc := config.Command{
 		Name:    "cmd",
 		Execute: "ls",
@@ -28,9 +26,7 @@ func TestRun(t *testing.T) {
 		Commands: []config.Command{cc, cc},
 	}
 
-	c := config.Config{
-		Repositories: []config.Repository{cr},
-	}
+	config.CONFIG.Repositories = append(config.CONFIG.Repositories, cr)
 
 	j := logging.Job{
 		URL:    "http://test.tld",
@@ -40,13 +36,13 @@ func TestRun(t *testing.T) {
 		Email:  "email",
 	}
 
-	run(j, &c, &b)
+	run(j)
 
-	if len(b.Jobs) != 1 {
-		t.Error("Wrong number of jobs", len(b.Jobs))
+	if len(logging.BUILDLOG.Jobs) != 1 {
+		t.Error("Wrong number of jobs", len(logging.BUILDLOG.Jobs))
 	}
 
-	if len(b.Jobs[0].Tasks) != 2 {
-		t.Error("Wrong number of tasks", len(b.Jobs[0].Tasks))
+	if len(logging.BUILDLOG.Jobs[0].Tasks) != 2 {
+		t.Error("Wrong number of tasks", len(logging.BUILDLOG.Jobs[0].Tasks))
 	}
 }

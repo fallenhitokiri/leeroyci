@@ -12,14 +12,19 @@ import (
 )
 
 // Send an email to `toName <toEmail>` with the details of the failed build.
-func email(c *config.Config, n *notification, to string) {
-	message := buildEmail(c, n)
-	auth := smtp.PlainAuth("", c.EmailUser, c.EmailPassword, c.EmailHost)
+func email(n *notification, to string) {
+	message := buildEmail(n)
+	auth := smtp.PlainAuth(
+		"",
+		config.CONFIG.EmailUser,
+		config.CONFIG.EmailPassword,
+		config.CONFIG.EmailHost,
+	)
 
 	err := smtp.SendMail(
-		c.MailServer(),
+		config.CONFIG.MailServer(),
 		auth,
-		c.EmailFrom,
+		config.CONFIG.EmailFrom,
 		[]string{to},
 		message,
 	)
@@ -30,8 +35,8 @@ func email(c *config.Config, n *notification, to string) {
 }
 
 // Notify the person who pushed the changes
-func buildEmail(c *config.Config, n *notification) []byte {
-	f := mail.Address{Name: "leeroy", Address: c.EmailFrom}
+func buildEmail(n *notification) []byte {
+	f := mail.Address{Name: "leeroy", Address: config.CONFIG.EmailFrom}
 	t := mail.Address{Name: n.Name, Address: n.Email}
 	s := subject(n)
 	b := n.message

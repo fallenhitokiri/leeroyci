@@ -7,7 +7,6 @@ import (
 )
 
 func TestContinouosTrue(t *testing.T) {
-	c := config.Config{}
 	r := config.Repository{
 		URL: "url",
 	}
@@ -15,14 +14,14 @@ func TestContinouosTrue(t *testing.T) {
 		Branch: "foo",
 	}
 	r.Deploy = append(r.Deploy, d)
-	c.Repositories = append(c.Repositories, r)
+	config.CONFIG.Repositories = append(config.CONFIG.Repositories, r)
 
 	j := logging.Job{
 		URL:    "url",
 		Branch: "foo",
 	}
 
-	deployed := ContinuousDeploy(&j, &c)
+	deployed := ContinuousDeploy(&j)
 
 	if deployed == false {
 		t.Error("Not deployed, but should")
@@ -30,7 +29,6 @@ func TestContinouosTrue(t *testing.T) {
 }
 
 func TestContinouosNoRepo(t *testing.T) {
-	c := config.Config{}
 	r := config.Repository{
 		URL: "url",
 	}
@@ -38,14 +36,14 @@ func TestContinouosNoRepo(t *testing.T) {
 		Branch: "foo",
 	}
 	r.Deploy = append(r.Deploy, d)
-	c.Repositories = append(c.Repositories, r)
+	config.CONFIG.Repositories = append(config.CONFIG.Repositories, r)
 
 	j := logging.Job{
 		URL:    "url2",
 		Branch: "foo",
 	}
 
-	deployed := ContinuousDeploy(&j, &c)
+	deployed := ContinuousDeploy(&j)
 
 	if deployed == true {
 		t.Error("Deployed, but should not")
@@ -53,7 +51,6 @@ func TestContinouosNoRepo(t *testing.T) {
 }
 
 func TestContinouosFalse(t *testing.T) {
-	c := config.Config{}
 	r := config.Repository{
 		URL: "url",
 	}
@@ -61,14 +58,14 @@ func TestContinouosFalse(t *testing.T) {
 		Branch: "foo",
 	}
 	r.Deploy = append(r.Deploy, d)
-	c.Repositories = append(c.Repositories, r)
+	config.CONFIG.Repositories = append(config.CONFIG.Repositories, r)
 
 	j := logging.Job{
 		URL:    "url",
 		Branch: "baz",
 	}
 
-	deployed := ContinuousDeploy(&j, &c)
+	deployed := ContinuousDeploy(&j)
 
 	if deployed == true {
 		t.Error("Deployed, but should not")

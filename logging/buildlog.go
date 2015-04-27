@@ -1,4 +1,4 @@
-// Buildlog stores all builds that were triggered and the result.
+// Package logging stores all builds that were triggered and the result.
 package logging
 
 import (
@@ -9,20 +9,22 @@ import (
 	"sync"
 )
 
+var BUILDLOG Buildlog
+
 type Buildlog struct {
 	Path  string
 	Jobs  []*Job
 	mutex sync.Mutex
 }
 
-func New(path string) *Buildlog {
+func New(path string) {
 	b := Buildlog{
 		Path: path,
 	}
 
 	b.load()
 
-	return &b
+	BUILDLOG = b
 }
 
 // Add adds a new job to the buildlog.

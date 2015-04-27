@@ -4,22 +4,20 @@ package github
 
 import (
 	"io/ioutil"
-	"leeroy/config"
 	"leeroy/logging"
 	"log"
 	"net/http"
 )
 
 // Parse a GitHub request body and add it to the build queue.
-func Parse(jobs chan logging.Job, req *http.Request, blog *logging.Buildlog,
-	c *config.Config) {
+func Parse(jobs chan logging.Job, req *http.Request) {
 	e := req.Header["X-Github-Event"][0]
 
 	switch e {
 	case "push":
 		handlePush(req, jobs)
 	case "pull_request":
-		handlePR(req, blog, c)
+		handlePR(req)
 	default:
 		log.Println("event not supported", e)
 	}

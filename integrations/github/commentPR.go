@@ -31,9 +31,9 @@ func newComment(job *logging.Job, base string) comment {
 }
 
 // PostPR posts a new comment on a pull request.
-func PostPR(c *config.Config, job *logging.Job, pc PRCallback) {
-	comment := newComment(job, c.URL)
-	rp, err := c.ConfigForRepo(job.URL)
+func PostPR(job *logging.Job, pc PRCallback) {
+	comment := newComment(job, config.CONFIG.URL)
+	rp, err := config.CONFIG.ConfigForRepo(job.URL)
 
 	if err != nil {
 		log.Fatalln(err)

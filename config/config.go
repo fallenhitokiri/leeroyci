@@ -8,6 +8,9 @@ import (
 	"sync"
 )
 
+// CONFIG exports the configuration for leeroy.
+var CONFIG Config
+
 // Config represents the complete configuration for the CI.
 type Config struct {
 	Secret        string

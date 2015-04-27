@@ -1,4 +1,4 @@
-// Build runs the build commands for a repository.
+// Package build runs the build commands for a repository.
 package build
 
 import (
@@ -12,16 +12,16 @@ import (
 
 // Build waits for new notifications and runs the build process after
 // receiving one.
-func Build(jobs chan logging.Job, c *config.Config, b *logging.Buildlog) {
+func Build(jobs chan logging.Job) {
 	for {
 		j := <-jobs
-		run(j, c, b)
+		run(j)
 	}
 }
 
 // Run a build porcess.
-func run(j logging.Job, c *config.Config, b *logging.Buildlog) {
-	r, err := c.ConfigForRepo(j.URL)
+func run(j logging.Job) {
+	r, err := config.CONFIG.ConfigForRepo(j.URL)
 	j.Identifier = r.Identifier()
 
 	if err != nil {
@@ -47,9 +47,9 @@ func run(j logging.Job, c *config.Config, b *logging.Buildlog) {
 		j.Add(t)
 	}
 
-	b.Add(&j)
-	go notification.Notify(c, &j, notification.KindBuild)
-	go deployment.ContinuousDeploy(&j, c)
+	logging.BUILDLOG.Add(&j)
+	go notification.Notify(&j, notification.KindBuild)
+	go deployment.ContinuousDeploy(&j)
 
 	log.Println("Finished building", j.URL, j.Branch)
 }

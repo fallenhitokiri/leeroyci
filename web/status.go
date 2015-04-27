@@ -10,18 +10,17 @@ import (
 )
 
 // Status shows all builds ever done.
-func Status(rw http.ResponseWriter, req *http.Request, c *config.Config,
-	blog *logging.Buildlog) {
-	blog.Sort()
+func Status(rw http.ResponseWriter, req *http.Request) {
+	logging.BUILDLOG.Sort()
 
-	j, n, p := paginatedJobs(blog.Jobs, getParameter(req, "start", "0"))
+	j, n, p := paginatedJobs(logging.BUILDLOG.Jobs, getParameter(req, "start", "0"))
 
 	r := newResponse(rw, req)
 	r.Context.Jobs = j
 	r.Context.Next = n
-	r.Context.URL = c.URL
+	r.Context.URL = config.CONFIG.URL
 	r.Template = "status"
-	r.TemplatePath = c.Templates
+	r.TemplatePath = config.CONFIG.Templates
 
 	if p != "" {
 		r.Context.Previous = p
@@ -31,18 +30,20 @@ func Status(rw http.ResponseWriter, req *http.Request, c *config.Config,
 }
 
 // Repo shows builds for a specific repository.
-func Repo(rw http.ResponseWriter, req *http.Request, c *config.Config,
-	blog *logging.Buildlog) {
+func Repo(rw http.ResponseWriter, req *http.Request) {
 	re := splitFirst(req.URL.Path)
 
-	j, n, p := paginatedJobs(blog.JobsForRepo(re), getParameter(req, "start", "0"))
+	j, n, p := paginatedJobs(
+		logging.BUILDLOG.JobsForRepo(re),
+		getParameter(req, "start", "0"),
+	)
 
 	r := newResponse(rw, req)
 	r.Context.Jobs = j
 	r.Context.Next = n
-	r.Context.URL = c.URL
+	r.Context.URL = config.CONFIG.URL
 	r.Template = "repo"
-	r.TemplatePath = c.Templates
+	r.TemplatePath = config.CONFIG.Templates
 
 	if p != "" {
 		r.Context.Previous = p
@@ -52,19 +53,21 @@ func Repo(rw http.ResponseWriter, req *http.Request, c *config.Config,
 }
 
 // Branch shows builds for a specific repository and branch.
-func Branch(rw http.ResponseWriter, req *http.Request, c *config.Config,
-	blog *logging.Buildlog) {
+func Branch(rw http.ResponseWriter, req *http.Request) {
 	re := splitFirst(req.URL.Path)
 	b := splitSecond(req.URL.Path)
 
-	j, n, p := paginatedJobs(blog.JobsForRepoBranch(re, b), getParameter(req, "start", "0"))
+	j, n, p := paginatedJobs(
+		logging.BUILDLOG.JobsForRepoBranch(re, b),
+		getParameter(req, "start", "0"),
+	)
 
 	r := newResponse(rw, req)
 	r.Context.Jobs = j
 	r.Context.Next = n
-	r.Context.URL = c.URL
+	r.Context.URL = config.CONFIG.URL
 	r.Template = "branch"
-	r.TemplatePath = c.Templates
+	r.TemplatePath = config.CONFIG.Templates
 
 	if p != "" {
 		r.Context.Previous = p
@@ -74,30 +77,28 @@ func Branch(rw http.ResponseWriter, req *http.Request, c *config.Config,
 }
 
 // Commit shows the build for a commit in a repository.
-func Commit(rw http.ResponseWriter, req *http.Request, c *config.Config,
-	blog *logging.Buildlog) {
+func Commit(rw http.ResponseWriter, req *http.Request) {
 	re := splitFirst(req.URL.Path)
 	co := splitSecond(req.URL.Path)
 
-	j := blog.JobByCommit(re, co)
+	j := logging.BUILDLOG.JobByCommit(re, co)
 
 	r := newResponse(rw, req)
 	r.Context.Jobs = []*logging.Job{j}
-	r.Context.URL = c.URL
+	r.Context.URL = config.CONFIG.URL
 	r.Template = "commit"
-	r.TemplatePath = c.Templates
+	r.TemplatePath = config.CONFIG.Templates
 
 	r.render()
 }
 
 // Badge returns a badge - as SVG - showing the build status for a repository and
 // branch.
-func Badge(rw http.ResponseWriter, req *http.Request, c *config.Config,
-	blog *logging.Buildlog) {
+func Badge(rw http.ResponseWriter, req *http.Request) {
 	r := splitFirst(req.URL.Path)
 	b := splitSecond(req.URL.Path)
 
-	j := blog.JobsForRepoBranch(r, b)
+	j := logging.BUILDLOG.JobsForRepoBranch(r, b)
 
 	var svg []byte
 

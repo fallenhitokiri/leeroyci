@@ -20,65 +20,70 @@ var listUsers = flag.Bool("listUsers", false, "list all users")
 func main() {
 	flag.Parse()
 
-	c := config.FromFile(*cfgFlag)
+	config.FromFile(*cfgFlag)
 
-	err := c.Validate()
+	err := config.CONFIG.Validate()
 
 	if err != nil {
 		log.Fatal("Configuration error: ", err)
 	}
 
 	if *createUser == true {
-		c.CreateUserCMD()
+		config.CONFIG.CreateUserCMD()
 		return
 	}
 
 	if *updateUser == true {
-		c.UpdateUserCMD()
+		config.CONFIG.UpdateUserCMD()
 		return
 	}
 
 	if *deleteUser == true {
-		c.DeleteUserCMD()
+		config.CONFIG.DeleteUserCMD()
 		return
 	}
 
 	if *listUsers == true {
-		c.ListUserCMD()
+		config.CONFIG.ListUserCMD()
 		return
 	}
 
 	jobs := make(chan logging.Job, 100)
-	b := logging.New(c.BuildLogPath)
+	logging.New(config.CONFIG.BuildLogPath)
 
-	go build.Build(jobs, c, b)
+	go build.Build(jobs)
 
 	log.Println("leeroy up an running!")
 
 	http.HandleFunc("/callback/", web.Auth(func(w http.ResponseWriter, r *http.Request) {
-		integrations.Callback(w, r, jobs, c, b)
-	}, c.Secret))
+		integrations.Callback(w, r, jobs)
+	}, config.CONFIG.Secret))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		web.Status(w, r, c, b)
+		web.Status(w, r)
 	})
 	http.HandleFunc("/status/repo/", func(w http.ResponseWriter, r *http.Request) {
-		web.Repo(w, r, c, b)
+		web.Repo(w, r)
 	})
 	http.HandleFunc("/status/branch/", func(w http.ResponseWriter, r *http.Request) {
-		web.Branch(w, r, c, b)
+		web.Branch(w, r)
 	})
 	http.HandleFunc("/status/commit/", func(w http.ResponseWriter, r *http.Request) {
-		web.Commit(w, r, c, b)
+		web.Commit(w, r)
 	})
 	http.HandleFunc("/status/badge/", func(w http.ResponseWriter, r *http.Request) {
-		web.Badge(w, r, c, b)
+		web.Badge(w, r)
 	})
 
-	if c.Scheme() == "https" {
-		log.Println("HTTPS:", c.URL)
-		log.Fatal(http.ListenAndServeTLS(c.Host(), c.Cert, c.Key, nil))
+	if config.CONFIG.Scheme() == "https" {
+		log.Println("HTTPS:", config.CONFIG.URL)
+		log.Fatal(http.ListenAndServeTLS(
+			config.CONFIG.Host(),
+			config.CONFIG.Cert,
+			config.CONFIG.Key,
+			nil,
+		))
 	} else {
-		log.Println("HTTP:", c.URL)
-		log.Fatal(http.ListenAndServe(c.Host(), nil))
+		log.Println("HTTP:", config.CONFIG.URL)
+		log.Fatal(http.ListenAndServe(config.CONFIG.Host(), nil))
 	}
 }

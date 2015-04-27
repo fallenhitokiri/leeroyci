@@ -7,7 +7,7 @@ import (
 )
 
 // FromFile reads a configuration file and creates a new Config instance.
-func FromFile(name string) *Config {
+func FromFile(name string) {
 	var c Config
 
 	file, err := ioutil.ReadFile(name)
@@ -22,7 +22,7 @@ func FromFile(name string) *Config {
 
 	c.path = name
 
-	return &c
+	CONFIG = c
 }
 
 // ToFile writes the current configuration to the standard configuration file.

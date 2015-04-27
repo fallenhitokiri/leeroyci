@@ -46,7 +46,7 @@ func (p *PRCallback) RepoURL() string {
 }
 
 // Handle GitHub pull requests.
-func handlePR(req *http.Request, blog *logging.Buildlog, c *config.Config) {
+func handlePR(req *http.Request) {
 	b := parseBody(req)
 
 	var pc PRCallback
@@ -58,26 +58,26 @@ func handlePR(req *http.Request, blog *logging.Buildlog, c *config.Config) {
 
 	if pc.Action != "closed" {
 		log.Println("handling pull request", pc.Number)
-		go updatePR(pc, blog, c)
+		go updatePR(pc)
 	}
 }
 
 // Updates the status of a pull request once the build is done. Sleeps 10
 // seconds between the checks.
-func updatePR(pc PRCallback, blog *logging.Buildlog, c *config.Config) {
+func updatePR(pc PRCallback) {
 	counter := 0 // used as pseudo rate limiting so GitHub likes us
 
 	for {
-		for _, j := range blog.Jobs {
+		for _, j := range logging.BUILDLOG.Jobs {
 			if j.Commit == pc.PR.Head.Commit {
-				r, err := c.ConfigForRepo(j.URL)
+				r, err := config.CONFIG.ConfigForRepo(j.URL)
 
 				if err != nil {
 					log.Fatalln(err)
 				}
 
 				if r.CommentPR {
-					PostPR(c, j, pc)
+					PostPR(j, pc)
 				}
 
 				if r.ClosePR {
@@ -86,9 +86,19 @@ func updatePR(pc PRCallback, blog *logging.Buildlog, c *config.Config) {
 
 				if r.StatusPR {
 					if j.Success() {
-						PostStatus(statusSuccess, j.StatusURL(c.URL), pc.PR.StatusURL, r.AccessKey)
+						PostStatus(
+							statusSuccess,
+							j.StatusURL(config.CONFIG.URL),
+							pc.PR.StatusURL,
+							r.AccessKey,
+						)
 					} else {
-						PostStatus(statusFailed, j.StatusURL(c.URL), pc.PR.StatusURL, r.AccessKey)
+						PostStatus(
+							statusFailed,
+							j.StatusURL(config.CONFIG.URL),
+							pc.PR.StatusURL,
+							r.AccessKey,
+						)
 					}
 				}
 
@@ -99,7 +109,7 @@ func updatePR(pc PRCallback, blog *logging.Buildlog, c *config.Config) {
 		// Check if the PR is still revelevant or if a new commit was pushed
 		// or closed. Terminate the goroutine if this is the case.
 		if counter >= 30 {
-			if prIsCurrent(pc, c) == false {
+			if prIsCurrent(pc) == false {
 				return
 			}
 			counter = 0
@@ -112,8 +122,8 @@ func updatePR(pc PRCallback, blog *logging.Buildlog, c *config.Config) {
 }
 
 // Returns if PRCallback is for the latest commit.
-func prIsCurrent(pc PRCallback, c *config.Config) bool {
-	rp, err := c.ConfigForRepo(pc.RepoURL())
+func prIsCurrent(pc PRCallback) bool {
+	rp, err := config.CONFIG.ConfigForRepo(pc.RepoURL())
 
 	r, err := githubRequest("GET", pc.PR.URL, rp.AccessKey, nil)
 

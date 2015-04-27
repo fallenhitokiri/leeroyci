@@ -51,11 +51,9 @@ func TestBuildEmail(t *testing.T) {
 		message: "foo",
 	}
 
-	c := config.Config{
-		EmailFrom: "foo@bar.tld",
-	}
+	config.CONFIG.EmailFrom = "foo@bar.tld"
 
-	m := buildEmail(&c, &n)
+	m := buildEmail(&n)
 
 	if strings.Contains(string(m), "foo@bar.tld") == false {
 		t.Error("Sender email not found")

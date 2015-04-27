@@ -10,13 +10,13 @@ import (
 )
 
 // Deploy a job if all tests are passed.
-func Deploy(j *logging.Job, c *config.Config) {
+func Deploy(j *logging.Job) {
 	if j.Success() != true {
 		log.Println("Not deploying", j.Branch, "build did not succeed.")
 		return
 	}
 
-	r, err := c.ConfigForRepo(j.URL)
+	r, err := config.CONFIG.ConfigForRepo(j.URL)
 
 	if err != nil {
 		log.Println("Repo", j.URL, "does not exist.")
@@ -30,7 +30,7 @@ func Deploy(j *logging.Job, c *config.Config) {
 		return
 	}
 
-	notification.Notify(c, j, notification.KindDeployStart)
+	notification.Notify(j, notification.KindDeployStart)
 
 	o, err := call(d.Execute, r.URL, j.Branch)
 
@@ -49,7 +49,7 @@ func Deploy(j *logging.Job, c *config.Config) {
 		log.Println(err.Error())
 	}
 
-	notification.Notify(c, j, notification.KindDeployDone)
+	notification.Notify(j, notification.KindDeployDone)
 }
 
 // Call a deployment script and return the output.

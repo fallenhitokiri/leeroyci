@@ -1,13 +1,11 @@
 package notification
 
 import (
-	"leeroy/config"
 	"leeroy/logging"
 	"testing"
 )
 
 func TestNotificationFromJob(t *testing.T) {
-	c := config.Config{}
 	j := logging.Job{
 		Identifier: "ident",
 		URL:        "url",
@@ -18,7 +16,7 @@ func TestNotificationFromJob(t *testing.T) {
 		Email:      "email",
 	}
 
-	n := notificationFromJob(&j, &c)
+	n := notificationFromJob(&j)
 
 	if n.Status != true {
 		t.Error("Status false, should be true")
