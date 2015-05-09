@@ -4,8 +4,7 @@ package github
 
 import (
 	"encoding/json"
-	"leeroy/config"
-	"leeroy/logging"
+	"leeroy/database"
 	"log"
 	"net/http"
 	"time"
@@ -68,9 +67,11 @@ func updatePR(pc PRCallback) {
 	counter := 0 // used as pseudo rate limiting so GitHub likes us
 
 	for {
-		for _, j := range logging.BUILDLOG.Jobs {
+		jobs := database.GetOpenJobs()
+
+		for _, j := range jobs {
 			if j.Commit == pc.PR.Head.Commit {
-				r, err := config.CONFIG.ConfigForRepo(j.URL)
+				r := database.RepositoryForURL(j.URL)
 
 				if err != nil {
 					log.Fatalln(err)

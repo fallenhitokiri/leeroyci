@@ -11,6 +11,7 @@ type Job struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt *time.Time
+	BuildDone time.Time
 
 	Repository   Repository
 	RepositoryID int64
@@ -24,6 +25,31 @@ type Job struct {
 
 	Tasks    []Task `gorm:"many2many:job_tasks;"`
 	Deployed *Task
+}
+
+// AddJob adds a new job to the database.
+func AddJob(url, branch, commit, name, email, commitURL string) {
+	r := RepositoryForURL(url)
+
+	j := Job{
+		CreatedAt:  time.Now(),
+		UpdatedAt:  time.Now(),
+		Repository: r,
+		Branch:     branch,
+		Commit:     commit,
+		CommitURL:  commitURL,
+		Name:       name,
+		Email:      email,
+	}
+}
+
+// GetOpenJobs returns all jobs which are not finished.
+func GetOpenJobs() []*Job {
+	j := []*Job{}
+
+	db.Where("BuildDone = NULL").Find(&j)
+
+	return j
 }
 
 // Status returns either the exit code of the triggered command or 0 if the

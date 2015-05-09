@@ -2,9 +2,8 @@
 package build
 
 import (
-	"leeroy/config"
+	"leeroy/database"
 	"leeroy/deployment"
-	"leeroy/logging"
 	"leeroy/notification"
 	"log"
 	"os/exec"
@@ -12,7 +11,7 @@ import (
 
 // Build waits for new notifications and runs the build process after
 // receiving one.
-func Build(jobs chan logging.Job) {
+func Build(jobs chan database.Job) {
 	for {
 		j := <-jobs
 		run(j)
@@ -20,7 +19,7 @@ func Build(jobs chan logging.Job) {
 }
 
 // Run a build porcess.
-func run(j logging.Job) {
+func run(j database.Job) {
 	r, err := config.CONFIG.ConfigForRepo(j.URL)
 	j.Identifier = r.Identifier()
 

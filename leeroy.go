@@ -3,9 +3,7 @@ package main
 import (
 	"flag"
 	"leeroy/build"
-	"leeroy/config"
 	"leeroy/integrations"
-	"leeroy/logging"
 	"leeroy/web"
 	"log"
 	"net/http"
@@ -49,7 +47,6 @@ func main() {
 	}
 
 	jobs := make(chan logging.Job, 100)
-	logging.New(config.CONFIG.BuildLogPath)
 
 	go build.Build(jobs)
 

@@ -4,7 +4,7 @@ package github
 
 import (
 	"encoding/json"
-	"leeroy/logging"
+	"leeroy/database"
 	"log"
 	"net/http"
 	"strings"
@@ -105,7 +105,7 @@ func (p *PushCallback) Commit() string {
 }
 
 // Handle GitHub push events.
-func handlePush(req *http.Request, jobs chan logging.Job) {
+func handlePush(req *http.Request) {
 	b := parseBody(req)
 
 	var cb PushCallback
@@ -117,25 +117,22 @@ func handlePush(req *http.Request, jobs chan logging.Job) {
 	}
 
 	if cb.ShouldBuild() == true {
-		pushToQueue(jobs, cb)
+		pushToQueue(cb)
 	} else {
 		log.Println("Not adding", cb.URL(), cb.Branch(), "to build queue")
 	}
 }
 
 // Convert a callback to a loggin.Job and push it to the build queue.
-func pushToQueue(jobs chan logging.Job, cb PushCallback) {
+func pushToQueue(cb PushCallback) {
 	name, email := cb.By()
 
-	j := logging.Job{
-		URL:       cb.URL(),
-		Branch:    cb.Branch(),
-		Timestamp: time.Now(),
-		Commit:    cb.Commit(),
-		Name:      name,
-		Email:     email,
-		CommitURL: cb.CommitURL(),
-	}
-
-	jobs <- j
+	database.AddJob(
+		cb.URL(),
+		cb.Branch(),
+		cb.Commit(),
+		name,
+		email,
+		cb.CommitURL(),
+	)
 }

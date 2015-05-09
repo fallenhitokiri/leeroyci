@@ -4,18 +4,17 @@ package github
 
 import (
 	"io/ioutil"
-	"leeroy/logging"
 	"log"
 	"net/http"
 )
 
 // Parse a GitHub request body and add it to the build queue.
-func Parse(jobs chan logging.Job, req *http.Request) {
+func Parse(req *http.Request) {
 	e := req.Header["X-Github-Event"][0]
 
 	switch e {
 	case "push":
-		handlePush(req, jobs)
+		handlePush(req)
 	case "pull_request":
 		handlePR(req)
 	default:
