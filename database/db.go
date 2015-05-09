@@ -16,15 +16,13 @@ var db gorm.DB
 func NewDatabase() error {
 	d, s := envURL()
 
-	con, err := gorm.Open(d, s)
+	db, err := gorm.Open(d, s)
 
 	if err != nil {
 		return err
 	}
 
-	con.DB()
-
-	db = con
+	db.DB()
 
 	db.AutoMigrate(
 		&Command{},
