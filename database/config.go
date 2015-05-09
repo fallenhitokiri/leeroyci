@@ -3,6 +3,7 @@ package database
 
 import (
 	"database/sql"
+	"net/url"
 )
 
 // Config represents the complete configuration for the CI.
@@ -24,4 +25,26 @@ func GetConfig() *Config {
 	c := &Config{}
 	db.First(c)
 	return c
+}
+
+// Scheme returns the URL scheme used.
+func (c *Config) Scheme() string {
+	u, err := url.Parse(c.URL)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return u.Scheme
+}
+
+// Host returns the host.
+func (c *Config) Host() string {
+	u, err := url.Parse(c.URL)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return u.Host
 }
