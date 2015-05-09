@@ -8,43 +8,22 @@ import (
 // Repository holds all information needed to identify a repository and run
 // tests and builds.
 type Repository struct {
-	ID            int
-	Name          string
-	URL           string
-	Commands      []Command
-	Notifications []Notify
-	CommentPR     bool
-	ClosePR       bool
-	StatusPR      bool
-	AccessKey     string
-	Deploy        []Deploy
-}
+	ID   int64
+	Name string
+	URL  string
 
-// Command stores a short name and the path or command to execute when a users
-// pushes to a repository.
-type Command struct {
-	ID      int
-	Name    string
-	Execute string
-}
+	CommentPR bool
+	ClosePR   bool
+	StatusPR  bool
+	AccessKey string
 
-// Notify stores the configuration needed for a notification plugin to work. All
-// optiones required by the services are stored as map - it is the job of the
-// notification plugin to access them correctly and handle missing ones.
-type Notify struct {
-	ID        int
-	Service   string
-	Arguments string
-}
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time
 
-// Deploy stores the command to execute and arguments to pass to the command
-// when a users pushes to a certain branch.
-type Deploy struct {
-	ID        int
-	Name      string
-	Branch    string
-	Execute   string
-	Arguments string
+	Commands      []Command `gorm:"many2many:repository_commands;"`
+	Notifications []Notify  `gorm:"many2many:repository_notifications;"`
+	Deploy        []Deploy  `gorm:"many2many:repository_deploy;"`
 }
 
 // RepositoryForURL returns the repository based on the URL that pushed changes.

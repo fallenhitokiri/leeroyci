@@ -26,7 +26,17 @@ func NewDatabase() error {
 
 	db = con
 
-	db.AutoMigrate(&Config{}, &MailServer{}, &User{})
+	db.AutoMigrate(
+		&Command{},
+		&Config{},
+		&Deploy{},
+		&Job{},
+		&MailServer{},
+		&Notify{},
+		&Repository{},
+		&Task{},
+		&User{},
+	)
 
 	return nil
 }

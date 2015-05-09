@@ -9,7 +9,7 @@ import (
 
 // User stores a user account including the password using bcrypt.
 type User struct {
-	ID        int
+	ID        int64
 	Email     string
 	FirstName string
 	LastName  string

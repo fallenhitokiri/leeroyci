@@ -7,7 +7,7 @@ import (
 
 // MailServer stores a mailserver configuration.
 type MailServer struct {
-	ID       int
+	ID       int64
 	Host     string
 	Sender   string
 	Port     int

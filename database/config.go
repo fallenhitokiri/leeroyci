@@ -8,7 +8,7 @@ import (
 
 // Config represents the complete configuration for the CI.
 type Config struct {
-	ID           int
+	ID           int64
 	Secret       string
 	BuildLogPath string
 	URL          string
