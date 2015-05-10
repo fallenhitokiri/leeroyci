@@ -21,13 +21,9 @@ type Repository struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt *time.Time
-
-	Commands      []Command `gorm:"many2many:repository_commands;"`
-	Notifications []Notify  `gorm:"many2many:repository_notifications;"`
-	Deploy        []Deploy  `gorm:"many2many:repository_deploy;"`
 }
 
-func AddRepository(name, url, accessKey string, commentPR, closePR, statusPR bool) {
+func AddRepository(name, url, accessKey string, commentPR, closePR, statusPR bool) *Repository {
 	r := Repository{
 		Name:      name,
 		URL:       url,
@@ -36,7 +32,10 @@ func AddRepository(name, url, accessKey string, commentPR, closePR, statusPR boo
 		ClosePR:   closePR,
 		statusPR:  statusPR,
 	}
+
 	db.Save(&r)
+
+	return &r
 }
 
 // RepositoryForURL returns the repository based on the URL that pushed changes.

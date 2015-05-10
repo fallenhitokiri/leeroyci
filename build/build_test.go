@@ -15,17 +15,11 @@ func TestCall(t *testing.T) {
 }
 
 func TestRun(t *testing.T) {
-	cc := database.Command{
-		Name:    "cmd",
-		Execute: "ls",
-	}
+	r := database.AddRepository("foo", "http://test.tld", "", false, false, false)
+	c1 := database.AddCommand(r, "cmd", "ls")
+	c2 := database.AddCommand(r, "cmd", "ls")
 
-	cr := database.Repository{
-		URL:      "http://test.tld",
-		Commands: []database.Command{cc, cc},
-	}
-
-	j := logging.Job{
+	j := database.Job{
 		URL:    "http://test.tld",
 		Branch: "branch",
 		Commit: "commit",
@@ -35,11 +29,13 @@ func TestRun(t *testing.T) {
 
 	run(j)
 
-	if len(logging.BUILDLOG.Jobs) != 1 {
+	jobs := database.GetAllJobs()
+
+	if len(jobs) != 1 {
 		t.Error("Wrong number of jobs", len(logging.BUILDLOG.Jobs))
 	}
 
-	if len(logging.BUILDLOG.Jobs[0].Tasks) != 2 {
+	if len(jobs[0].Tasks) != 2 {
 		t.Error("Wrong number of tasks", len(logging.BUILDLOG.Jobs[0].Tasks))
 	}
 }

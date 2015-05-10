@@ -9,4 +9,21 @@ type Deploy struct {
 	Branch    string
 	Execute   string
 	Arguments string
+
+	Repository   Repository
+	RepositoryID int64
+}
+
+func AddDeploy(r *Repository, name, branch, execute, arguments string) *Deploy {
+	d := Deploy{
+		Name:       name,
+		Branch:     branch,
+		Execute:    execute,
+		Arguments:  arguments,
+		Repository: r,
+	}
+
+	db.Save(&d)
+
+	return &d
 }

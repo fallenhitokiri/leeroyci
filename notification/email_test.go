@@ -1,7 +1,7 @@
 package notification
 
 import (
-	"leeroy/config"
+	"leeroy/database"
 	"strings"
 	"testing"
 )
@@ -51,7 +51,8 @@ func TestBuildEmail(t *testing.T) {
 		message: "foo",
 	}
 
-	config.CONFIG.EmailFrom = "foo@bar.tld"
+	ms := database.GetMailServer()
+	ms.Sender = "foo@bar.tld"
 
 	m := buildEmail(&n)
 

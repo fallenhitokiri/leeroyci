@@ -1,20 +1,20 @@
 package github
 
 import (
-	"leeroy/logging"
+	"leeroy/database"
 	"strings"
 	"testing"
 )
 
 func TestNewComment(t *testing.T) {
-	j := logging.Job{}
+	j := database.Job{}
 	c := newComment(&j, "")
 
 	if strings.Contains(c.Body, "successful") == false {
 		t.Error("wrong comment - not successful")
 	}
 
-	ta := logging.Task{
+	ta := database.Task{
 		Return: "foo",
 	}
 	j.Tasks = append(j.Tasks, ta)

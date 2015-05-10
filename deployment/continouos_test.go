@@ -1,23 +1,16 @@
 package deployment
 
 import (
-	"leeroy/config"
-	"leeroy/logging"
+	"leeroy/database"
 	"testing"
 )
 
 func TestContinouosTrue(t *testing.T) {
-	r := config.Repository{
-		URL: "url",
-	}
-	d := config.Deploy{
-		Branch: "foo",
-	}
-	r.Deploy = append(r.Deploy, d)
-	config.CONFIG.Repositories = append(config.CONFIG.Repositories, r)
+	r := database.AddRepository("foo", "http://test.tld", "", false, false, false)
+	d := database.AddDeploy(r, "", "foo", "", "")
 
 	j := logging.Job{
-		URL:    "url",
+		URL:    "http://test.tld",
 		Branch: "foo",
 	}
 
@@ -29,14 +22,8 @@ func TestContinouosTrue(t *testing.T) {
 }
 
 func TestContinouosNoRepo(t *testing.T) {
-	r := config.Repository{
-		URL: "url",
-	}
-	d := config.Deploy{
-		Branch: "foo",
-	}
-	r.Deploy = append(r.Deploy, d)
-	config.CONFIG.Repositories = append(config.CONFIG.Repositories, r)
+	r := database.AddRepository("foo", "http://test.tld", "", false, false, false)
+	d := database.AddDeploy(r, "", "foo", "", "")
 
 	j := logging.Job{
 		URL:    "url2",
@@ -51,17 +38,11 @@ func TestContinouosNoRepo(t *testing.T) {
 }
 
 func TestContinouosFalse(t *testing.T) {
-	r := config.Repository{
-		URL: "url",
-	}
-	d := config.Deploy{
-		Branch: "foo",
-	}
-	r.Deploy = append(r.Deploy, d)
-	config.CONFIG.Repositories = append(config.CONFIG.Repositories, r)
+	r := database.AddRepository("foo", "http://test.tld", "", false, false, false)
+	d := database.AddDeploy(r, "", "foo", "", "")
 
 	j := logging.Job{
-		URL:    "url",
+		URL:    "http://test.tld",
 		Branch: "baz",
 	}
 

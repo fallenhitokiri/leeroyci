@@ -8,4 +8,7 @@ type Notify struct {
 	ID        int64
 	Service   string
 	Arguments string
+
+	Repository   Repository
+	RepositoryID int64
 }

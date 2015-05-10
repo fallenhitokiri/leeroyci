@@ -1,7 +1,7 @@
 package web
 
 import (
-	"leeroy/logging"
+	"leeroy/database"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -21,8 +21,8 @@ func TestRenderJSON(t *testing.T) {
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("Get", "127.0.0.1", nil)
 	r := newResponse(w, req)
-	j := []*logging.Job{
-		&logging.Job{
+	j := []*database.Job{
+		&database.Job{
 			Identifier: "foo",
 		},
 	}

@@ -7,4 +7,19 @@ type Command struct {
 	ID      int64
 	Name    string
 	Execute string
+
+	Repository   Repository
+	RepositoryID int64
+}
+
+func AddCommand(r *Repository, name, execute string) *Command {
+	c := Command{
+		Name:       name,
+		Execute:    execute,
+		Repository: r,
+	}
+
+	db.Save(&c)
+
+	return &c
 }

@@ -1,12 +1,12 @@
 package notification
 
 import (
-	"leeroy/logging"
+	"leeroy/database"
 	"testing"
 )
 
 func TestNotificationFromJob(t *testing.T) {
-	j := logging.Job{
+	j := database.Job{
 		Identifier: "ident",
 		URL:        "url",
 		Branch:     "branch",

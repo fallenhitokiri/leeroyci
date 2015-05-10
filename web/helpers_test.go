@@ -1,7 +1,7 @@
 package web
 
 import (
-	"leeroy/logging"
+	"leeroy/database"
 	"net/http"
 	"testing"
 )
@@ -92,50 +92,50 @@ func TestGetParameter(t *testing.T) {
 }
 
 func TestPaginatedJobs(t *testing.T) {
-	j := []*logging.Job{
-		&logging.Job{
+	j := []*database.Job{
+		&database.Job{
 			Identifier: "1",
 		},
-		&logging.Job{
+		&database.Job{
 			Identifier: "2",
 		},
-		&logging.Job{
+		&database.Job{
 			Identifier: "3",
 		},
-		&logging.Job{
+		&database.Job{
 			Identifier: "4",
 		},
-		&logging.Job{
+		&database.Job{
 			Identifier: "5",
 		},
-		&logging.Job{
+		&database.Job{
 			Identifier: "6",
 		},
-		&logging.Job{
+		&database.Job{
 			Identifier: "7",
 		},
-		&logging.Job{
+		&database.Job{
 			Identifier: "8",
 		},
-		&logging.Job{
+		&database.Job{
 			Identifier: "9",
 		},
-		&logging.Job{
+		&database.Job{
 			Identifier: "10",
 		},
-		&logging.Job{
+		&database.Job{
 			Identifier: "11",
 		},
-		&logging.Job{
+		&database.Job{
 			Identifier: "12",
 		},
-		&logging.Job{
+		&database.Job{
 			Identifier: "13",
 		},
-		&logging.Job{
+		&database.Job{
 			Identifier: "14",
 		},
-		&logging.Job{
+		&database.Job{
 			Identifier: "15",
 		},
 	}
@@ -152,7 +152,7 @@ func TestPaginatedJobs(t *testing.T) {
 }
 
 func TestPaginatedJobsEmpty(t *testing.T) {
-	orig := []*logging.Job{}
+	orig := []*database.Job{}
 	j, n, p := paginatedJobs(orig, "10")
 
 	if len(j) != 0 {

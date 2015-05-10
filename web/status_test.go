@@ -1,7 +1,7 @@
 package web
 
 import (
-	"leeroy/logging"
+	"leeroy/database"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -10,8 +10,8 @@ import (
 func TestStatus(t *testing.T) {
 	rw := httptest.NewRecorder()
 	req, _ := http.NewRequest("Get", "127.0.0.1", nil)
-	logging.BUILDLOG.Jobs = []*logging.Job{
-		&logging.Job{},
+	j := []*database.Job{
+		&database.Job{},
 	}
 
 	Status(rw, req)
@@ -24,11 +24,8 @@ func TestStatus(t *testing.T) {
 func TestRepo(t *testing.T) {
 	rw := httptest.NewRecorder()
 	req, _ := http.NewRequest("Get", "127.0.0.1/status/repo/75726c", nil)
-	logging.BUILDLOG.Jobs = []*logging.Job{
-		&logging.Job{
-			URL:    "url",
-			Branch: "foo",
-		},
+	j := []*database.Job{
+		&database.Job{},
 	}
 
 	Repo(rw, req)
@@ -41,11 +38,8 @@ func TestRepo(t *testing.T) {
 func TestBranch(t *testing.T) {
 	rw := httptest.NewRecorder()
 	req, _ := http.NewRequest("Get", "127.0.0.1/status/branch/75726c/foo", nil)
-	logging.BUILDLOG.Jobs = []*logging.Job{
-		&logging.Job{
-			URL:    "url",
-			Branch: "foo",
-		},
+	j := []*database.Job{
+		&database.Job{},
 	}
 
 	Branch(rw, req)
@@ -58,11 +52,8 @@ func TestBranch(t *testing.T) {
 func TestCommit(t *testing.T) {
 	rw := httptest.NewRecorder()
 	req, _ := http.NewRequest("Get", "127.0.0.1/status/branch/75726c/foo", nil)
-	logging.BUILDLOG.Jobs = []*logging.Job{
-		&logging.Job{
-			URL:    "url",
-			Commit: "foo",
-		},
+	j := []*database.Job{
+		&database.Job{},
 	}
 
 	Commit(rw, req)
@@ -75,8 +66,8 @@ func TestCommit(t *testing.T) {
 func TestBadge(t *testing.T) {
 	rw := httptest.NewRecorder()
 	req, _ := http.NewRequest("Get", "127.0.0.1/status/badge/75726c/foo", nil)
-	logging.BUILDLOG.Jobs = []*logging.Job{
-		&logging.Job{},
+	j := []*database.Job{
+		&database.Job{},
 	}
 
 	Badge(rw, req)
