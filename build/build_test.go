@@ -1,8 +1,7 @@
 package build
 
 import (
-	"leeroy/config"
-	"leeroy/logging"
+	"leeroy/database"
 	"testing"
 )
 
@@ -16,17 +15,15 @@ func TestCall(t *testing.T) {
 }
 
 func TestRun(t *testing.T) {
-	cc := config.Command{
+	cc := database.Command{
 		Name:    "cmd",
 		Execute: "ls",
 	}
 
-	cr := config.Repository{
+	cr := database.Repository{
 		URL:      "http://test.tld",
-		Commands: []config.Command{cc, cc},
+		Commands: []database.Command{cc, cc},
 	}
-
-	config.CONFIG.Repositories = append(config.CONFIG.Repositories, cr)
 
 	j := logging.Job{
 		URL:    "http://test.tld",

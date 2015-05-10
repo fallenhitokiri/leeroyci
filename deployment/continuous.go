@@ -3,7 +3,6 @@
 package deployment
 
 import (
-	"leeroy/config"
 	"leeroy/database"
 	"log"
 )

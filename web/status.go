@@ -4,23 +4,23 @@
 package web
 
 import (
-	"leeroy/config"
-	"leeroy/logging"
+	"leeroy/database"
 	"net/http"
 )
 
 // Status shows all builds ever done.
 func Status(rw http.ResponseWriter, req *http.Request) {
-	logging.BUILDLOG.Sort()
+	jobs := database.GetAllJobs()
+	config := database.GetConfig()
 
-	j, n, p := paginatedJobs(logging.BUILDLOG.Jobs, getParameter(req, "start", "0"))
+	j, n, p := paginatedJobs(jobs, getParameter(req, "start", "0"))
 
 	r := newResponse(rw, req)
 	r.Context.Jobs = j
 	r.Context.Next = n
-	r.Context.URL = config.CONFIG.URL
+	r.Context.URL = config.URL
 	r.Template = "status"
-	r.TemplatePath = config.CONFIG.Templates
+	r.TemplatePath = config.Templates
 
 	if p != "" {
 		r.Context.Previous = p
@@ -31,19 +31,20 @@ func Status(rw http.ResponseWriter, req *http.Request) {
 
 // Repo shows builds for a specific repository.
 func Repo(rw http.ResponseWriter, req *http.Request) {
-	re := splitFirst(req.URL.Path)
+	//re := splitFirst(req.URL.Path)
+	config := database.GetConfig()
 
 	j, n, p := paginatedJobs(
-		logging.BUILDLOG.JobsForRepo(re),
+		database.GetAllJobs(), // TODO: query jobs for re
 		getParameter(req, "start", "0"),
 	)
 
 	r := newResponse(rw, req)
 	r.Context.Jobs = j
 	r.Context.Next = n
-	r.Context.URL = config.CONFIG.URL
+	r.Context.URL = config.URL
 	r.Template = "repo"
-	r.TemplatePath = config.CONFIG.Templates
+	r.TemplatePath = config.Templates
 
 	if p != "" {
 		r.Context.Previous = p
@@ -54,20 +55,21 @@ func Repo(rw http.ResponseWriter, req *http.Request) {
 
 // Branch shows builds for a specific repository and branch.
 func Branch(rw http.ResponseWriter, req *http.Request) {
-	re := splitFirst(req.URL.Path)
-	b := splitSecond(req.URL.Path)
+	//re := splitFirst(req.URL.Path)
+	//b := splitSecond(req.URL.Path)
+	config := database.GetConfig()
 
 	j, n, p := paginatedJobs(
-		logging.BUILDLOG.JobsForRepoBranch(re, b),
+		database.GetAllJobs(), // TODO: query jobs for re + b
 		getParameter(req, "start", "0"),
 	)
 
 	r := newResponse(rw, req)
 	r.Context.Jobs = j
 	r.Context.Next = n
-	r.Context.URL = config.CONFIG.URL
+	r.Context.URL = config.URL
 	r.Template = "branch"
-	r.TemplatePath = config.CONFIG.Templates
+	r.TemplatePath = config.Templates
 
 	if p != "" {
 		r.Context.Previous = p
@@ -78,16 +80,17 @@ func Branch(rw http.ResponseWriter, req *http.Request) {
 
 // Commit shows the build for a commit in a repository.
 func Commit(rw http.ResponseWriter, req *http.Request) {
-	re := splitFirst(req.URL.Path)
-	co := splitSecond(req.URL.Path)
+	//re := splitFirst(req.URL.Path)
+	//co := splitSecond(req.URL.Path)
+	config := database.GetConfig()
 
-	j := logging.BUILDLOG.JobByCommit(re, co)
+	j := database.GetAllJobs()[0] //logging.BUILDLOG.JobByCommit(re, co)
 
 	r := newResponse(rw, req)
-	r.Context.Jobs = []*logging.Job{j}
-	r.Context.URL = config.CONFIG.URL
+	r.Context.Jobs = []*database.Job{j}
+	r.Context.URL = config.URL
 	r.Template = "commit"
-	r.TemplatePath = config.CONFIG.Templates
+	r.TemplatePath = config.Templates
 
 	r.render()
 }
@@ -95,10 +98,10 @@ func Commit(rw http.ResponseWriter, req *http.Request) {
 // Badge returns a badge - as SVG - showing the build status for a repository and
 // branch.
 func Badge(rw http.ResponseWriter, req *http.Request) {
-	r := splitFirst(req.URL.Path)
-	b := splitSecond(req.URL.Path)
+	//r := splitFirst(req.URL.Path)
+	//b := splitSecond(req.URL.Path)
 
-	j := logging.BUILDLOG.JobsForRepoBranch(r, b)
+	j := database.GetAllJobs()[0] //logging.BUILDLOG.JobsForRepoBranch(r, b)
 
 	var svg []byte
 

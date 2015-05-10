@@ -4,7 +4,7 @@ package github
 
 import (
 	"encoding/json"
-	"leeroy/logging"
+	"leeroy/database"
 	"log"
 )
 
@@ -21,7 +21,7 @@ func newUpdate() update {
 }
 
 // ClosePR closes a pull request if a build failed.
-func ClosePR(token string, job *logging.Job, pc PRCallback) {
+func ClosePR(token string, job *database.Job, pc PRCallback) {
 	// just return if the build did not fail
 	if job.Success() {
 		return

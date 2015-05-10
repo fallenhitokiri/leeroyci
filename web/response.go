@@ -3,7 +3,7 @@ package web
 
 import (
 	"encoding/json"
-	"leeroy/logging"
+	"leeroy/database"
 	"leeroy/web/templates"
 	"log"
 	"net/http"
@@ -17,7 +17,7 @@ var (
 
 // Context holds all varibales that could be used by a template.
 type Context struct {
-	Jobs     []*logging.Job
+	Jobs     []*database.Job
 	Next     string
 	Previous string
 	URL      string

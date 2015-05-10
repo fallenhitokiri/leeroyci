@@ -4,8 +4,7 @@ package notification
 
 import (
 	"bytes"
-	"leeroy/config"
-	"leeroy/logging"
+	"leeroy/database"
 	"log"
 	"text/template"
 )
@@ -34,14 +33,16 @@ type notification struct {
 }
 
 // Create a notification from a job.
-func notificationFromJob(j *logging.Job) *notification {
+func notificationFromJob(j *database.Job) *notification {
+	c := database.GetConfig()
+
 	return &notification{
 		Repo:   j.URL,
 		Branch: j.Branch,
 		Name:   j.Name,
 		Email:  j.Email,
 		Status: j.Success(),
-		URL:    j.StatusURL(config.CONFIG.URL),
+		URL:    j.StatusURL(c.URL),
 		Deploy: j.DeploySuccess(),
 	}
 }

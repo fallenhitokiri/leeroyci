@@ -5,7 +5,7 @@ package notification
 import (
 	"encoding/base64"
 	"fmt"
-	"leeroy/config"
+	"leeroy/database"
 	"log"
 	"net/mail"
 	"net/smtp"
@@ -14,17 +14,20 @@ import (
 // Send an email to `toName <toEmail>` with the details of the failed build.
 func email(n *notification, to string) {
 	message := buildEmail(n)
+
+	ms := database.GetMailServer()
+
 	auth := smtp.PlainAuth(
 		"",
-		config.CONFIG.EmailUser,
-		config.CONFIG.EmailPassword,
-		config.CONFIG.EmailHost,
+		ms.User,
+		ms.Password,
+		ms.Host,
 	)
 
 	err := smtp.SendMail(
-		config.CONFIG.MailServer(),
+		ms.Server(),
 		auth,
-		config.CONFIG.EmailFrom,
+		ms.Sender,
 		[]string{to},
 		message,
 	)
@@ -36,7 +39,9 @@ func email(n *notification, to string) {
 
 // Notify the person who pushed the changes
 func buildEmail(n *notification) []byte {
-	f := mail.Address{Name: "leeroy", Address: config.CONFIG.EmailFrom}
+	ms := database.GetMailServer()
+
+	f := mail.Address{Name: "leeroy", Address: ms.Sender}
 	t := mail.Address{Name: n.Name, Address: n.Email}
 	s := subject(n)
 	b := n.message

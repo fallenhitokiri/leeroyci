@@ -4,8 +4,7 @@ package github
 
 import (
 	"encoding/json"
-	"leeroy/config"
-	"leeroy/logging"
+	"leeroy/database"
 	"log"
 )
 
@@ -32,8 +31,10 @@ func newComment(job *logging.Job, base string) comment {
 
 // PostPR posts a new comment on a pull request.
 func PostPR(job *logging.Job, pc PRCallback) {
-	comment := newComment(job, config.CONFIG.URL)
-	rp, err := config.CONFIG.ConfigForRepo(job.URL)
+	c := database.GetConfig()
+
+	comment := newComment(job, c.URL)
+	rp := database.RepositoryForURL(job.URL)
 
 	if err != nil {
 		log.Fatalln(err)

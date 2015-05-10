@@ -3,6 +3,7 @@ package database
 
 import (
 	"errors"
+	"time"
 )
 
 // Repository holds all information needed to identify a repository and run
@@ -24,6 +25,18 @@ type Repository struct {
 	Commands      []Command `gorm:"many2many:repository_commands;"`
 	Notifications []Notify  `gorm:"many2many:repository_notifications;"`
 	Deploy        []Deploy  `gorm:"many2many:repository_deploy;"`
+}
+
+func AddRepository(name, url, accessKey string, commentPR, closePR, statusPR bool) {
+	r := Repository{
+		Name:      name,
+		URL:       url,
+		AccessKey: accessKey,
+		CommentPR: commentPR,
+		ClosePR:   closePR,
+		statusPR:  statusPR,
+	}
+	db.Save(&r)
 }
 
 // RepositoryForURL returns the repository based on the URL that pushed changes.

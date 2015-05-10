@@ -2,26 +2,20 @@
 package deployment
 
 import (
-	"leeroy/config"
-	"leeroy/logging"
+	"leeroy/database"
 	"leeroy/notification"
 	"log"
 	"os/exec"
 )
 
 // Deploy a job if all tests are passed.
-func Deploy(j *logging.Job) {
+func Deploy(j *database.Job) {
 	if j.Success() != true {
 		log.Println("Not deploying", j.Branch, "build did not succeed.")
 		return
 	}
 
-	r, err := config.CONFIG.ConfigForRepo(j.URL)
-
-	if err != nil {
-		log.Println("Repo", j.URL, "does not exist.")
-		return
-	}
+	r := database.RepositoryForURL(j.URL)
 
 	d, err := r.DeployTarget(j.Branch)
 

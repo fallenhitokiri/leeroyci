@@ -3,16 +3,18 @@
 package notification
 
 import (
-	"leeroy/config"
-	"leeroy/logging"
+	"leeroy/database"
 	"log"
 )
 
 // Notify send build and deployment notifications for a job.
-func Notify(j *logging.Job, kind string) {
+func Notify(j *database.Job, kind string) {
 	if kindSupported(kind) == false {
 		log.Fatalln("unsupported notification type", kind)
+		return
 	}
+
+	c := database.GetConfig()
 
 	n := notificationFromJob(j)
 	n.kind = kind
@@ -21,7 +23,7 @@ func Notify(j *logging.Job, kind string) {
 	// always notify the person who comitted
 	go email(n, j.Email)
 
-	repo, err := config.CONFIG.ConfigForRepo(j.URL)
+	repo := database.RepositoryForURL(j.URL)
 
 	if err != nil {
 		log.Fatalln("could not find repo", j.URL)

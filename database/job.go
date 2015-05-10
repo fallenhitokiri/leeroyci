@@ -52,6 +52,12 @@ func GetOpenJobs() []*Job {
 	return j
 }
 
+// GetAllJobs returns all jobs.
+func GetAllJobs() []*Job {
+	j := []*Job{}
+	return db.Find(&j)
+}
+
 // Status returns either the exit code of the triggered command or 0 if the
 // command finished successfully.
 func (j *Job) Status() string {

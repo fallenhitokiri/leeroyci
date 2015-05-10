@@ -86,17 +86,19 @@ func updatePR(pc PRCallback) {
 				}
 
 				if r.StatusPR {
+					c := database.GetConfig()
+
 					if j.Success() {
 						PostStatus(
 							statusSuccess,
-							j.StatusURL(config.CONFIG.URL),
+							j.StatusURL(c.URL),
 							pc.PR.StatusURL,
 							r.AccessKey,
 						)
 					} else {
 						PostStatus(
 							statusFailed,
-							j.StatusURL(config.CONFIG.URL),
+							j.StatusURL(c.URL),
 							pc.PR.StatusURL,
 							r.AccessKey,
 						)
@@ -124,7 +126,7 @@ func updatePR(pc PRCallback) {
 
 // Returns if PRCallback is for the latest commit.
 func prIsCurrent(pc PRCallback) bool {
-	rp, err := config.CONFIG.ConfigForRepo(pc.RepoURL())
+	rp := database.RepositoryForURL(pc.RepoURL())
 
 	r, err := githubRequest("GET", pc.PR.URL, rp.AccessKey, nil)
 

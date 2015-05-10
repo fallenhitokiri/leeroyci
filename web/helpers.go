@@ -5,7 +5,7 @@ package web
 
 import (
 	"encoding/hex"
-	"leeroy/logging"
+	"leeroy/database"
 	"log"
 	"net/http"
 	"net/url"
@@ -38,7 +38,7 @@ func splitSecond(path string) string {
 
 // paginatedJobs returns a part of the jobs slices starting at 'start', the next
 // start element and the previous element.
-func paginatedJobs(jobs []*logging.Job, start string) ([]*logging.Job, string, string) {
+func paginatedJobs(jobs []*database.Job, start string) ([]*database.Job, string, string) {
 	if len(jobs) == 0 {
 		return jobs, "", ""
 	}
