@@ -2,7 +2,6 @@
 package database
 
 import (
-	"errors"
 	"time"
 )
 
@@ -23,6 +22,7 @@ type Repository struct {
 	DeletedAt *time.Time
 }
 
+// AddRepository adds a new repository.
 func AddRepository(name, url, accessKey string, commentPR, closePR, statusPR bool) *Repository {
 	r := Repository{
 		Name:      name,
@@ -30,7 +30,7 @@ func AddRepository(name, url, accessKey string, commentPR, closePR, statusPR boo
 		AccessKey: accessKey,
 		CommentPR: commentPR,
 		ClosePR:   closePR,
-		statusPR:  statusPR,
+		StatusPR:  statusPR,
 	}
 
 	db.Save(&r)
@@ -54,11 +54,11 @@ func (r *Repository) Identifier() string {
 }
 
 // DeployTarget returns the deployment target for a branch
-func (r *Repository) DeployTarget(branch string) (Deploy, error) {
+/*func (r *Repository) DeployTarget(branch string) (Deploy, error) {
 	for _, d := range r.Deploy {
 		if d.Branch == branch {
 			return d, nil
 		}
 	}
 	return Deploy{}, errors.New("No deployment target for branch")
-}
+}*/

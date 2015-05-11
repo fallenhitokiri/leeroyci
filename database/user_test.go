@@ -1,20 +1,8 @@
 package database
 
 import (
-	"os"
 	"testing"
 )
-
-func TestMain(m *testing.M) {
-	os.Setenv("DATABASE_URL", "sqlite3 :memory:")
-	NewDatabase()
-
-	i := m.Run()
-
-	os.Unsetenv("DATABASE_URL")
-
-	os.Exit(i)
-}
 
 func TestHashComparePassword(t *testing.T) {
 	pass := "asdf"

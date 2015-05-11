@@ -28,19 +28,21 @@ type Job struct {
 }
 
 // AddJob adds a new job to the database.
-func AddJob(url, branch, commit, name, email, commitURL string) {
+func AddJob(url, branch, commit, name, email, commitURL string) *Job {
 	r := RepositoryForURL(url)
 
 	j := Job{
 		CreatedAt:  time.Now(),
 		UpdatedAt:  time.Now(),
-		Repository: r,
+		Repository: *r,
 		Branch:     branch,
 		Commit:     commit,
 		CommitURL:  commitURL,
 		Name:       name,
 		Email:      email,
 	}
+
+	return &j
 }
 
 // GetOpenJobs returns all jobs which are not finished.
@@ -55,7 +57,8 @@ func GetOpenJobs() []*Job {
 // GetAllJobs returns all jobs.
 func GetAllJobs() []*Job {
 	j := []*Job{}
-	return db.Find(&j)
+	db.Find(&j)
+	return j
 }
 
 // Status returns either the exit code of the triggered command or 0 if the
@@ -83,16 +86,6 @@ func (j *Job) Success() bool {
 // Add a task to the job.
 func (j *Job) Add(t Task) {
 	j.Tasks = append(j.Tasks, t)
-}
-
-// Hex returns the URL in hex
-func (j *Job) Hex() string {
-	return hex.EncodeToString([]byte(j.URL))
-}
-
-// StatusURL returns the URL for the webinterface
-func (j *Job) StatusURL(base string) string {
-	return fmt.Sprintf("%sstatus/commit/%s/%s", base, j.Hex(), j.Commit)
 }
 
 // DeploySuccess returns if the deploy was successful.

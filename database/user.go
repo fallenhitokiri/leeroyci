@@ -75,7 +75,7 @@ func (u *User) Update(email, firstName, lastName, password string, admin bool) (
 	return u, nil
 }
 
-// Delete deletes an existing user.
+// DeleteUser deletes an existing user.
 func (u *User) DeleteUser() error {
 	db.Delete(u)
 

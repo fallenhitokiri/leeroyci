@@ -14,13 +14,14 @@ type Deploy struct {
 	RepositoryID int64
 }
 
+// AddDeploy adds a new deployment task to a repository.
 func AddDeploy(r *Repository, name, branch, execute, arguments string) *Deploy {
 	d := Deploy{
 		Name:       name,
 		Branch:     branch,
 		Execute:    execute,
 		Arguments:  arguments,
-		Repository: r,
+		Repository: *r,
 	}
 
 	db.Save(&d)

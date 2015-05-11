@@ -12,11 +12,12 @@ type Command struct {
 	RepositoryID int64
 }
 
+// AddCommand adds a new command to a repository.
 func AddCommand(r *Repository, name, execute string) *Command {
 	c := Command{
 		Name:       name,
 		Execute:    execute,
-		Repository: r,
+		Repository: *r,
 	}
 
 	db.Save(&c)

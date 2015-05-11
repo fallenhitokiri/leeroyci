@@ -49,32 +49,6 @@ func TestAdd(t *testing.T) {
 	}
 }
 
-func TestMD5(t *testing.T) {
-	j := Job{
-		URL: "https://github.com/fallenhitokiri/pushtest",
-	}
-
-	hex := "68747470733a2f2f6769746875622e636f6d2f66616c6c656e6869746f6b6972692f7075736874657374"
-
-	if j.Hex() != hex {
-		t.Error("Wrong hex", j.Hex())
-	}
-}
-
-func TestStatusURL(t *testing.T) {
-	j := Job{
-		URL:    "https://github.com/fallenhitokiri/pushtest",
-		Commit: "foo",
-	}
-
-	u := j.StatusURL("asdf/")
-	e := "asdf/status/commit/68747470733a2f2f6769746875622e636f6d2f66616c6c656e6869746f6b6972692f7075736874657374/foo"
-
-	if u != e {
-		t.Error("Wrong URL", u)
-	}
-}
-
 func TestDeploySuccess(t *testing.T) {
 	j := Job{}
 

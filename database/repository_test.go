@@ -23,28 +23,3 @@ func TestIdentifier(t *testing.T) {
 		t.Error("Wrong identifier", i)
 	}
 }
-
-func TestDeploymentTarget(t *testing.T) {
-	r := Repository{}
-
-	d1 := Deploy{
-		Branch:  "foo",
-		Execute: "123",
-	}
-
-	d2 := Deploy{
-		Branch: "bar",
-	}
-
-	r.Deploy = append(r.Deploy, d1, d2)
-
-	dep, err := r.DeployTarget("foo")
-
-	if err != nil {
-		t.Error(err)
-	}
-
-	if dep.Execute != "123" {
-		t.Error("Wrong execute", dep.Execute)
-	}
-}

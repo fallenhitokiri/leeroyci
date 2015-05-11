@@ -5,32 +5,32 @@ import (
 	"testing"
 )
 
-func TestNewDatabase(t *testing.T) {
+func TestMain(m *testing.M) {
 	os.Setenv("DATABASE_URL", "sqlite3 :memory:")
-
 	NewDatabase()
 
+	i := m.Run()
+
+	os.Unsetenv("DATABASE_URL")
+	os.Exit(i)
+}
+
+func TestNewDatabase(t *testing.T) {
 	err := db.DB().Ping()
 
 	if err != nil {
 		t.Error("No database connection")
 	}
-
-	os.Unsetenv("DATABASE_URL")
 }
 
 func TestEnvURL(t *testing.T) {
-	os.Setenv("DATABASE_URL", "foo bar baz")
-
 	d, s := envURL()
 
-	if d != "foo" {
+	if d != "sqlite3" {
 		t.Error("Wrong driver", d)
 	}
 
-	if s != "bar baz" {
+	if s != ":memory:" {
 		t.Error("Wrong connection string", s)
 	}
-
-	os.Unsetenv("DATABASE_URL")
 }
