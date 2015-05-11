@@ -4,22 +4,11 @@ import (
 	"testing"
 )
 
-func TestIdentifier(t *testing.T) {
-	r := Repository{
-		URL: "foo",
-	}
+func TestAddRepositoryGetRepository(t *testing.T) {
+	r1 := AddRepository("foo", "bar", "accessKey", false, false, false)
+	r2 := GetRepository("bar")
 
-	i := r.Identifier()
-
-	if i != "foo" {
-		t.Error("Wrong identifier", i)
-	}
-
-	r.Name = "bar"
-
-	i = r.Identifier()
-
-	if i != "bar" {
-		t.Error("Wrong identifier", i)
+	if r1.ID != r2.ID {
+		t.Error("IDs do not match.")
 	}
 }

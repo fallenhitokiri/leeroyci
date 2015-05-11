@@ -24,7 +24,7 @@ type Repository struct {
 
 // AddRepository adds a new repository.
 func AddRepository(name, url, accessKey string, commentPR, closePR, statusPR bool) *Repository {
-	r := Repository{
+	repo := Repository{
 		Name:      name,
 		URL:       url,
 		AccessKey: accessKey,
@@ -33,32 +33,14 @@ func AddRepository(name, url, accessKey string, commentPR, closePR, statusPR boo
 		StatusPR:  statusPR,
 	}
 
-	db.Save(&r)
+	db.Save(&repo)
 
-	return &r
+	return &repo
 }
 
-// RepositoryForURL returns the repository based on the URL that pushed changes.
-func RepositoryForURL(url string) *Repository {
-	r := &Repository{}
-	db.Where("URL = ?", url).First(&r)
-	return r
+// GetRepository returns the repository based on the URL that pushed changes.
+func GetRepository(url string) *Repository {
+	repo := &Repository{}
+	db.Where("URL = ?", url).First(&repo)
+	return repo
 }
-
-// Identifier returns the name or the URL
-func (r *Repository) Identifier() string {
-	if r.Name != "" {
-		return r.Name
-	}
-	return r.URL
-}
-
-// DeployTarget returns the deployment target for a branch
-/*func (r *Repository) DeployTarget(branch string) (Deploy, error) {
-	for _, d := range r.Deploy {
-		if d.Branch == branch {
-			return d, nil
-		}
-	}
-	return Deploy{}, errors.New("No deployment target for branch")
-}*/

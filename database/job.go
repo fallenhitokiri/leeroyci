@@ -22,14 +22,12 @@ type Job struct {
 
 	Name  string
 	Email string
-
-	Tasks    []Task `gorm:"many2many:job_tasks;"`
-	Deployed *Task
 }
 
+/*
 // AddJob adds a new job to the database.
 func AddJob(url, branch, commit, name, email, commitURL string) *Job {
-	r := RepositoryForURL(url)
+	r := GetRepository(url)
 
 	j := Job{
 		CreatedAt:  time.Now(),
@@ -98,4 +96,4 @@ func (j *Job) DeploySuccess() bool {
 		return true
 	}
 	return false
-}
+}*/

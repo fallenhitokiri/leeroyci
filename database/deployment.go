@@ -28,3 +28,13 @@ func AddDeploy(r *Repository, name, branch, execute, arguments string) *Deploy {
 
 	return &d
 }
+
+// DeployTarget returns the deployment target for a branch
+/*func (r *Repository) DeployTarget(branch string) (Deploy, error) {
+	for _, d := range r.Deploy {
+		if d.Branch == branch {
+			return d, nil
+		}
+	}
+	return Deploy{}, errors.New("No deployment target for branch")
+}*/

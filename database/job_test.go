@@ -1,6 +1,6 @@
 package database
 
-import (
+/*import (
 	"testing"
 )
 
@@ -71,4 +71,4 @@ func TestDeploySuccess(t *testing.T) {
 	if j.DeploySuccess() != false {
 		t.Error("DeploySuccess is not false but should be.")
 	}
-}
+}*/
