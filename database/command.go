@@ -31,7 +31,7 @@ func AddCommand(repo *Repository, name, execute, branch, kind string) (*Command,
 		return nil, errors.New("wrong kind.")
 	}
 
-	command := Command{
+	c := Command{
 		Name:       name,
 		Execute:    execute,
 		Kind:       kind,
@@ -39,9 +39,9 @@ func AddCommand(repo *Repository, name, execute, branch, kind string) (*Command,
 		Branch:     branch,
 	}
 
-	db.Save(&command)
+	db.Save(&c)
 
-	return &command, nil
+	return &c, nil
 }
 
 // GetCommands returns all commands for a repository, branch and kind
@@ -64,4 +64,31 @@ func GetCommands(repo *Repository, branch, kind string) []Command {
 	}
 
 	return append(noBranch, branches...)
+}
+
+// GetCommand returns a command for a specific ID.
+func GetCommand(id int64) *Command {
+	c := &Command{}
+	db.Where("ID = ?", id).First(&c)
+	return c
+}
+
+// UpdateCommand updates a command.
+func UpdateCommand(id int64, name, kind, branch, execute string) *Command {
+	c := GetCommand(id)
+
+	c.Name = name
+	c.Kind = kind
+	c.Branch = branch
+	c.Execute = execute
+
+	db.Save(c)
+
+	return c
+}
+
+// DeleteCommand deletes a command.
+func DeleteCommand(id int64) {
+	c := GetCommand(id)
+	db.Delete(c)
 }
