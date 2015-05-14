@@ -23,3 +23,24 @@ func TestHost(t *testing.T) {
 		t.Error("Wrong host", c.Host())
 	}
 }
+
+func TestConfigCRUD(t *testing.T) {
+	_ = AddConfig("secret", "dbPath", "url", "cert", "key")
+	get1 := GetConfig()
+	updated := UpdateConfig("secret2", "dbPath", "url", "cert", "key")
+	get2 := GetConfig()
+	DeleteConfig()
+	get3 := GetConfig()
+
+	if get1.ID != get2.ID || updated.ID != get2.ID {
+		t.Error("ID mismatch")
+	}
+
+	if get1.Secret == get2.Secret {
+		t.Error("Secret not updated")
+	}
+
+	if get3.ID != 0 {
+		t.Error("Not deleted")
+	}
+}

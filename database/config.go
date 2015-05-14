@@ -2,22 +2,32 @@
 package database
 
 import (
-	"database/sql"
 	"net/url"
 )
 
 // Config represents the complete configuration for the CI.
 type Config struct {
-	ID           int64
-	Secret       string
-	BuildLogPath string
-	URL          string
-	Cert         string
-	Key          string
-	path         string
-	Templates    string
-	MailServer   MailServer
-	MailServerID sql.NullInt64
+	ID     int64
+	Secret string
+	DBPath string
+	URL    string
+	Cert   string
+	Key    string
+}
+
+// AddConfig adds a new configuration.
+func AddConfig(secret, dbPath, url, cert, key string) *Config {
+	c := &Config{
+		Secret: secret,
+		DBPath: dbPath,
+		URL:    url,
+		Cert:   cert,
+		Key:    key,
+	}
+
+	db.Save(c)
+
+	return c
 }
 
 // GetConfig returns the current configuration.
@@ -25,6 +35,27 @@ func GetConfig() *Config {
 	c := &Config{}
 	db.First(c)
 	return c
+}
+
+// UpdateConfig updates the config.
+func UpdateConfig(secret, dbPath, url, cert, key string) *Config {
+	c := GetConfig()
+
+	c.Secret = secret
+	c.DBPath = dbPath
+	c.URL = url
+	c.Cert = cert
+	c.Key = key
+
+	db.Save(c)
+
+	return c
+}
+
+// DeleteConfig delete the existing configuration.
+func DeleteConfig() {
+	c := GetConfig()
+	db.Delete(c)
 }
 
 // Scheme returns the URL scheme used.

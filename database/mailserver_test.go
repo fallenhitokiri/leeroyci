@@ -16,7 +16,7 @@ func TestServer(t *testing.T) {
 	}
 }
 
-func TestCRUD(t *testing.T) {
+func TestMailServerCRUD(t *testing.T) {
 	_ = AddMailServer("host", "sender", "user", "password", 1234)
 	get1 := GetMailServer()
 	updated := UpdateMailServer("host", "sender", "user", "password", 4321)
