@@ -19,7 +19,6 @@ type Repository struct {
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	DeletedAt *time.Time
 }
 
 // AddRepository adds a new repository.

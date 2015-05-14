@@ -3,6 +3,7 @@ package database
 
 import (
 	"errors"
+	"time"
 )
 
 const (
@@ -14,15 +15,17 @@ const (
 // Command stores a short name and the path or command to execute when a users
 // pushes to a repository.
 type Command struct {
-	ID     int64
-	Name   string
-	Kind   string
-	Branch string
-
+	ID      int64
+	Name    string
+	Kind    string
+	Branch  string
 	Execute string
 
 	Repository   Repository
 	RepositoryID int64
+
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 // AddCommand adds a new command to a repository.

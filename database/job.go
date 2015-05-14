@@ -7,11 +7,10 @@ import (
 
 // Job stores all information about one commit and the executed tasks.
 type Job struct {
-	ID        int64
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time
-	BuildDone time.Time
+	ID int64
+
+	TasksFinished  time.Time
+	DeployFinished time.Time
 
 	Repository   Repository
 	RepositoryID int64
@@ -22,17 +21,15 @@ type Job struct {
 
 	Name  string
 	Email string
+
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
-/*
 // AddJob adds a new job to the database.
-func AddJob(url, branch, commit, name, email, commitURL string) *Job {
-	r := GetRepository(url)
-
-	j := Job{
-		CreatedAt:  time.Now(),
-		UpdatedAt:  time.Now(),
-		Repository: *r,
+func AddJob(repo *Repository, branch, commit, commitURL, name, email string) *Job {
+	j := &Job{
+		Repository: *repo,
 		Branch:     branch,
 		Commit:     commit,
 		CommitURL:  commitURL,
@@ -40,10 +37,31 @@ func AddJob(url, branch, commit, name, email, commitURL string) *Job {
 		Email:      email,
 	}
 
-	return &j
+	db.Save(j)
+
+	return j
 }
 
-// GetOpenJobs returns all jobs which are not finished.
+// GetJob returns a job for a given ID.
+func GetJob(id int64) *Job {
+	j := &Job{}
+	db.Where("ID = ?", id).First(&j)
+	return j
+}
+
+// TasksDone sets TasksDone
+func (j *Job) TasksDone() {
+	j.TasksFinished = time.Now()
+	db.Save(j)
+}
+
+// DeployDone sets DeployDone
+func (j *Job) DeployDone() {
+	j.DeployFinished = time.Now()
+	db.Save(j)
+}
+
+/*// GetOpenJobs returns all jobs which are not finished.
 func GetOpenJobs() []*Job {
 	j := []*Job{}
 
@@ -80,20 +98,3 @@ func (j *Job) Success() bool {
 	}
 	return false
 }
-
-// Add a task to the job.
-func (j *Job) Add(t Task) {
-	j.Tasks = append(j.Tasks, t)
-}
-
-// DeploySuccess returns if the deploy was successful.
-func (j *Job) DeploySuccess() bool {
-	if j.Deployed == nil {
-		return false
-	}
-
-	if j.Deployed.Return == "" {
-		return true
-	}
-	return false
-}*/

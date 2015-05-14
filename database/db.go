@@ -28,7 +28,6 @@ func NewDatabase() error {
 	db.AutoMigrate(
 		&Command{},
 		&Config{},
-		&Deploy{},
 		&Job{},
 		&MailServer{},
 		&Notify{},

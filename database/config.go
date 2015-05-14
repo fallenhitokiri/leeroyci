@@ -3,6 +3,7 @@ package database
 
 import (
 	"net/url"
+	"time"
 )
 
 // Config represents the complete configuration for the CI.
@@ -13,6 +14,9 @@ type Config struct {
 	URL    string
 	Cert   string
 	Key    string
+
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 // AddConfig adds a new configuration.
