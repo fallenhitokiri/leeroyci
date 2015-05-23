@@ -21,8 +21,8 @@ type Repository struct {
 	UpdatedAt time.Time
 }
 
-// AddRepository adds a new repository.
-func AddRepository(name, url, accessKey string, commentPR, closePR, statusPR bool) *Repository {
+// CreateRepository adds a new repository.
+func CreateRepository(name, url, accessKey string, commentPR, closePR, statusPR bool) *Repository {
 	repo := Repository{
 		Name:      name,
 		URL:       url,
@@ -42,4 +42,25 @@ func GetRepository(url string) *Repository {
 	repo := &Repository{}
 	db.Where("URL = ?", url).First(&repo)
 	return repo
+}
+
+// UpdateRepository updates an existing repository.
+func UpdateRepository(name, url, accessKey string, commentPR, closePR, statusPR bool) *Repository {
+	r := GetRepository(url)
+
+	r.Name = name
+	r.CommentPR = commentPR
+	r.StatusPR = statusPR
+	r.ClosePR = closePR
+	r.AccessKey = accessKey
+
+	db.Save(r)
+
+	return r
+}
+
+// DeleteRepository deletes an existing repository.
+func DeleteRepository(url string) {
+	r := GetRepository(url)
+	db.Delete(r)
 }

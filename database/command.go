@@ -7,8 +7,13 @@ import (
 )
 
 const (
-	CommandKindTest   = "test"
-	CommandKindBuild  = "build"
+	// CommandKindTest is used when a command runs tests.
+	CommandKindTest = "test"
+
+	// CommandKindBuild is used when a command builds a package or project.
+	CommandKindBuild = "build"
+
+	// CommandKindDeploy is used when a command deploys a branch.
 	CommandKindDeploy = "deploy"
 )
 
@@ -31,7 +36,7 @@ type Command struct {
 // AddCommand adds a new command to a repository.
 func AddCommand(repo *Repository, name, execute, branch, kind string) (*Command, error) {
 	if kind != CommandKindTest && kind != CommandKindBuild && kind != CommandKindDeploy {
-		return nil, errors.New("wrong kind.")
+		return nil, errors.New("wrong kind")
 	}
 
 	c := Command{

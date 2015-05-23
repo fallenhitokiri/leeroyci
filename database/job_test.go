@@ -5,7 +5,7 @@ import (
 )
 
 func TestCGDoneJob(t *testing.T) {
-	repo := AddRepository("foo", "baz", "accessKey", false, false, false)
+	repo := CreateRepository("foo", "baz", "accessKey", false, false, false)
 
 	job := AddJob(repo, "branch", "commit", "commitURL", "name", "email")
 	job.TasksDone()

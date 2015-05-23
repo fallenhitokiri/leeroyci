@@ -5,7 +5,7 @@ import (
 )
 
 func TestAddCommandGetCommand(t *testing.T) {
-	repo := AddRepository("", "", "", false, false, false)
+	repo := CreateRepository("", "", "", false, false, false)
 	com1, err := AddCommand(repo, "", "", "", CommandKindBuild)
 
 	if err != nil {
@@ -20,7 +20,7 @@ func TestAddCommandGetCommand(t *testing.T) {
 }
 
 func TestAddCommandGetCommandDifferentKind(t *testing.T) {
-	repo := AddRepository("", "", "", false, false, false)
+	repo := CreateRepository("", "", "", false, false, false)
 	_, err := AddCommand(repo, "", "", "", CommandKindBuild)
 
 	if err != nil {
@@ -35,7 +35,7 @@ func TestAddCommandGetCommandDifferentKind(t *testing.T) {
 }
 
 func TestCommandCRUD(t *testing.T) {
-	repo := AddRepository("", "", "", false, false, false)
+	repo := CreateRepository("", "", "", false, false, false)
 
 	add, _ := AddCommand(repo, "name", "execute", "branch", CommandKindBuild)
 	get1 := GetCommand(add.ID)
