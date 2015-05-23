@@ -30,7 +30,7 @@ func NewDatabase() error {
 		&Config{},
 		&Job{},
 		&MailServer{},
-		&Notify{},
+		&Notification{},
 		&Repository{},
 		&Task{},
 		&User{},
