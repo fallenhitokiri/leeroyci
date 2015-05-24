@@ -11,6 +11,7 @@ import (
 )
 
 var db gorm.DB
+var Configured bool
 
 // NewDatabase established a database connection and stores it in `db`.
 func NewDatabase() error {
@@ -35,6 +36,14 @@ func NewDatabase() error {
 		&Task{},
 		&User{},
 	)
+
+	cfg := GetConfig()
+
+	if cfg.ID == 0 {
+		Configured = false
+	} else {
+		Configured = true
+	}
 
 	return nil
 }
