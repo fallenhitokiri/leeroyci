@@ -14,6 +14,20 @@ type Task struct {
 	JobID int64
 }
 
+// AddTask adds a new task.
+func AddTask(command *Command, job *Job, ret, out string) *Task {
+	task := Task{
+		Return:  ret,
+		Output:  out,
+		Command: command,
+		Job:     job,
+	}
+
+	db.Save(&task)
+
+	return &task
+}
+
 // Status returns either the exit code of the triggered command or 0
 // 0 if the command finished successfully.
 func (t *Task) Status() string {
