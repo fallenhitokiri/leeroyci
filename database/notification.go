@@ -2,16 +2,17 @@
 package database
 
 const (
-	// Notification type for email notifications.
+	// NotificationServiceEmail type for email notifications.
 	NotificationServiceEmail = "email"
 
-	// Notification type for slack notifications.
+	// NotificationServiceSlack type for slack notifications.
 	NotificationServiceSlack = "slack"
 )
 
-// Notify stores the configuration needed for a notification plugin to work. All
-// optiones required by the services are stored as map - it is the job of the
-// notification plugin to access them correctly and handle missing ones.
+// Notification stores the configuration needed for a notification plugin to
+// work. All optiones required by the services are stored as map - it is the
+// job of the notification plugin to access them correctly and handle missing
+// ones.
 type Notification struct {
 	ID        int64
 	Service   string
@@ -21,7 +22,7 @@ type Notification struct {
 	RepositoryID int64
 }
 
-// CreateNotify create a new notification for a repository.
+// CreateNotification create a new notification for a repository.
 func CreateNotification(service, arguments string, repo *Repository) *Notification {
 	not := Notification{
 		Service:    service,

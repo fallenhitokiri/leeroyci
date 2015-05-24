@@ -19,8 +19,8 @@ func AddTask(command *Command, job *Job, ret, out string) *Task {
 	task := Task{
 		Return:  ret,
 		Output:  out,
-		Command: command,
-		Job:     job,
+		Command: *command,
+		Job:     *job,
 	}
 
 	db.Save(&task)
