@@ -11,6 +11,8 @@ import (
 )
 
 var db gorm.DB
+
+// Configured indicates if there is a valid configuration.
 var Configured bool
 
 // NewDatabase established a database connection and stores it in `db`.
