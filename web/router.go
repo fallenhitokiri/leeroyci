@@ -1,14 +1,20 @@
 package web
 
 import (
-	"github.com/gin-gonic/gin"
+	"net/http"
+
+	"github.com/GeertJohan/go.rice"
+	"github.com/gorilla/mux"
+	"github.com/justinas/alice"
 )
 
-// AddRoutes adds all routes for the webinterface to a gin router.
-func AddRoutes(engine *gin.Engine) {
-	// setup middleware
-	engine.Use(notConfigured())
+// Routes returns a new Goriall router.
+func Routes() *mux.Router {
+	mid := alice.New(loggingHandler, notConfiguredHandler)
 
-	engine.GET("/setup", setupGET)
-	engine.GET("/static/*filepath", staticServe)
+	router := mux.NewRouter()
+	router.Handle("/setup", mid.ThenFunc(setupGET))
+	router.Handle("/static/", http.FileServer(rice.MustFindBox("../static").HTTPBox()))
+
+	return router
 }

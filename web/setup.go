@@ -2,10 +2,10 @@ package web
 
 import (
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
-func setupGET(c *gin.Context) {
-	c.String(http.StatusOK, "cfg")
+func setupGET(w http.ResponseWriter, r *http.Request) {
+	tmpl := getTemplates("")
+
+	tmpl.Execute(w, map[string]string{"Message": "Hello, world!"})
 }
