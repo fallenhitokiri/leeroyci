@@ -43,16 +43,13 @@ func GetNotification(id int64) *Notification {
 }
 
 // UpdateNotification updates a notification.
-func UpdateNotification(id int64, service, arguments string) *Notification {
-	not := GetNotification(id)
-	not.Service = service
-	not.Arguments = arguments
-	db.Save(not)
-	return not
+func (n *Notification) Update(service, arguments string) {
+	n.Service = service
+	n.Arguments = arguments
+	db.Save(n)
 }
 
 // DeleteNotification deletes a notification.
-func DeleteNotification(id int64) {
-	not := GetNotification(id)
-	db.Delete(not)
+func (n *Notification) Delete() {
+	db.Delete(n)
 }
