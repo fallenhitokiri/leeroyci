@@ -8,7 +8,7 @@ func TestAddRepositoryGetRepository(t *testing.T) {
 	r1 := CreateRepository("foo", "bar", "accessKey", false, false, false)
 	r2 := GetRepository("bar")
 	r2.Update("baz", "bar", "accessKey", false, false, false)
-	DeleteRepository("bar")
+	r2.Delete("bar")
 	r3 := GetRepository("bar")
 
 	if r1.ID != r2.ID {
