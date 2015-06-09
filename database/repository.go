@@ -45,9 +45,7 @@ func GetRepository(url string) *Repository {
 }
 
 // UpdateRepository updates an existing repository.
-func UpdateRepository(name, url, accessKey string, commentPR, closePR, statusPR bool) *Repository {
-	r := GetRepository(url)
-
+func (r *Repository) Update(name, url, accessKey string, commentPR, closePR, statusPR bool) {
 	r.Name = name
 	r.CommentPR = commentPR
 	r.StatusPR = statusPR
@@ -55,13 +53,10 @@ func UpdateRepository(name, url, accessKey string, commentPR, closePR, statusPR 
 	r.AccessKey = accessKey
 
 	db.Save(r)
-
-	return r
 }
 
 // DeleteRepository deletes an existing repository.
-func DeleteRepository(url string) {
-	r := GetRepository(url)
+func (r *Repository) Delete(url string) {
 	db.Delete(r)
 }
 

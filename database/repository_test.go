@@ -7,19 +7,19 @@ import (
 func TestAddRepositoryGetRepository(t *testing.T) {
 	r1 := CreateRepository("foo", "bar", "accessKey", false, false, false)
 	r2 := GetRepository("bar")
-	r3 := UpdateRepository("baz", "bar", "accessKey", false, false, false)
+	r2.Update("baz", "bar", "accessKey", false, false, false)
 	DeleteRepository("bar")
-	r4 := GetRepository("bar")
+	r3 := GetRepository("bar")
 
 	if r1.ID != r2.ID {
 		t.Error("IDs do not match.")
 	}
 
-	if r3.Name == r2.Name {
+	if r2.Name == "bar" {
 		t.Error("Names are the same.")
 	}
 
-	if r4.ID == r1.ID || r4.ID != 0 {
+	if r3.ID == r1.ID || r3.ID != 0 {
 		t.Error("Repository not deleted.")
 	}
 }
