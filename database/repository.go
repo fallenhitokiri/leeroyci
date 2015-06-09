@@ -64,3 +64,12 @@ func DeleteRepository(url string) {
 	r := GetRepository(url)
 	db.Delete(r)
 }
+
+// Jobs returns all jobs for this repository.
+func (r *Repository) Jobs() []Job {
+	jobs := []Job{}
+
+	db.Where("repository_id = ?", r.ID).Find(&jobs)
+
+	return jobs
+}

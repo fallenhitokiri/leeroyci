@@ -26,8 +26,8 @@ type Job struct {
 	UpdatedAt time.Time
 }
 
-// AddJob adds a new job to the database.
-func AddJob(repo *Repository, branch, commit, commitURL, name, email string) *Job {
+// CreateJob adds a new job to the database.
+func CreateJob(repo *Repository, branch, commit, commitURL, name, email string) *Job {
 	j := &Job{
 		Repository: *repo,
 		Branch:     branch,
