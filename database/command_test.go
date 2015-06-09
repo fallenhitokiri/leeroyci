@@ -4,51 +4,21 @@ import (
 	"testing"
 )
 
-func TestAddCommandGetCommand(t *testing.T) {
-	repo := CreateRepository("", "", "", false, false, false)
-	com1, err := AddCommand(repo, "", "", "", CommandKindBuild)
-
-	if err != nil {
-		t.Error(err)
-	}
-
-	coms := GetCommands(repo, "", CommandKindBuild)
-
-	if coms[0].ID != com1.ID {
-		t.Error("ID mismatch")
-	}
-}
-
-func TestAddCommandGetCommandDifferentKind(t *testing.T) {
-	repo := CreateRepository("", "", "", false, false, false)
-	_, err := AddCommand(repo, "", "", "", CommandKindBuild)
-
-	if err != nil {
-		t.Error(err)
-	}
-
-	coms := GetCommands(repo, "", CommandKindTest)
-
-	if len(coms) != 0 {
-		t.Error("Wrong number of commands", len(coms))
-	}
-}
-
 func TestCommandCRUD(t *testing.T) {
 	repo := CreateRepository("", "", "", false, false, false)
 
 	add, _ := AddCommand(repo, "name", "execute", "branch", CommandKindBuild)
 	get1 := GetCommand(add.ID)
-	updated := UpdateCommand(add.ID, "name", "kind", "branch", CommandKindDeploy)
+	get1.Update("name", "kind", "branch", CommandKindDeploy)
 	get2 := GetCommand(add.ID)
-	DeleteCommand(add.ID)
+	get1.Delete()
 	get3 := GetCommand(add.ID)
 
-	if get1.ID != get2.ID || updated.ID != get2.ID {
+	if get1.ID != get2.ID {
 		t.Error("ID mismatch")
 	}
 
-	if get1.Kind == get2.Kind {
+	if get1.Kind != "kind" {
 		t.Error("Kind not updated")
 	}
 

@@ -52,28 +52,6 @@ func AddCommand(repo *Repository, name, execute, branch, kind string) (*Command,
 	return &c, nil
 }
 
-// GetCommands returns all commands for a repository, branch and kind
-func GetCommands(repo *Repository, branch, kind string) []Command {
-	noBranch := []Command{}
-	branches := []Command{}
-
-	db.Where(&Command{
-		RepositoryID: repo.ID,
-		Kind:         kind,
-		Branch:       "",
-	}).Find(&noBranch)
-
-	if branch != "" {
-		db.Where(&Command{
-			RepositoryID: repo.ID,
-			Kind:         kind,
-			Branch:       branch,
-		}).Find(&branches)
-	}
-
-	return append(noBranch, branches...)
-}
-
 // GetCommand returns a command for a specific ID.
 func GetCommand(id int64) *Command {
 	c := &Command{}
@@ -82,21 +60,16 @@ func GetCommand(id int64) *Command {
 }
 
 // UpdateCommand updates a command.
-func UpdateCommand(id int64, name, kind, branch, execute string) *Command {
-	c := GetCommand(id)
-
+func (c *Command) Update(name, kind, branch, execute string) {
 	c.Name = name
 	c.Kind = kind
 	c.Branch = branch
 	c.Execute = execute
 
 	db.Save(c)
-
-	return c
 }
 
 // DeleteCommand deletes a command.
-func DeleteCommand(id int64) {
-	c := GetCommand(id)
+func (c *Command) Delete() {
 	db.Delete(c)
 }

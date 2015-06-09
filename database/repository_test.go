@@ -44,3 +44,33 @@ func TestJobs(t *testing.T) {
 		}
 	}
 }
+
+func TestAddCommandCommand(t *testing.T) {
+	repo := CreateRepository("", "", "", false, false, false)
+	com1, err := AddCommand(repo, "", "", "", CommandKindBuild)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	coms := repo.Commands(repo, "", CommandKindBuild)
+
+	if coms[0].ID != com1.ID {
+		t.Error("ID mismatch")
+	}
+}
+
+func TestAddCommandGetCommandDifferentKind(t *testing.T) {
+	repo := CreateRepository("", "", "", false, false, false)
+	_, err := AddCommand(repo, "", "", "", CommandKindBuild)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	coms := repo.Commands(repo, "", CommandKindTest)
+
+	if len(coms) != 0 {
+		t.Error("Wrong number of commands", len(coms))
+	}
+}
