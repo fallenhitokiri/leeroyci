@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	"leeroy/database"
-	"leeroy/web"
+	"github.com/fallenhitokiri/leeroyci/database"
+	"github.com/fallenhitokiri/leeroyci/web"
 )
 
 func main() {

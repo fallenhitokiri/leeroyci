@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"leeroy/database"
+	"github.com/fallenhitokiri/leeroyci/database"
 )
 
 // notConfigured redirects to /setup if there is no valid configuration
