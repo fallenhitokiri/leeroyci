@@ -10,7 +10,6 @@ import (
 type Config struct {
 	ID     int64
 	Secret string
-	DBPath string
 	URL    string
 	Cert   string
 	Key    string
@@ -20,10 +19,9 @@ type Config struct {
 }
 
 // AddConfig adds a new configuration.
-func AddConfig(secret, dbPath, url, cert, key string) *Config {
+func AddConfig(secret, url, cert, key string) *Config {
 	c := &Config{
 		Secret: secret,
-		DBPath: dbPath,
 		URL:    url,
 		Cert:   cert,
 		Key:    key,
@@ -42,11 +40,10 @@ func GetConfig() *Config {
 }
 
 // UpdateConfig updates the config.
-func UpdateConfig(secret, dbPath, url, cert, key string) *Config {
+func UpdateConfig(secret, url, cert, key string) *Config {
 	c := GetConfig()
 
 	c.Secret = secret
-	c.DBPath = dbPath
 	c.URL = url
 	c.Cert = cert
 	c.Key = key
