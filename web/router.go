@@ -5,8 +5,11 @@ import (
 
 	"github.com/GeertJohan/go.rice"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 	"github.com/justinas/alice"
 )
+
+var store = sessions.NewCookieStore([]byte("something-very-secret"))
 
 // Routes returns a new Goriall router.
 func Routes() *mux.Router {
@@ -14,6 +17,7 @@ func Routes() *mux.Router {
 
 	router := mux.NewRouter()
 	router.Handle("/setup", mid.ThenFunc(viewSetup))
+	router.Handle("/login", mid.ThenFunc(viewLogin))
 
 	// add rice box to serve static files. Do not use the full middleware stack but
 	// only the logging handler. We do not want "notConfigured" to run e.x. so we

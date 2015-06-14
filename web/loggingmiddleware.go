@@ -9,6 +9,8 @@ import (
 // loggingHandler logs the time a request takes to the console.
 func loggingHandler(next http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
+		session, _ := store.Get(r, "leeroyci")
+		log.Println(session.Values)
 		t1 := time.Now()
 		next.ServeHTTP(w, r)
 		t2 := time.Now()

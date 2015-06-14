@@ -39,7 +39,6 @@ func viewSetup(w http.ResponseWriter, r *http.Request) {
 		}
 
 		decoder := schema.NewDecoder()
-
 		form := new(userForm)
 
 		err = decoder.Decode(form, r.PostForm)
