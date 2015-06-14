@@ -14,7 +14,13 @@ func Routes() *mux.Router {
 
 	router := mux.NewRouter()
 	router.Handle("/setup", mid.ThenFunc(setupGET))
-	router.Handle("/static/", http.FileServer(rice.MustFindBox("../static").HTTPBox()))
+
+	// add rice box to serve static files. Do not use the full middleware stack but
+	// only the logging handler. We do not want "notConfigured" to run e.x. so we
+	// can make the setup look nice.
+	box := rice.MustFindBox("static")
+	staticFileServer := http.StripPrefix("/static/", http.FileServer(box.HTTPBox()))
+	router.Handle("/static/{path:.*}", loggingHandler(staticFileServer))
 
 	return router
 }

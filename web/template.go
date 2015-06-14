@@ -7,8 +7,9 @@ import (
 	"github.com/GeertJohan/go.rice"
 )
 
+// getTemplates returns the template 'name' fully prepared for rendering.
 func getTemplates(name string) *template.Template {
-	box, err := rice.FindBox("../templates")
+	box, err := rice.FindBox("templates")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -32,8 +33,6 @@ func getTemplates(name string) *template.Template {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	log.Println(tmpl)
 
 	return tmpl
 }
