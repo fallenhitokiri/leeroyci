@@ -18,6 +18,7 @@ func Routes() *mux.Router {
 	router := mux.NewRouter()
 	router.Handle("/setup", mid.Then(templateRenderer{viewSetup}))
 	router.Handle("/login", mid.Then(templateRenderer{viewLogin}))
+	router.Handle("/builds", mid.Then(templateRenderer{viewListAll}))
 
 	// add rice box to serve static files. Do not use the full middleware stack but
 	// only the logging handler. We do not want "notConfigured" to run e.x. so we

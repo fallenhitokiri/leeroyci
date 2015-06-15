@@ -50,7 +50,7 @@ func viewLogin(w http.ResponseWriter, r *http.Request) (tmpl string, ctx context
 		}
 
 		session, _ := store.Get(r, "leeroyci")
-		session.Values["admin"] = user.Admin
+		session.Values["session_key"] = user.Email
 		session.Save(r, w)
 	}
 

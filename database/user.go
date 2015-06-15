@@ -15,6 +15,7 @@ type User struct {
 	LastName  string
 	Password  string
 	Admin     bool
+	Session   string
 }
 
 // GetUser returns the user for a given email address.
@@ -80,6 +81,12 @@ func (u *User) DeleteUser() error {
 	db.Delete(u)
 
 	return nil
+}
+
+// Add a session to this user.
+func (u *User) AddSession(session string) {
+	u.Session = session
+	db.Save(u)
 }
 
 // HashPassword generates a hash using bcrypt.
