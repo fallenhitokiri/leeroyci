@@ -26,16 +26,16 @@ type userForm struct {
 	SMPTPassword string `schema:"smtp_password"`
 }
 
-func viewSetup(w http.ResponseWriter, r *http.Request) {
-	tmpl := getTemplates("setup.html")
-	var payload = make(map[string]interface{})
-	var errors = make([]string, 0, 0)
+func viewSetup(w http.ResponseWriter, r *http.Request) (tmpl string, ctx context) {
+	tmpl = "setup.html"
+	ctx = make(context)
 
 	if r.Method == "POST" {
 		err := r.ParseForm()
 
 		if err != nil {
-			errors = append(errors, err.Error())
+			ctx["error"] = err.Error()
+			return
 		}
 
 		decoder := schema.NewDecoder()
@@ -44,7 +44,8 @@ func viewSetup(w http.ResponseWriter, r *http.Request) {
 		err = decoder.Decode(form, r.PostForm)
 
 		if err != nil {
-			errors = append(errors, err.Error())
+			ctx["error"] = err.Error()
+			return
 		}
 
 		user, err := database.CreateUser(
@@ -56,7 +57,8 @@ func viewSetup(w http.ResponseWriter, r *http.Request) {
 		)
 
 		if err != nil {
-			errors = append(errors, err.Error())
+			ctx["error"] = err.Error()
+			return
 		}
 
 		database.AddConfig(
@@ -79,7 +81,5 @@ func viewSetup(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	payload["errors"] = errors
-
-	tmpl.Execute(w, payload)
+	return
 }

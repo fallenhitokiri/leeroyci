@@ -16,8 +16,8 @@ func Routes() *mux.Router {
 	mid := alice.New(loggingHandler, notConfiguredHandler)
 
 	router := mux.NewRouter()
-	router.Handle("/setup", mid.ThenFunc(viewSetup))
-	router.Handle("/login", mid.ThenFunc(viewLogin))
+	router.Handle("/setup", mid.Then(templateRenderer{viewSetup}))
+	router.Handle("/login", mid.Then(templateRenderer{viewLogin}))
 
 	// add rice box to serve static files. Do not use the full middleware stack but
 	// only the logging handler. We do not want "notConfigured" to run e.x. so we

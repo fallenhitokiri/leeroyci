@@ -3,9 +3,21 @@ package web
 import (
 	"html/template"
 	"log"
+	"net/http"
 
 	"github.com/GeertJohan/go.rice"
 )
+
+type templateRenderer struct {
+	view func(w http.ResponseWriter, r *http.Request) (tmpl string, ctx context)
+}
+
+func (tr templateRenderer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	name, ctx := tr.view(w, r)
+
+	tmpl := getTemplates(name)
+	tmpl.Execute(w, ctx)
+}
 
 // getTemplates returns the template 'name' fully prepared for rendering.
 func getTemplates(name string) *template.Template {

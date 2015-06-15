@@ -16,7 +16,6 @@ func notConfiguredHandler(next http.Handler) http.Handler {
 		if database.Configured || path == "/setup" || strings.HasPrefix(path, "/static") {
 			next.ServeHTTP(w, r)
 		} else {
-			//c.Redirect(http.StatusFound, "/setup")
 			http.Redirect(w, r, "/setup", 302)
 			return
 		}
