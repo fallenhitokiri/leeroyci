@@ -28,7 +28,7 @@ type userForm struct {
 
 func viewSetup(w http.ResponseWriter, r *http.Request) (tmpl string, ctx context) {
 	tmpl = "setup.html"
-	ctx = make(context)
+	ctx = NewContext(r)
 
 	if r.Method == "POST" {
 		err := r.ParseForm()

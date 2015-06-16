@@ -4,8 +4,6 @@ import (
 	"net/http"
 
 	"github.com/fallenhitokiri/leeroyci/database"
-
-	"log"
 )
 
 type context map[string]interface{}

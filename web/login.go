@@ -15,7 +15,7 @@ type loginForm struct {
 
 func viewLogin(w http.ResponseWriter, r *http.Request) (tmpl string, ctx context) {
 	tmpl = "login.html"
-	ctx = make(context)
+	ctx = NewContext(r)
 
 	if r.Method == "POST" {
 		err := r.ParseForm()

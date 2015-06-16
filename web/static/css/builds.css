@@ -1,0 +1,47 @@
+.build-list {
+    list-style-type: none;
+    padding:0;
+}
+
+.build-list .build-row {
+    background: #efefef;
+    border-radius: 5px;
+    border-width: 0 0 0 30px;
+    border-style: solid;
+    border-color: #efefef;
+    padding:10px;
+    margin:0 0 20px 0;
+}
+
+.build-list .build-success {
+    border-color: rgb(102, 188, 92);
+}
+
+.build-list .build-error {
+    border-color: rgb(212, 83, 83);
+}
+
+.build-list .build-pending {
+    border-color: rgb(119, 119, 119);
+}
+
+.build-list .job-info {
+    font-size:1.4em;
+    margin-bottom: 15px;
+    display:block;
+}
+
+.build-list .job-details {
+    display:block;
+}
+
+.build-list .job-details span {
+    margin-right: 20px;
+}
+
+.build-list .tasks {
+    display: block;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+

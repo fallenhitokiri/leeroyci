@@ -31,27 +31,38 @@
 
 {{ define "content" }}
 <div class="row">
-    <div class="col-md-4">
-        asdf<br/>
-        asdf<br/>
-        asdf<br/>
-        asdf<br/>
-        asdf<br/>
-        asdf<br/>
-    </div>
+    <div class="col-md-12">
+        <ul class="build-list">
+            <li class="build-row build-pending">
+                <span class="job-info">leeroyci <strong>new-web-interface</strong></span>
 
-    <div class="col-md-8">
-        asdf<br/>
-        asdf<br/>
-        asdf<br/>
-        asdf<br/>
-        asdf<br/>
-        asdf<br/>
-        asdf<br/>
+                <span class="tasks">
+                    <span class="label label-default">unit tests</span>
+                    <span class="label label-default">integration tests</span>
+                    <span class="label label-default">debug build</span>
+                    <span class="label label-default">test deploy</span>
+                </span>
+
+                <span class="job-details">
+                    <span class="label label-primary">
+                        Timo Zimmermann &lt;timo@screamingatmyscreen.com&gt;
+                    </span>
+                    <span class="label label-default">
+                        4caf2af8aa2b9b547152c41531d1b2e9427f4cad
+                    </span>
+
+                    <span class="label label-default">
+                        2015-06-16 00:52:22.850927316 +0000 UTC
+                    </span>
+                </span>
+            </li>
+        </ul>
     </div>
 </div>
 {{ end }}
 
 {{ define "js" }}{{ end }}
 
-{{ define "css" }}{{ end }}
+{{ define "css" }}
+<link rel="stylesheet" href="/static/css/builds.css">
+{{ end }}
