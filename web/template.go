@@ -9,7 +9,7 @@ import (
 )
 
 type templateRenderer struct {
-	view func(w http.ResponseWriter, r *http.Request) (tmpl string, ctx context)
+	view func(w http.ResponseWriter, r *http.Request) (tmpl string, ctx responseContext)
 }
 
 func (tr templateRenderer) ServeHTTP(w http.ResponseWriter, r *http.Request) {

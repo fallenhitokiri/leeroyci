@@ -7,9 +7,9 @@ import (
 	"github.com/fallenhitokiri/leeroyci/database"
 )
 
-// notConfigured redirects to /setup if there is no valid configuration
+// middlewareNoConfig redirects to /setup if there is no valid configuration
 // and the path is not /setup or /static
-func notConfiguredHandler(next http.Handler) http.Handler {
+func middlewareNoConfig(next http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		path := r.URL.String()
 

@@ -6,10 +6,14 @@ import (
 	"github.com/fallenhitokiri/leeroyci/database"
 )
 
-type context map[string]interface{}
+type responseContext map[string]interface{}
 
-func NewContext(r *http.Request) context {
-	var ctx = make(context)
+type requestContextKey string
+
+const RequestContextUser = "user"
+
+func NewContext(r *http.Request) responseContext {
+	var ctx = make(responseContext)
 
 	session, _ := store.Get(r, "leeroyci")
 	session_key := session.Values["session_key"]

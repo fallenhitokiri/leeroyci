@@ -13,7 +13,7 @@ type loginForm struct {
 	Password string `schema:"password"`
 }
 
-func viewLogin(w http.ResponseWriter, r *http.Request) (tmpl string, ctx context) {
+func viewLogin(w http.ResponseWriter, r *http.Request) (tmpl string, ctx responseContext) {
 	tmpl = "login.html"
 	ctx = NewContext(r)
 

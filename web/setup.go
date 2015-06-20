@@ -26,7 +26,7 @@ type userForm struct {
 	SMPTPassword string `schema:"smtp_password"`
 }
 
-func viewSetup(w http.ResponseWriter, r *http.Request) (tmpl string, ctx context) {
+func viewSetup(w http.ResponseWriter, r *http.Request) (tmpl string, ctx responseContext) {
 	tmpl = "setup.html"
 	ctx = NewContext(r)
 
@@ -77,7 +77,7 @@ func viewSetup(w http.ResponseWriter, r *http.Request) (tmpl string, ctx context
 		)
 
 		if user != nil {
-			http.Redirect(w, r, "/static/leeroy.jpg", 302)
+			http.Redirect(w, r, "/login", 302)
 		}
 	}
 
