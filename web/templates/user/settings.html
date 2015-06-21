@@ -1,0 +1,60 @@
+{{ define "title" }}Builds{{ end }}
+
+{{ define "body" }}all-builds{{ end }}
+
+{{ define "content" }}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <form action="/user/settings" method="POST">
+            <fieldset>
+                <h1>Update your information</h1>
+                {{ if .message }}
+                    <div class="alert alert-success">
+                        {{ .message }}
+                    </div>
+                {{ end }}
+
+                {{ if .error }}
+                    <div class="alert alert-danger">
+                        {{ .error }}
+                    </div>
+                {{ end }}
+
+                <div class="form-group">
+                    <label for="email">Email address (will be your login)</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" value="{{ .user.Email }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="first_name">Your first name</label>
+                    <input type="text" class="form-control" id="first_name"  name="first_name" placeholder="Enter first name" value="{{ .user.FirstName }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name">Your last name</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter last name" value="{{ .user.LastName }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Your password (required to update information)</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
+                </div>
+
+                <p>Leave this field blank if you do not want to change your password</p>
+                <div class="form-group">
+                    <label for="password">Your new password</label>
+                    <input type="text" class="form-control" id="password" name="password" placeholder="Enter password">
+                </div>
+
+                <button class="btn btn-info">Update</button>
+            </fieldset>
+        </form>
+    </div>
+</div>
+{{ end }}
+
+{{ define "js" }}{{ end }}
+
+{{ define "css" }}
+<link rel="stylesheet" href="/static/css/builds.css">
+{{ end }}
