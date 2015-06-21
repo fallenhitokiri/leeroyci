@@ -8,7 +8,7 @@ import (
 	"github.com/fallenhitokiri/leeroyci/database"
 )
 
-type userForm struct {
+type configForm struct {
 	Email     string `schema:"email"`
 	FirstName string `schema:"first_name"`
 	LastName  string `schema:"last_name"`
@@ -26,63 +26,66 @@ type userForm struct {
 	SMPTPassword string `schema:"smtp_password"`
 }
 
+func (c configForm) save(request *http.Request) (*database.User, error) {
+	err := request.ParseForm()
+
+	if err != nil {
+		return nil, err
+	}
+
+	decoder := schema.NewDecoder()
+	form := new(configForm)
+
+	err = decoder.Decode(form, request.PostForm)
+
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := database.CreateUser(
+		form.Email,
+		form.FirstName,
+		form.LastName,
+		form.Password,
+		true,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	database.AddConfig(
+		form.Secret,
+		form.URL,
+		form.SSLCert,
+		form.SSLKey,
+	)
+
+	database.AddMailServer(
+		form.Host,
+		form.Sender,
+		form.SMTPUser,
+		form.SMPTPassword,
+		form.Port,
+	)
+
+	return user, nil
+}
+
 func viewSetup(w http.ResponseWriter, r *http.Request) {
 	template := "setup.html"
 	ctx := make(responseContext)
 
 	if r.Method == "POST" {
-		err := r.ParseForm()
+		_, err := configForm{}.save(r)
 
-		if err != nil {
-			ctx["error"] = err.Error()
-			render(w, r, template, ctx)
-			return
-		}
-
-		decoder := schema.NewDecoder()
-		form := new(userForm)
-
-		err = decoder.Decode(form, r.PostForm)
-
-		if err != nil {
-			ctx["error"] = err.Error()
-			render(w, r, template, ctx)
-			return
-		}
-
-		user, err := database.CreateUser(
-			form.Email,
-			form.FirstName,
-			form.LastName,
-			form.Password,
-			true,
-		)
-
-		if err != nil {
-			ctx["error"] = err.Error()
-			render(w, r, template, ctx)
-			return
-		}
-
-		database.AddConfig(
-			form.Secret,
-			form.URL,
-			form.SSLCert,
-			form.SSLKey,
-		)
-
-		database.AddMailServer(
-			form.Host,
-			form.Sender,
-			form.SMTPUser,
-			form.SMPTPassword,
-			form.Port,
-		)
-
-		if user != nil {
+		if err == nil {
 			database.Configured = true
 			http.Redirect(w, r, "/login", 302)
+			return
 		}
+
+		ctx["error"] = err.Error()
 	}
 
 	render(w, r, template, ctx)
