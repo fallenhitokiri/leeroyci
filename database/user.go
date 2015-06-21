@@ -77,17 +77,20 @@ func CreateUser(email, firstName, lastName, password string, admin bool) (*User,
 
 // Update updates an existing user.
 func (u *User) Update(email, firstName, lastName, password string, admin bool) (*User, error) {
-	hash, err := hashPassword(password)
-
-	if err != nil {
-		return nil, err
-	}
-
 	u.FirstName = firstName
 	u.LastName = lastName
 	u.Email = email
-	u.Password = hash
 	u.Admin = admin
+
+	if password != "" {
+		hash, err := hashPassword(password)
+
+		if err != nil {
+			return nil, err
+		}
+
+		u.Password = hash
+	}
 
 	db.Save(u)
 

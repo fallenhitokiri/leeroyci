@@ -27,8 +27,14 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ .user.FirstName }} <span class="caret"></span></a>
                             
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Settings</a></li>
-                                <li class="divider"></li>
+                                {{ if .user.Admin }}
+                                    <li><a href="#">Leeroy Configuration</a>
+                                    <li><a href="#">Mailserver Configuration</a>
+                                    <li><a href="#">Repository Configuration</a>
+                                    <li><a href="#">Notification Configuration</a>
+                                    <li class="divider"></li>
+                                {{ end }}
+                                <li><a href="/user/settings">User Settings</a></li>
                                 <li><a href="/logout">Logout</a></li>
                             </ul>
                         </li>

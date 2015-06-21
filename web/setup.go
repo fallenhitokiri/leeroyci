@@ -89,5 +89,4 @@ func viewSetup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	render(w, r, template, ctx)
-	return
 }
