@@ -2,7 +2,8 @@ package web
 
 import (
 	"net/http"
-	"strings"
+
+	"github.com/gorilla/context"
 
 	"github.com/fallenhitokiri/leeroyci/database"
 )
@@ -11,15 +12,23 @@ import (
 // the user instance to the context.
 func middlewareAuth(next http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
+		session, _ := sessionStore.Get(r, "leeroyci")
+		sessionKey := session.Values["session_key"]
 
-		// path := r.URL.String()
+		if sessionKey == nil {
+			http.Redirect(w, r, "/login", 302)
+			return
+		}
 
-		// if database.Configured || path == "/setup" || strings.HasPrefix(path, "/static") {
-		// 	next.ServeHTTP(w, r)
-		// } else {
-		// 	http.Redirect(w, r, "/setup", 302)
-		// 	return
-		// }
+		user, err := database.GetUserBySession(sessionKey.(string))
+
+		if err == nil {
+			context.Set(r, contextUser, user)
+			next.ServeHTTP(w, r)
+		} else {
+			http.Redirect(w, r, "/login", 302)
+			return
+		}
 	}
 
 	return http.HandlerFunc(fn)

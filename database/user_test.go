@@ -13,13 +13,13 @@ func TestHashComparePassword(t *testing.T) {
 		t.Error(err)
 	}
 
-	v := comparePassword(pass, h)
+	v := ComparePassword(pass, h)
 
 	if v != true {
 		t.Error("password did not match")
 	}
 
-	v = comparePassword("foo", h)
+	v = ComparePassword("foo", h)
 
 	if v != false {
 		t.Error("passwords did match")

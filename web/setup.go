@@ -26,15 +26,16 @@ type userForm struct {
 	SMPTPassword string `schema:"smtp_password"`
 }
 
-func viewSetup(w http.ResponseWriter, r *http.Request) (tmpl string, ctx responseContext) {
-	tmpl = "setup.html"
-	ctx = NewContext(r)
+func viewSetup(w http.ResponseWriter, r *http.Request) {
+	template := "setup.html"
+	ctx := make(responseContext)
 
 	if r.Method == "POST" {
 		err := r.ParseForm()
 
 		if err != nil {
 			ctx["error"] = err.Error()
+			render(w, r, template, ctx)
 			return
 		}
 
@@ -45,6 +46,7 @@ func viewSetup(w http.ResponseWriter, r *http.Request) (tmpl string, ctx respons
 
 		if err != nil {
 			ctx["error"] = err.Error()
+			render(w, r, template, ctx)
 			return
 		}
 
@@ -58,6 +60,7 @@ func viewSetup(w http.ResponseWriter, r *http.Request) (tmpl string, ctx respons
 
 		if err != nil {
 			ctx["error"] = err.Error()
+			render(w, r, template, ctx)
 			return
 		}
 
@@ -77,9 +80,11 @@ func viewSetup(w http.ResponseWriter, r *http.Request) (tmpl string, ctx respons
 		)
 
 		if user != nil {
+			database.Configured = true
 			http.Redirect(w, r, "/login", 302)
 		}
 	}
 
+	render(w, r, template, ctx)
 	return
 }

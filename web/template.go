@@ -6,16 +6,16 @@ import (
 	"net/http"
 
 	"github.com/GeertJohan/go.rice"
+	"github.com/gorilla/context"
 )
 
-type templateRenderer struct {
-	view func(w http.ResponseWriter, r *http.Request) (tmpl string, ctx responseContext)
-}
+type responseContext map[string]interface{}
 
-func (tr templateRenderer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	name, ctx := tr.view(w, r)
+func render(w http.ResponseWriter, r *http.Request, template string, ctx responseContext) {
+	tmpl := getTemplates(template)
 
-	tmpl := getTemplates(name)
+	ctx["user"] = context.Get(r, contextUser)
+
 	tmpl.Execute(w, ctx)
 }
 

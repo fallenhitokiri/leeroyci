@@ -13,15 +13,16 @@ type loginForm struct {
 	Password string `schema:"password"`
 }
 
-func viewLogin(w http.ResponseWriter, r *http.Request) (tmpl string, ctx responseContext) {
-	tmpl = "login.html"
-	ctx = NewContext(r)
+func viewLogin(w http.ResponseWriter, r *http.Request) {
+	template := "login.html"
+	ctx := make(responseContext)
 
 	if r.Method == "POST" {
 		err := r.ParseForm()
 
 		if err != nil {
 			ctx["error"] = err.Error()
+			render(w, r, template, ctx)
 			return
 		}
 
@@ -32,6 +33,7 @@ func viewLogin(w http.ResponseWriter, r *http.Request) (tmpl string, ctx respons
 
 		if err != nil {
 			ctx["error"] = err.Error()
+			render(w, r, template, ctx)
 			return
 		}
 
@@ -39,6 +41,7 @@ func viewLogin(w http.ResponseWriter, r *http.Request) (tmpl string, ctx respons
 
 		if err != nil {
 			ctx["error"] = err.Error()
+			render(w, r, template, ctx)
 			return
 		}
 
@@ -46,13 +49,20 @@ func viewLogin(w http.ResponseWriter, r *http.Request) (tmpl string, ctx respons
 
 		if auth == false {
 			ctx["error"] = "Authentication failed."
+			render(w, r, template, ctx)
 			return
 		}
 
-		session, _ := store.Get(r, "leeroyci")
-		session.Values["session_key"] = user.Email
+		sessionID := user.NewSession()
+
+		session, _ := sessionStore.Get(r, "leeroyci")
+		session.Values["session_key"] = sessionID
 		session.Save(r, w)
+
+		http.Redirect(w, r, "/builds", 302)
+		return
 	}
 
+	render(w, r, template, ctx)
 	return
 }

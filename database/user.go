@@ -2,10 +2,16 @@
 package database
 
 import (
+	"crypto/rand"
+	"crypto/sha512"
 	"errors"
+	"strings"
 
 	"golang.org/x/crypto/bcrypt"
 )
+
+const sessionDictionary = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+const sessionLength = 256
 
 // User stores a user account including the password using bcrypt.
 type User struct {
@@ -22,6 +28,18 @@ type User struct {
 func GetUser(email string) (*User, error) {
 	u := &User{}
 	db.Where("email = ?", email).First(u)
+
+	if u.ID == 0 {
+		return nil, errors.New("Could not find user.")
+	}
+
+	return u, nil
+}
+
+// GetUserBySession returns the user for a given session key.
+func GetUserBySession(key string) (*User, error) {
+	u := &User{}
+	db.Where("session = ?", key).First(u)
 
 	if u.ID == 0 {
 		return nil, errors.New("Could not find user.")
@@ -84,9 +102,29 @@ func (u *User) DeleteUser() error {
 }
 
 // Add a session to this user.
-func (u *User) AddSession(session string) {
-	u.Session = session
+func (u *User) NewSession() string {
+	u.Session = u.generateSessionID(sessionDictionary, sessionLength)
 	db.Save(u)
+	return u.Session
+}
+
+// generateSessionID generates a new session ID for a user combining the
+// email address and a random string.
+// dictionary and length are optional parameters used for testing.
+func (u *User) generateSessionID(dictionary string, length int) string {
+	var random = make([]byte, length)
+	rand.Read(random)
+
+	for k, v := range random {
+		random[k] = dictionary[v%byte(len(dictionary))]
+	}
+
+	joined := strings.Join([]string{u.Email, string(random)}, "")
+
+	hash := sha512.New()
+	hash.Write([]byte(joined))
+
+	return string(hash.Sum(nil))
 }
 
 // HashPassword generates a hash using bcrypt.
