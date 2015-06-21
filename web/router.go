@@ -19,6 +19,7 @@ func Routes() *mux.Router {
 	router := mux.NewRouter()
 	router.Handle("/setup", chainUnauth.ThenFunc(viewSetup))
 	router.Handle("/login", chainUnauth.ThenFunc(viewLogin))
+	router.Handle("/logout", chainUnauth.ThenFunc(viewLogout))
 	router.Handle("/builds", chainAuth.ThenFunc(viewListAll))
 
 	// add rice box to serve static files. Do not use the full middleware stack but

@@ -11,7 +11,32 @@
         {{template "css" .}}
     </head>
     <body id="{{template "body" .}}">
-        {{template "top" .}}
+        {{ if .user }}
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/builds">
+                        <!--<img alt="Brand" src="...">-->
+                        LeeroyCI
+                    </a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="user-menu">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ .user.FirstName }} <span class="caret"></span></a>
+                            
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Settings</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/logout">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        {{ end }}
 
         <div class="container-fluid">
             {{template "content" .}}
