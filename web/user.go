@@ -47,7 +47,7 @@ func (u userSettingsForm) update(request *http.Request) error {
 		form.FirstName,
 		form.LastName,
 		form.NewPassword,
-		true,
+		user.Admin,
 	)
 
 	return err
