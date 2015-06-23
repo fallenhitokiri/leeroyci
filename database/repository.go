@@ -22,7 +22,7 @@ type Repository struct {
 }
 
 // CreateRepository adds a new repository.
-func CreateRepository(name, url, accessKey string, commentPR, closePR, statusPR bool) *Repository {
+func CreateRepository(name, url, accessKey string, commentPR, closePR, statusPR bool) (*Repository, error) {
 	repo := Repository{
 		Name:      name,
 		URL:       url,
@@ -34,7 +34,7 @@ func CreateRepository(name, url, accessKey string, commentPR, closePR, statusPR 
 
 	db.Save(&repo)
 
-	return &repo
+	return &repo, nil
 }
 
 // GetRepository returns the repository based on the URL that pushed changes.
@@ -53,6 +53,13 @@ func (r *Repository) Update(name, url, accessKey string, commentPR, closePR, sta
 	r.AccessKey = accessKey
 
 	db.Save(r)
+}
+
+// ListRepositories returns all repositories.
+func ListRepositories() []*Repository {
+	repos := make([]*Repository, 0)
+	db.Find(&repos)
+	return repos
 }
 
 // DeleteRepository deletes an existing repository.

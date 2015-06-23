@@ -30,6 +30,9 @@ func Routes() *mux.Router {
 	router.Handle("/admin/user/{uid:[0-9]+}", chainAdmin.ThenFunc(viewAdminEditUser))
 	router.Handle("/admin/user/delete/{uid:[0-9]+}", chainAdmin.ThenFunc(viewAdminDeleteUser))
 
+	router.Handle("/admin/repositories", chainAdmin.ThenFunc(viewAdminListRepositories))
+	router.Handle("/admin/repository/add", chainAdmin.ThenFunc(viewAdminCreateRepository))
+
 	// add rice box to serve static files. Do not use the full middleware stack but
 	// only the logging handler. We do not want "notConfigured" to run e.x. so we
 	// can make the setup look nice.
