@@ -24,6 +24,13 @@ type User struct {
 	Session   string
 }
 
+// ListUsers returns a list of all users.
+func ListUsers() []*User {
+	u := make([]*User, 0)
+	db.Find(&u)
+	return u
+}
+
 // GetUser returns the user for a given email address.
 func GetUser(email string) (*User, error) {
 	u := &User{}
@@ -40,6 +47,18 @@ func GetUser(email string) (*User, error) {
 func GetUserBySession(key string) (*User, error) {
 	u := &User{}
 	db.Where("session = ?", key).First(u)
+
+	if u.ID == 0 {
+		return nil, errors.New("Could not find user.")
+	}
+
+	return u, nil
+}
+
+// GetUserByID returns the user for a given ID.
+func GetUserByID(id string) (*User, error) {
+	u := &User{}
+	db.Where("ID = ?", id).First(u)
 
 	if u.ID == 0 {
 		return nil, errors.New("Could not find user.")
@@ -98,7 +117,7 @@ func (u *User) Update(email, firstName, lastName, password string, admin bool) (
 }
 
 // DeleteUser deletes an existing user.
-func (u *User) DeleteUser() error {
+func (u *User) Delete() error {
 	db.Delete(u)
 
 	return nil

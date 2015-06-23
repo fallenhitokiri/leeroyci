@@ -15,14 +15,20 @@ var sessionStore = sessions.NewCookieStore([]byte("something-very-secret"))
 func Routes() *mux.Router {
 	chainUnauth := alice.New(middlewareLogging, middlewareNoConfig)
 	chainAuth := alice.New(middlewareLogging, middlewareNoConfig, middlewareAuth)
+	chainAdmin := alice.New(middlewareLogging, middlewareNoConfig, middlewareAuth, middlewareAdmin)
 
 	router := mux.NewRouter()
 	router.Handle("/setup", chainUnauth.ThenFunc(viewSetup))
 	router.Handle("/login", chainUnauth.ThenFunc(viewLogin))
 	router.Handle("/logout", chainUnauth.ThenFunc(viewLogout))
 
-	router.Handle("/builds", chainAuth.ThenFunc(viewListAll))
+	router.Handle("/", chainAuth.ThenFunc(viewListAll))
 	router.Handle("/user/settings", chainAuth.ThenFunc(viewUserSettings))
+
+	router.Handle("/admin/users", chainAdmin.ThenFunc(viewAdminListUsers))
+	router.Handle("/admin/user/add", chainAdmin.ThenFunc(viewAdminCreateUser))
+	router.Handle("/admin/user/{uid:[0-9]+}", chainAdmin.ThenFunc(viewAdminEditUser))
+	router.Handle("/admin/user/delete/{uid:[0-9]+}", chainAdmin.ThenFunc(viewAdminDeleteUser))
 
 	// add rice box to serve static files. Do not use the full middleware stack but
 	// only the logging handler. We do not want "notConfigured" to run e.x. so we
