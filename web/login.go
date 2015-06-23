@@ -57,7 +57,7 @@ func viewLogin(w http.ResponseWriter, r *http.Request) {
 			session.Values["session_key"] = sessionID
 			session.Save(r, w)
 
-			http.Redirect(w, r, "/builds", 302)
+			http.Redirect(w, r, "/", 302)
 			return
 		}
 
