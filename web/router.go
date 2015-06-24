@@ -35,6 +35,10 @@ func Routes() *mux.Router {
 	router.Handle("/admin/repository/{rid:[0-9]+}", chainAdmin.ThenFunc(viewAdminEditRepository))
 	router.Handle("/admin/repository/delete/{rid:[0-9]+}", chainAdmin.ThenFunc(viewAdminDeleteRepository))
 
+	router.Handle("/admin/repository/{rid:[0-9]+}/notification/add", chainAdmin.ThenFunc(viewAdminCreateNotification))
+	router.Handle("/admin/repository/{rid:[0-9]+}/notification/{nid:[0-9]+}", chainAdmin.ThenFunc(viewAdminEditNotification))
+	router.Handle("/admin/repository/{rid:[0-9]+}/notification/delete/{nid:[0-9]+}", chainAdmin.ThenFunc(viewAdminDeleteNotification))
+
 	// add rice box to serve static files. Do not use the full middleware stack but
 	// only the logging handler. We do not want "notConfigured" to run e.x. so we
 	// can make the setup look nice.

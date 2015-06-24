@@ -1,0 +1,50 @@
+{{ define "title" }}Edit Notification{{ end }}
+
+{{ define "body" }}admin-notification-edit{{ end }}
+
+{{ define "content" }}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <form action="/admin/repository/{{ .repository.ID }}/notification/{{ .notification.ID }}" method="POST">
+            <fieldset>
+                <h1>
+                    Edit notification
+                    <a href="/admin/repository/{{ .repository.ID }}" class="btn btn-default pull-right">Back</a>
+                </h1>
+                {{ if .error }}
+                    <div class="alert alert-danger">
+                        {{ .error }}
+                    </div>
+                {{ end }}
+
+                {{ if .message }}
+                    <div class="alert alert-success">
+                        {{ .message }}
+                    </div>
+                {{ end }}
+
+                <div class="form-group">
+                    <label for="service">Select service</label>
+                    <select name="service">
+                        {{ range .services }}
+                            <option value="{{ . }}" {{ if eq . $.notification.Service }}selected {{ end }}>{{ . }}</option>
+                        {{ end }}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="arguments">Arguments for the notification service (comma separated)</label>
+                    <input type="text" class="form-control" id="arguments" name="arguments" placeholder="Arguments" value="{{ .notification.Arguments }}">
+                </div>
+
+                <button class="btn btn-info">Update Notification</button>
+                <a href="/admin/repository/{{ .repository.ID }}/notification/delete/{{ .notification.ID }}" class="btn btn-danger pull-right">Delete Notification</a>
+            </fieldset>
+        </form>
+    </div>
+</div>
+{{ end }}
+
+{{ define "js" }}{{ end }}
+
+{{ define "css" }}{{ end }}

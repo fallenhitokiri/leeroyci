@@ -1,0 +1,41 @@
+{{ define "title" }}Add New Notification for {{ .repository.Name }}{{ end }}
+
+{{ define "body" }}admin-notification-add{{ end }}
+
+{{ define "content" }}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <form action="/admin/repository/{{ .repository.ID }}/notification/add" method="POST">
+            <fieldset>
+                <h1>Add a new notification</h1>
+                {{ if .error }}
+                    <div class="alert alert-danger">
+                        {{ .error }}
+                    </div>
+                {{ end }}
+
+                <div class="form-group">
+                    <label for="service">Select service</label>
+                    <select name="service">
+                        {{ range .services }}
+                            <option value="{{ . }}">{{ . }}</option>
+                        {{ end }}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="arguments">Arguments for the notification service (comma separated)</label>
+                    <input type="text" class="form-control" id="arguments" name="arguments" placeholder="Arguments">
+                </div>
+
+                <button class="btn btn-info">Add Notification</button>
+                <a href="/admin/repository/{{ .repository.ID }}" class="btn btn-default pull-right">Cancel</a>
+            </fieldset>
+        </form>
+    </div>
+</div>
+{{ end }}
+
+{{ define "js" }}{{ end }}
+
+{{ define "css" }}{{ end }}

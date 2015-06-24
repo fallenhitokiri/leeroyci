@@ -19,6 +19,8 @@ type Repository struct {
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
+
+	Notifications []Notification
 }
 
 // CreateRepository adds a new repository.
@@ -40,14 +42,14 @@ func CreateRepository(name, url, accessKey string, commentPR, closePR, statusPR 
 // GetRepository returns the repository based on the URL that pushed changes.
 func GetRepository(url string) *Repository {
 	repo := &Repository{}
-	db.Where("URL = ?", url).First(&repo)
+	db.Preload("Notifications").Where("URL = ?", url).First(&repo)
 	return repo
 }
 
 // GetRepositoryByID returns the repository based on the ID.
 func GetRepositoryByID(id string) (*Repository, error) {
 	repo := &Repository{}
-	db.Where("ID = ?", id).First(&repo)
+	db.Preload("Notifications").Where("ID = ?", id).First(&repo)
 	return repo, nil
 }
 

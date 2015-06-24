@@ -19,11 +19,11 @@ type Notification struct {
 	Arguments string
 
 	Repository   Repository
-	RepositoryID int64
+	RepositoryID int64 `sql:"index"`
 }
 
 // CreateNotification create a new notification for a repository.
-func CreateNotification(service, arguments string, repo *Repository) *Notification {
+func CreateNotification(service, arguments string, repo *Repository) (*Notification, error) {
 	not := Notification{
 		Service:    service,
 		Arguments:  arguments,
@@ -32,21 +32,22 @@ func CreateNotification(service, arguments string, repo *Repository) *Notificati
 
 	db.Save(&not)
 
-	return &not
+	return &not, nil
 }
 
 // GetNotification returns a notification.
-func GetNotification(id int64) *Notification {
+func GetNotification(id string) (*Notification, error) {
 	not := &Notification{}
 	db.Where("id = ?", id).First(&not)
-	return not
+	return not, nil
 }
 
 // UpdateNotification updates a notification.
-func (n *Notification) Update(service, arguments string) {
+func (n *Notification) Update(service, arguments string) error {
 	n.Service = service
 	n.Arguments = arguments
 	db.Save(n)
+	return nil
 }
 
 // DeleteNotification deletes a notification.

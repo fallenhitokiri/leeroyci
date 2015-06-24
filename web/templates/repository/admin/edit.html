@@ -4,7 +4,7 @@
 
 {{ define "content" }}
 <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-md-6">
         <form action="/admin/repository/{{ .repository.ID }}" method="POST">
             <fieldset>
                 <h1>{{ .repository.Name }}</h1>
@@ -54,6 +54,27 @@
                 <a href="/admin/repository/delete/{{ .repository.ID }}" class="btn btn-danger pull-right">Delete Repository</a>
             </fieldset>
         </form>
+    </div>
+
+    <div class="col-md-5 col-md-offset-1">
+        <h3>
+            Notifications
+            <a href="/admin/repository/{{ .repository.ID }}/notification/add" class="btn btn-sm btn-default pull-right">Add Notification</a>
+        </h3>
+        {{ if .repository.Notifications }}
+            <ul>
+            {{ range .repository.Notifications }}
+                <li>
+                    <a href="/admin/repository/{{ $.repository.ID }}/notification/{{ .ID }}">Service: {{ .Service }}</a>
+                </li>
+            {{ end }}
+            </ul>
+        {{ else }}
+            <div class="alert alert-info">
+                No notifications configured yet - go ahead and add one so you
+                know what is going on :)
+            </div>
+        {{ end }}
     </div>
 </div>
 {{ end }}
