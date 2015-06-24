@@ -1,0 +1,63 @@
+{{ define "title" }}Edit {{ .repository.Name }}{{ end }}
+
+{{ define "body" }}admin-repository-edit{{ end }}
+
+{{ define "content" }}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <form action="/admin/repository/{{ .repository.ID }}" method="POST">
+            <fieldset>
+                <h1>{{ .repository.Name }}</h1>
+                {{ if .message }}
+                    <div class="alert alert-success">
+                        {{ .message }}
+                    </div>
+                {{ end }}
+
+                {{ if .error }}
+                    <div class="alert alert-danger">
+                        {{ .error }}
+                    </div>
+                {{ end }}
+
+                <div class="form-group">
+                    <label for="name">Name for this repository</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Repository name" value="{{ .repository.Name }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="url">URL for this repository</label>
+                    <input type="text" class="form-control" id="url" name="url" placeholder="Repository URL" value="{{ .repository.URL }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="access_key">AccessKey - required for endpoint</label>
+                    <input type="text" class="form-control" id="access_key" name="access_key" placeholder="Enter access key" value="{{ .repository.AccessKey }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="close_pr">Close pull requests if builds fail</label>
+                    <input type="checkbox" class="form-control" id="close_pr" name="close_pr" {{ if .repository.ClosePR }}checked{{ end }}>
+                </div>
+
+                <div class="form-group">
+                    <label for="status_pr">Update status of commits with build results</label>
+                    <input type="checkbox" class="form-control" id="status_pr" name="status_pr" {{ if .repository.StatusPR }}checked{{ end }}>
+                </div>
+
+                <div class="form-group">
+                    <label for="comment_pr">Add build results as comment to pull request</label>
+                    <input type="checkbox" class="form-control" id="comment_pr" name="comment_pr" {{ if .repository.CommentPR }}checked{{ end }}>
+                </div>                
+
+                <button class="btn btn-info">Update Repository</button>
+                <a href="/admin/repository/delete/{{ .repository.ID }}" class="btn btn-danger pull-right">Delete Repository</a>
+            </fieldset>
+        </form>
+    </div>
+</div>
+{{ end }}
+
+{{ define "js" }}{{ end }}
+
+{{ define "css" }}{{ end }}

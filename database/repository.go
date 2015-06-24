@@ -44,8 +44,15 @@ func GetRepository(url string) *Repository {
 	return repo
 }
 
+// GetRepositoryByID returns the repository based on the ID.
+func GetRepositoryByID(id string) (*Repository, error) {
+	repo := &Repository{}
+	db.Where("ID = ?", id).First(&repo)
+	return repo, nil
+}
+
 // UpdateRepository updates an existing repository.
-func (r *Repository) Update(name, url, accessKey string, commentPR, closePR, statusPR bool) {
+func (r *Repository) Update(name, url, accessKey string, commentPR, closePR, statusPR bool) (*Repository, error) {
 	r.Name = name
 	r.CommentPR = commentPR
 	r.StatusPR = statusPR
@@ -53,6 +60,8 @@ func (r *Repository) Update(name, url, accessKey string, commentPR, closePR, sta
 	r.AccessKey = accessKey
 
 	db.Save(r)
+
+	return r, nil
 }
 
 // ListRepositories returns all repositories.
@@ -63,8 +72,10 @@ func ListRepositories() []*Repository {
 }
 
 // DeleteRepository deletes an existing repository.
-func (r *Repository) Delete(url string) {
+func (r *Repository) Delete() error {
 	db.Delete(r)
+
+	return nil
 }
 
 // Jobs returns all jobs for this repository.
