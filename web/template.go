@@ -2,7 +2,6 @@ package web
 
 import (
 	"html/template"
-	"log"
 	"net/http"
 
 	"github.com/GeertJohan/go.rice"
@@ -23,13 +22,13 @@ func render(w http.ResponseWriter, r *http.Request, template string, ctx respons
 func getTemplates(name string) *template.Template {
 	box, err := rice.FindBox("templates")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	base, err := box.String("base.html")
 
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	tmpl, err := template.New(name).Parse(base)
@@ -37,13 +36,13 @@ func getTemplates(name string) *template.Template {
 	base, err = box.String(name)
 
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	tmpl, err = tmpl.Parse(base)
 
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	return tmpl

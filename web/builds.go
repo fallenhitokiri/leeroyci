@@ -10,5 +10,4 @@ func viewListAll(w http.ResponseWriter, r *http.Request) {
 	// ctx["next_builds"] =
 	//    ctx["previous_builds"] =
 	render(w, r, "builds/list_all.html", ctx)
-	return
 }

@@ -13,9 +13,9 @@ var sessionStore = sessions.NewCookieStore([]byte("something-very-secret"))
 
 // Routes returns a new Goriall router.
 func Routes() *mux.Router {
-	chainUnauth := alice.New(middlewareLogging, middlewareNoConfig)
-	chainAuth := alice.New(middlewareLogging, middlewareNoConfig, middlewareAuth)
-	chainAdmin := alice.New(middlewareLogging, middlewareNoConfig, middlewareAuth, middlewareAdmin)
+	chainUnauth := alice.New(middlewareLogging, middlewarePanic, middlewareNoConfig)
+	chainAuth := alice.New(middlewareLogging, middlewarePanic, middlewareNoConfig, middlewareAuth)
+	chainAdmin := alice.New(middlewareLogging, middlewarePanic, middlewareNoConfig, middlewareAuth, middlewareAdmin)
 
 	router := mux.NewRouter()
 	router.Handle("/setup", chainUnauth.ThenFunc(viewSetup))
