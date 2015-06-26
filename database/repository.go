@@ -21,6 +21,7 @@ type Repository struct {
 	UpdatedAt time.Time
 
 	Notifications []Notification
+	Commands      []Command
 }
 
 // CreateRepository adds a new repository.
@@ -42,14 +43,14 @@ func CreateRepository(name, url, accessKey string, commentPR, closePR, statusPR 
 // GetRepository returns the repository based on the URL that pushed changes.
 func GetRepository(url string) *Repository {
 	repo := &Repository{}
-	db.Preload("Notifications").Where("URL = ?", url).First(&repo)
+	db.Preload("Notifications").Preload("Commands").Where("URL = ?", url).First(&repo)
 	return repo
 }
 
 // GetRepositoryByID returns the repository based on the ID.
 func GetRepositoryByID(id string) (*Repository, error) {
 	repo := &Repository{}
-	db.Preload("Notifications").Where("ID = ?", id).First(&repo)
+	db.Preload("Notifications").Preload("Commands").Where("ID = ?", id).First(&repo)
 	return repo, nil
 }
 
@@ -90,7 +91,7 @@ func (r *Repository) Jobs() []Job {
 }
 
 // Commands returns all commands for a repository, branch and kind
-func (r *Repository) Commands(repo *Repository, branch, kind string) []Command {
+func (r *Repository) GetCommands(repo *Repository, branch, kind string) []Command {
 	noBranch := []Command{}
 	branches := []Command{}
 

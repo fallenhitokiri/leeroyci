@@ -34,7 +34,7 @@ type Command struct {
 }
 
 // AddCommand adds a new command to a repository.
-func AddCommand(repo *Repository, name, execute, branch, kind string) (*Command, error) {
+func CreateCommand(repo *Repository, name, execute, branch, kind string) (*Command, error) {
 	if kind != CommandKindTest && kind != CommandKindBuild && kind != CommandKindDeploy {
 		return nil, errors.New("wrong kind")
 	}
@@ -53,20 +53,22 @@ func AddCommand(repo *Repository, name, execute, branch, kind string) (*Command,
 }
 
 // GetCommand returns a command for a specific ID.
-func GetCommand(id int64) *Command {
+func GetCommand(id string) (*Command, error) {
 	c := &Command{}
 	db.Where("ID = ?", id).First(&c)
-	return c
+	return c, nil
 }
 
 // UpdateCommand updates a command.
-func (c *Command) Update(name, kind, branch, execute string) {
+func (c *Command) Update(name, kind, branch, execute string) error {
 	c.Name = name
 	c.Kind = kind
 	c.Branch = branch
 	c.Execute = execute
 
 	db.Save(c)
+
+	return nil
 }
 
 // DeleteCommand deletes a command.

@@ -58,6 +58,30 @@
 
     <div class="col-md-5 col-md-offset-1">
         <h3>
+            Commands
+            <a href="/admin/repository/{{ .repository.ID }}/command/add" class="btn btn-sm btn-default pull-right">Add Command</a>
+        </h3>
+
+        {{ if .repository.Commands }}
+            <ul>
+            {{ range .repository.Commands }}
+                <li>
+                    <a href="/admin/repository/{{ $.repository.ID }}/command/{{ .ID }}">{{ .Name }}</a>
+                    <span class="label label-info">{{ .Kind }}</span>
+                    <span class="label label-default">{{ .Branch }}</span>
+                </li>
+            {{ end }}
+            </ul>
+        {{ else }}
+            <div class="alert alert-info">
+                No commands configured yet - go ahead and add one so things
+                happen when you push new commits :)
+            </div>
+        {{ end }}
+
+        <!-- commands -->
+
+        <h3>
             Notifications
             <a href="/admin/repository/{{ .repository.ID }}/notification/add" class="btn btn-sm btn-default pull-right">Add Notification</a>
         </h3>
@@ -75,6 +99,7 @@
                 know what is going on :)
             </div>
         {{ end }}
+        <!-- notifications -->
     </div>
 </div>
 {{ end }}
