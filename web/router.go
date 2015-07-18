@@ -22,7 +22,7 @@ func Routes() *mux.Router {
 	router.Handle("/login", chainUnauth.ThenFunc(viewLogin))
 	router.Handle("/logout", chainUnauth.ThenFunc(viewLogout))
 
-	router.Handle("/", chainAuth.ThenFunc(viewListAll))
+	router.Handle("/", chainAuth.ThenFunc(viewListJobs))
 	router.Handle("/user/settings", chainAuth.ThenFunc(viewUserSettings))
 
 	router.Handle("/admin/users", chainAdmin.ThenFunc(viewAdminListUsers))

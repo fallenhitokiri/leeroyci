@@ -6,9 +6,10 @@
 <div class="row">
     <div class="col-md-12">
         <ul class="build-list">
-            {{ range .builds }}
+        {{ if .jobs }}
+            {{ range .jobs }}
                 <li class="build-row build-success">
-                    <span class="job-info">leeroyci <strong>new-web-interface</strong></span>
+                    <span class="job-info">{{ . }}leeroyci <strong>new-web-interface</strong></span>
 
                     <span class="tasks">
                         <span class="label label-success">unit tests</span>
@@ -33,15 +34,20 @@
             {{ end }}
 
             <li>
-                {{ if .previous_builds }}
-                    <a href="/builds?offset={{ .previous_builds }}" class="btn btn-info">Previous</a>
+                {{ if .first_page }}
+                    <a href="/?offset={{ .previous_offset }}" class="btn btn-info">Previous</a>
                 {{ end }}
 
-                {{ if .next_builds }}
-                    <a href="/builds?offset={{ .next_builds }}" class="btn btn-info pull-right">Next</a>
+                {{ if gt .next_offset -1 }}
+                    <a href="/?offset={{ .next_offset }}" class="btn btn-info pull-right">Next</a>
                 {{ end }}
             </li>
         </ul>
+    {{ else }}
+        <div class="alert alert-info">
+            No jobs, give me something to do!
+        </div>
+    {{ end }}
     </div>
 </div>
 {{ end }}

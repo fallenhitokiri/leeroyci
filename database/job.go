@@ -49,6 +49,24 @@ func GetJob(id int64) *Job {
 	return j
 }
 
+// GetJobs returns a list of jobs for a given range.
+func GetJobs(offset, limit int) []*Job {
+	jobs := make([]*Job, 0)
+
+	db.Offset(offset).Limit(limit).Find(&jobs)
+
+	return jobs
+}
+
+// NumberOfJobs returns the number of all existing jobs.
+func NumberOfJobs() int {
+	var count int
+
+	db.Table("jobs").Count(&count)
+
+	return count
+}
+
 // TasksDone sets TasksDone
 func (j *Job) TasksDone() {
 	j.TasksFinished = time.Now()
