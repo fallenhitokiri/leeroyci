@@ -12,7 +12,7 @@
                     <span class="job-info">{{ .Repository.Name }} <strong>{{ .Branch }}</strong></span>
 
                     <span class="tasks">
-                        {{ range .Tasks}}
+                        {{ range .CommandLogs }}
                             <span class="label {{ if .Passed }}label-success{{ else }}label-danger{{ end }}">{{ .Name }} asfasd</span>
                         {{ end }}
                     </span>

@@ -33,6 +33,17 @@ type Command struct {
 	UpdatedAt time.Time
 }
 
+// CommandLog stored a finnished command and the output of the task.
+type CommandLog struct {
+	ID     int64
+	Name   string // we only keep the name, no reference to the command, in case it changes.
+	Return string
+	Output string
+
+	Job   Job
+	JobID int64
+}
+
 // AddCommand adds a new command to a repository.
 func CreateCommand(repo *Repository, name, execute, branch, kind string) (*Command, error) {
 	if kind != CommandKindTest && kind != CommandKindBuild && kind != CommandKindDeploy {
@@ -74,4 +85,27 @@ func (c *Command) Update(name, kind, branch, execute string) error {
 // DeleteCommand deletes a command.
 func (c *Command) Delete() {
 	db.Delete(c)
+}
+
+// CreateCommandLog adds a new log.
+func CreateCommandLog(command *Command, job *Job, ret, out string) *CommandLog {
+	log := CommandLog{
+		Name:   command.Name,
+		Return: ret,
+		Output: out,
+		Job:    *job,
+	}
+
+	db.Save(&log)
+
+	return &log
+}
+
+// Passed returns true if the command completed successfully.
+func (t *CommandLog) Passed() bool {
+	if t.Return == "" {
+		return true
+	}
+
+	return false
 }
