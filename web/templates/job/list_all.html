@@ -8,7 +8,7 @@
         <ul class="build-list">
         {{ if .jobs }}
             {{ range .jobs }}
-                <li class="build-row build-success">
+                <li class="build-row build-{{ .Status }}">
                     <span class="job-info">{{ .Repository.Name }} <strong>{{ .Branch }}</strong></span>
 
                     <span class="tasks">

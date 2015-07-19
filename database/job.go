@@ -5,6 +5,12 @@ import (
 	"time"
 )
 
+const (
+	JobStatusSuccess = "success"
+	JobStatusError   = "error"
+	JobStatusPending = "pending"
+)
+
 // Job stores all information about one commit and the executed tasks.
 type Job struct {
 	ID int64
@@ -55,7 +61,17 @@ func GetJob(id int64) *Job {
 func GetJobs(offset, limit int) []*Job {
 	jobs := make([]*Job, 0)
 
-	db.Preload("Repository").Preload("CommandLogs").Offset(offset).Limit(limit).Find(&jobs)
+	db.Preload(
+		"Repository",
+	).Preload(
+		"CommandLogs",
+	).Offset(
+		offset,
+	).Limit(
+		limit,
+	).Order(
+		"created_at desc",
+	).Find(&jobs)
 
 	return jobs
 }
@@ -67,6 +83,20 @@ func NumberOfJobs() int {
 	db.Table("jobs").Count(&count)
 
 	return count
+}
+
+// Status returns the current status fo the job.
+func (j *Job) Status() string {
+	n := time.Time{}
+	if j.TasksFinished != n {
+		for _, c := range j.CommandLogs {
+			if !c.Passed() {
+				return JobStatusError
+			}
+		}
+		return JobStatusSuccess
+	}
+	return JobStatusPending
 }
 
 // TasksDone sets TasksDone
