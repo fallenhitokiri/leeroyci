@@ -3,8 +3,6 @@ package web
 import (
 	"net/http"
 
-	"log"
-
 	"github.com/fallenhitokiri/leeroyci/database"
 )
 
@@ -24,8 +22,6 @@ func viewListJobs(w http.ResponseWriter, r *http.Request) {
 	ctx["jobs"] = database.GetJobs(offset, limit)
 
 	prev, next := previous_next_number(offset)
-
-	log.Println(prev, next)
 
 	ctx["previous_offset"] = prev
 	ctx["next_offset"] = next

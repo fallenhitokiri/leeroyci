@@ -9,13 +9,12 @@
         {{ if .jobs }}
             {{ range .jobs }}
                 <li class="build-row build-success">
-                    <span class="job-info">{{ . }}leeroyci <strong>new-web-interface</strong></span>
+                    <span class="job-info">{{ .Repository.Name }} <strong>{{ .Branch }}</strong></span>
 
                     <span class="tasks">
-                        <span class="label label-success">unit tests</span>
-                        <span class="label label-success">integration tests</span>
-                        <span class="label label-success">debug build</span>
-                        <span class="label label-success">test deploy</span>
+                        {{ range .Tasks}}
+                            <span class="label {{ if .Passed }}label-success{{ else }}label-danger{{ end }}">{{ .Name }} asfasd</span>
+                        {{ end }}
                     </span>
 
                     <span class="job-details">

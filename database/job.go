@@ -24,6 +24,8 @@ type Job struct {
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
+
+	Tasks []Task
 }
 
 // CreateJob adds a new job to the database.
@@ -45,7 +47,7 @@ func CreateJob(repo *Repository, branch, commit, commitURL, name, email string) 
 // GetJob returns a job for a given ID.
 func GetJob(id int64) *Job {
 	j := &Job{}
-	db.Where("ID = ?", id).First(&j)
+	db.Preload("Repository").Preload("Tasks").Where("ID = ?", id).First(&j)
 	return j
 }
 
@@ -53,7 +55,7 @@ func GetJob(id int64) *Job {
 func GetJobs(offset, limit int) []*Job {
 	jobs := make([]*Job, 0)
 
-	db.Offset(offset).Limit(limit).Find(&jobs)
+	db.Preload("Repository").Preload("Tasks").Offset(offset).Limit(limit).Find(&jobs)
 
 	return jobs
 }
