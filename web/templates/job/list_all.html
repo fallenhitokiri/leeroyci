@@ -19,14 +19,14 @@
 
                     <span class="job-details">
                         <span class="label label-primary">
-                            Timo Zimmermann &lt;timo@screamingatmyscreen.com&gt;
+                            {{ .Name }} &lt;{{ .Email }}&gt;
                         </span>
                         <span class="label label-default">
-                            4caf2af8aa2b9b547152c41531d1b2e9427f4cad
+                            {{ .Commit }}
                         </span>
 
                         <span class="label label-default">
-                            2015-06-16 00:52:22.850927316 +0000 UTC
+                            {{ .CreatedAt }}
                         </span>
                     </span>
                 </li>
