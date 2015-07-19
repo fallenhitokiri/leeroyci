@@ -27,7 +27,7 @@
                     <label for="kind">Select kind</label>
                     <select name="kind">
                         {{ range .kinds }}
-                            <option value="{{ . }}">{{ . }}</option>
+                            <option value="{{ . }}" {{ if eq . $.command.Kind}}selected{{ end }} >{{ . }}</option>
                         {{ end }}
                     </select>
                 </div>
