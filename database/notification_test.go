@@ -5,12 +5,12 @@ import (
 )
 
 func TestNotificationCRUD(t *testing.T) {
-	r := CreateRepository("name", "url", "accessKey", false, false, false)
-	n1 := CreateNotification("service", "arguments", r)
-	n2 := GetNotification(n1.ID)
+	r, _ := CreateRepository("name", "url", "accessKey", false, false, false)
+	n1, _ := CreateNotification("service", "arguments", r)
+	n2, _ := GetNotification(string(n1.ID))
 	n2.Update("service", "arguments2")
 	n2.Delete()
-	n3 := GetNotification(n1.ID)
+	n3, _ := GetNotification(string(n1.ID))
 
 	if n1.Service != n2.Service {
 		t.Error("Service does not match")

@@ -53,7 +53,7 @@ func TestCreateGetUpdateDelete(t *testing.T) {
 		t.Error("Name not updated")
 	}
 
-	u.DeleteUser()
+	u.Delete()
 
 	_, err = GetUser("foo@bar.tld")
 

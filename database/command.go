@@ -70,7 +70,7 @@ func GetCommand(id string) (*Command, error) {
 	return c, nil
 }
 
-// UpdateCommand updates a command.
+// Update a command.
 func (c *Command) Update(name, kind, branch, execute string) error {
 	c.Name = name
 	c.Kind = kind

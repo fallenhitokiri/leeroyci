@@ -1,21 +1,22 @@
 package database
 
 import (
+	"strconv"
 	"testing"
 )
 
 func TestCommandCRUD(t *testing.T) {
-	repo := CreateRepository("", "", "", false, false, false)
+	repo, _ := CreateRepository("", "", "", false, false, false)
 
-	add, _ := AddCommand(repo, "name", "execute", "branch", CommandKindBuild)
-	get1 := GetCommand(add.ID)
+	add, _ := CreateCommand(repo, "name", "execute", "branch", CommandKindBuild)
+	get1, _ := GetCommand(strconv.FormatInt(add.ID, 10))
 	get1.Update("name", "kind", "branch", CommandKindDeploy)
-	get2 := GetCommand(add.ID)
+	get2, _ := GetCommand(strconv.FormatInt(add.ID, 10))
 	get1.Delete()
-	get3 := GetCommand(add.ID)
+	get3, _ := GetCommand(strconv.FormatInt(add.ID, 10))
 
 	if get1.ID != get2.ID {
-		t.Error("ID mismatch")
+		t.Error("ID mismatch", get1.ID, get2.ID)
 	}
 
 	if get1.Kind != "kind" {

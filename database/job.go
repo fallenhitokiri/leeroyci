@@ -85,16 +85,25 @@ func NumberOfJobs() int {
 	return count
 }
 
+// Passed returns true if all commands succeeded.
+func (j *Job) Passed() bool {
+	for _, c := range j.CommandLogs {
+		if !c.Passed() {
+			return false
+		}
+	}
+	return true
+}
+
 // Status returns the current status fo the job.
 func (j *Job) Status() string {
 	n := time.Time{}
 	if j.TasksFinished != n {
-		for _, c := range j.CommandLogs {
-			if !c.Passed() {
-				return JobStatusError
-			}
+		if j.Passed() {
+			return JobStatusSuccess
 		}
-		return JobStatusSuccess
+
+		return JobStatusError
 	}
 	return JobStatusPending
 }
