@@ -2,6 +2,8 @@
 package database
 
 import (
+	"net/mail"
+	"net/smtp"
 	"strconv"
 	"time"
 )
@@ -65,4 +67,17 @@ func DeleteMailServer() {
 // Server returns the host name and port for a mailserver.
 func (m *MailServer) Server() string {
 	return m.Host + ":" + strconv.Itoa(m.Port)
+}
+
+// From returns net/mail.Address with sender information for the mail server.
+func (m *MailServer) From() mail.Address {
+	return mail.Address{
+		Name:    "Leeroy CI",
+		Address: m.Sender,
+	}
+}
+
+// Auth returns net/smtp.Auth for this mail server.
+func (m *MailServer) Auth() smtp.Auth {
+	return smtp.PlainAuth("", m.User, m.Password, m.Host)
 }

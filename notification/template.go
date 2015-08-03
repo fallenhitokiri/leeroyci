@@ -1,4 +1,5 @@
-// Package notification implements sending notifications to users.
+// Package notification handles all notifications for a job. This includes
+// build and deployment notifications.
 package notification
 
 import (
@@ -10,10 +11,20 @@ import (
 	"github.com/fallenhitokiri/leeroyci/database"
 )
 
+const (
+	EVENT_TEST         = "test"
+	EVENT_BUILD        = "build"
+	EVENT_DEPLOY_START = "deploy-start"
+	EVENT_DEPLOY_END   = "deploy-end"
+
+	TYPE_HTML = "html"
+	TYPE_TEXT = "text"
+)
+
 // message returns a formatted message to send through a notification system.
 // event specifies what happened - tests completed e.x.
 // kind specifies the notification system.
-func message(job *database.Job, event, kind string) string {
+func message(job *database.Job, service, event, kind string) string {
 	ctx := map[string]interface{}{
 		"TasksFinished":  job.TasksFinished,
 		"DeployFinished": job.DeployFinished,
@@ -26,25 +37,25 @@ func message(job *database.Job, event, kind string) string {
 		"CommandLogs":    job.CommandLogs,
 	}
 
-	tmpl, err := getTemplate(event, kind)
+	tmpl, err := getTemplate(service, event, kind)
 
 	if err != nil {
 		return ""
 	}
 
-	var buffer bytes.Buffer
-	tmpl.Execute(&buffer, ctx)
-	return buffer.String()
+	var buf bytes.Buffer
+	tmpl.Execute(&buf, ctx)
+	return buf.String()
 }
 
 // getTemplate returns the template to use for a notification.
-func getTemplate(event, kind string) (*template.Template, error) {
+func getTemplate(service, event, kind string) (*template.Template, error) {
 	box, err := rice.FindBox("templates")
 	if err != nil {
 		return nil, err
 	}
 
-	name := kind + "-" + event + ".tmpl"
+	name := service + "-" + kind + "-" + event + ".tmpl"
 
 	tmplStr, err := box.String(name)
 
