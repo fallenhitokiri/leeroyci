@@ -15,6 +15,9 @@ const (
 
 	// NotificationServiceCampfire type for campfire notifications.
 	NotificationServiceCampfire = "campfire"
+
+	// NotificationServiceHipChat type for hipchat notifications.
+	NotificationServiceHipchat = "hipchat"
 )
 
 // Notification stores the configuration needed for a notification plugin to
