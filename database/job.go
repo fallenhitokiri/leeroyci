@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// Define all statuses a job can have.
 const (
 	JobStatusSuccess = "success"
 	JobStatusError   = "error"
@@ -59,7 +60,7 @@ func GetJob(id int64) *Job {
 
 // GetJobs returns a list of jobs for a given range.
 func GetJobs(offset, limit int) []*Job {
-	jobs := make([]*Job, 0)
+	var jobs []*Job
 
 	db.Preload(
 		"Repository",
