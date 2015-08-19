@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/fallenhitokiri/leeroyci/database"
+	"github.com/fallenhitokiri/leeroyci/runner"
 )
 
 type pushCallback struct {
@@ -101,7 +102,7 @@ func (p *pushCallback) createJob() error {
 
 	repository := database.GetRepository(p.repositoryURL())
 
-	database.CreateJob(
+	job := database.CreateJob(
 		repository,
 		p.branch(),
 		p.commit(),
@@ -109,6 +110,8 @@ func (p *pushCallback) createJob() error {
 		p.name(),
 		p.email(),
 	)
+
+	runner.RunQueue <- job.ID
 
 	return nil
 }

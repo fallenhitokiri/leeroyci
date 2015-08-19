@@ -91,19 +91,19 @@ func (r *Repository) Jobs() []Job {
 }
 
 // Commands returns all commands for a repository, branch and kind
-func (r *Repository) GetCommands(repo *Repository, branch, kind string) []Command {
+func (r *Repository) GetCommands(branch, kind string) []Command {
 	noBranch := []Command{}
 	branches := []Command{}
 
 	db.Where(&Command{
-		RepositoryID: repo.ID,
+		RepositoryID: r.ID,
 		Kind:         kind,
 		Branch:       "",
 	}).Find(&noBranch)
 
 	if branch != "" {
 		db.Where(&Command{
-			RepositoryID: repo.ID,
+			RepositoryID: r.ID,
 			Kind:         kind,
 			Branch:       branch,
 		}).Find(&branches)
