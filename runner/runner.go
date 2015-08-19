@@ -1,3 +1,4 @@
+// Package runner runs all tasks for all commands associated with a repository.
 package runner
 
 import (
@@ -7,8 +8,11 @@ import (
 	"github.com/fallenhitokiri/leeroyci/database"
 )
 
+// RunQueue receives job IDs for which commands should run.
 var RunQueue = make(chan int64, 100)
 
+// Runner waits for jobs to be pushed on RunQueue and runs all commands. It also
+// creates the command logs and sends the necessary notifications.
 func Runner() {
 	for {
 		jobID := <-RunQueue
@@ -30,6 +34,8 @@ func Runner() {
 	}
 }
 
+// run runs the command that is specified in Command.Execute and creates the
+// command log with the results of the command.
 func run(job *database.Job, repository *database.Repository, kind string) {
 	commands := repository.GetCommands(job.Branch, kind)
 
