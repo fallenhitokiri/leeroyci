@@ -2,7 +2,15 @@
 // pull requests and close them if the build failed.
 package github
 
-import "strings"
+import (
+	"encoding/json"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"strings"
+
+	"github.com/fallenhitokiri/leeroyci/database"
+)
 
 type pushCallback struct {
 	Ref        string
@@ -82,4 +90,45 @@ func (p *pushCallback) shouldRun() bool {
 		return false
 	}
 	return true
+}
+
+// createJob adds a new job to the database.
+func (p *pushCallback) createJob() error {
+	if p.shouldRun() == false {
+		log.Println("Not adding", p.repositoryURL(), p.branch())
+		return nil
+	}
+
+	repository := database.GetRepository(p.repositoryURL())
+
+	database.CreateJob(
+		repository,
+		p.branch(),
+		p.commit(),
+		p.commitURL(),
+		p.name(),
+		p.email(),
+	)
+
+	return nil
+}
+
+func handlePush(req *http.Request) {
+	body, err := ioutil.ReadAll(req.Body)
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	var callback pushCallback
+
+	err = json.Unmarshal(body, &callback)
+
+	if err != nil {
+		log.Println("Could not unmarshal request")
+		return
+	}
+
+	callback.createJob()
 }

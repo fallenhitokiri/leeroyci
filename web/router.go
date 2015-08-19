@@ -21,6 +21,7 @@ func Routes() *mux.Router {
 	router.Handle("/setup", chainUnauth.ThenFunc(viewSetup))
 	router.Handle("/login", chainUnauth.ThenFunc(viewLogin))
 	router.Handle("/logout", chainUnauth.ThenFunc(viewLogout))
+	router.Handle("/callback/{service:[a-zA-Z]+}/{secret:[a-zA-Z]+}", chainUnauth.ThenFunc(viewCallback))
 
 	router.Handle("/", chainAuth.ThenFunc(viewListJobs))
 	router.Handle("/user/settings", chainAuth.ThenFunc(viewUserSettings))
