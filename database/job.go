@@ -23,7 +23,7 @@ type Job struct {
 	RepositoryID int64
 
 	Branch    string
-	Commit    string
+	Commit    string `gorm:"column:commit_sha"`
 	CommitURL string
 
 	Name  string
@@ -75,6 +75,15 @@ func GetJobs(offset, limit int) []*Job {
 	).Find(&jobs)
 
 	return jobs
+}
+
+// GetJobByCommit returns with a specific commit ID or nil.
+func GetJobByCommit(commit string) *Job {
+	job := &Job{}
+
+	db.Where("commit_sha = ?", commit).Last(&job)
+
+	return job
 }
 
 // NumberOfJobs returns the number of all existing jobs.

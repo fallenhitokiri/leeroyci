@@ -53,7 +53,7 @@ func TestAddCommandCommand(t *testing.T) {
 		t.Error(err)
 	}
 
-	coms := repo.GetCommands(repo, "", CommandKindBuild)
+	coms := repo.GetCommands("", CommandKindBuild)
 
 	if coms[0].ID != com1.ID {
 		t.Error("ID mismatch")
@@ -68,7 +68,7 @@ func TestAddCommandGetCommandDifferentKind(t *testing.T) {
 		t.Error(err)
 	}
 
-	coms := repo.GetCommands(repo, "", CommandKindTest)
+	coms := repo.GetCommands("", CommandKindTest)
 
 	if len(coms) != 0 {
 		t.Error("Wrong number of commands", len(coms))

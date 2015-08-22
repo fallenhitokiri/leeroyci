@@ -26,8 +26,7 @@ type Command struct {
 	Branch  string
 	Execute string
 
-	Repository   Repository
-	RepositoryID int64
+	RepositoryID int64 `sql:index`
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
@@ -51,11 +50,11 @@ func CreateCommand(repo *Repository, name, execute, branch, kind string) (*Comma
 	}
 
 	c := Command{
-		Name:       name,
-		Execute:    execute,
-		Kind:       kind,
-		Repository: *repo,
-		Branch:     branch,
+		Name:         name,
+		Execute:      execute,
+		Kind:         kind,
+		RepositoryID: repo.ID,
+		Branch:       branch,
 	}
 
 	db.Save(&c)
