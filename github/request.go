@@ -11,7 +11,7 @@ import (
 
 // githubRequest handles HTTP requests to GitHubs API.
 // If the API endpoint does not expect any information nil should be passed as payload.
-func githubRequest(method string, url string, token string, payload []byte) ([]byte, error) {
+func makeRequest(method string, url string, token string, payload []byte) ([]byte, error) {
 	r, err := http.NewRequest(method, url, bytes.NewReader(payload))
 
 	if err != nil {

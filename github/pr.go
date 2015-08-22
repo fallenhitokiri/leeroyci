@@ -40,7 +40,7 @@ type pullRequestRepository struct {
 	HTMLURL string `json:"html_url"`
 }
 
-// Payload GitHub expects to create a new status.
+// Payload to update / close a PR / commit.
 type postStatus struct {
 	State       string `json:"state"`
 	TargetURL   string `json:"target_url"`
@@ -95,13 +95,17 @@ func (p *pullRequestCallback) updatePR() {
 			p.postStatus(job, repository)
 		}
 
+		if repository.ClosePR && job.Passed() == false {
+			p.closePR(job, repository)
+		}
+
 		return
 	}
 }
 
 func (p *pullRequestCallback) isCurrent() bool {
 	repo := database.GetRepository(p.repositoryURL())
-	response, err := githubRequest("GET", p.PR.URL, repo.AccessKey, nil)
+	response, err := makeRequest("GET", p.PR.URL, repo.AccessKey, nil)
 
 	if err != nil {
 		log.Println(err)
@@ -127,7 +131,7 @@ func (p *pullRequestCallback) isCurrent() bool {
 	return true
 }
 
-func (p *pullRequestCallback) postStatus(job *database.Job, repository *database.Repository) {
+func (p *pullRequestCallback) postStatus(job *database.Job, repo *database.Repository) {
 	status := newStatus(job)
 	payload, err := json.Marshal(&status)
 
@@ -136,7 +140,28 @@ func (p *pullRequestCallback) postStatus(job *database.Job, repository *database
 		return
 	}
 
-	_, err = githubRequest("POST", p.PR.StatusURL, repository.AccessKey, payload)
+	_, err = makeRequest("POST", p.PR.StatusURL, repo.AccessKey, payload)
+
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+type update struct {
+	State string `json:"state"`
+}
+
+func (p *pullRequestCallback) closePR(job *database.Job, repo *database.Repository) {
+	status := newStatus(job)
+	status.State = "closed"
+	payload, err := json.Marshal(&status)
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	_, err = makeRequest("PATCH", p.PR.URL, repo.AccessKey, payload)
 
 	if err != nil {
 		log.Println(err)
@@ -150,8 +175,6 @@ func newStatus(job *database.Job) *postStatus {
 	if !job.Passed() {
 		state = statusFailed
 	}
-
-	log.Println(job.URL())
 
 	return &postStatus{
 		State:       statusMessages[state]["state"],
@@ -178,5 +201,7 @@ func handlePR(req *http.Request) {
 		return
 	}
 
-	go callback.updatePR()
+	if callback.Action != "closed" {
+		go callback.updatePR()
+	}
 }

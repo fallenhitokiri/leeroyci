@@ -39,7 +39,6 @@ type CommandLog struct {
 	Return string
 	Output string
 
-	Job   Job
 	JobID int64
 }
 
@@ -92,12 +91,18 @@ func CreateCommandLog(command *Command, job *Job, ret, out string) *CommandLog {
 		Name:   command.Name,
 		Return: ret,
 		Output: out,
-		Job:    *job,
+		JobID:  job.ID,
 	}
 
 	db.Save(&log)
 
 	return &log
+}
+
+func GetCommandLogsForJob(id int64) []*CommandLog {
+	var logs []*CommandLog
+	db.Where("job_id = ?", id).Find(&logs)
+	return logs
 }
 
 // Passed returns true if the command completed successfully.

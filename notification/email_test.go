@@ -2,27 +2,20 @@ package notification
 
 import (
 	"testing"
-	"time"
 
 	"github.com/fallenhitokiri/leeroyci/database"
 )
 
 func TestEmailSubject(t *testing.T) {
-	repo := database.Repository{
-		Name: "repo",
-	}
+	database.NewDatabase()
+	repo, _ := database.CreateRepository("repo", "bar", "accessKey", false, false, false)
+	job := database.CreateJob(repo, "branch", "1234", "commitURL", "foo", "bar")
+	job.TasksDone()
 
-	job := database.Job{
-		Branch:        "branch",
-		Commit:        "1234",
-		TasksFinished: time.Now(),
-		Repository:    repo,
-	}
-
-	build := emailSubject(&job, EVENT_BUILD)
-	test := emailSubject(&job, EVENT_TEST)
-	deployStart := emailSubject(&job, EVENT_DEPLOY_START)
-	deployEnd := emailSubject(&job, EVENT_DEPLOY_END)
+	build := emailSubject(job, EVENT_BUILD)
+	test := emailSubject(job, EVENT_TEST)
+	deployStart := emailSubject(job, EVENT_DEPLOY_START)
+	deployEnd := emailSubject(job, EVENT_DEPLOY_END)
 
 	if build != "repo/branch build success" {
 		t.Error("Wrong message", build)

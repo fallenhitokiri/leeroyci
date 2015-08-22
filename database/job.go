@@ -3,6 +3,7 @@ package database
 
 import (
 	"fmt"
+	//"log"
 	"time"
 )
 
@@ -98,7 +99,9 @@ func NumberOfJobs() int {
 
 // Passed returns true if all commands succeeded.
 func (j *Job) Passed() bool {
-	for _, c := range j.CommandLogs {
+	logs := GetCommandLogsForJob(j.ID)
+
+	for _, c := range logs {
 		if !c.Passed() {
 			return false
 		}
