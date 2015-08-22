@@ -2,6 +2,7 @@
 package database
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -128,4 +129,9 @@ func (j *Job) TasksDone() {
 func (j *Job) DeployDone() {
 	j.DeployFinished = time.Now()
 	db.Save(j)
+}
+
+func (j *Job) URL() string {
+	config := GetConfig()
+	return fmt.Sprintf("%sjob/%d", config.URL, j.ID)
 }

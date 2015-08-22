@@ -6,7 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/fallenhitokiri/leeroyci/web/github"
+	"github.com/fallenhitokiri/leeroyci/github"
 )
 
 func viewCallback(w http.ResponseWriter, r *http.Request) {

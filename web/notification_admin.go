@@ -1,7 +1,9 @@
 package web
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
@@ -62,9 +64,9 @@ func viewAdminCreateNotification(w http.ResponseWriter, r *http.Request) {
 	ctx := make(responseContext)
 
 	vars := mux.Vars(r)
-	rid := vars["rid"]
+	rid, _ := strconv.Atoi(vars["rid"])
 
-	repo, err := database.GetRepositoryByID(rid)
+	repo, err := database.GetRepositoryByID(int64(rid))
 
 	if err != nil {
 		render(w, r, "403.html", make(responseContext)) // TODO: create 500
@@ -83,7 +85,7 @@ func viewAdminCreateNotification(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			ctx["error"] = err.Error()
 		} else {
-			uri := "/admin/repository/" + rid
+			uri := fmt.Sprintf("/admin/repository/%d", rid)
 			http.Redirect(w, r, uri, 302)
 			return
 		}
@@ -97,10 +99,10 @@ func viewAdminEditNotification(w http.ResponseWriter, r *http.Request) {
 	ctx := make(responseContext)
 
 	vars := mux.Vars(r)
-	rid := vars["rid"]
+	rid, _ := strconv.Atoi(vars["rid"])
 	nid := vars["nid"]
 
-	repo, err := database.GetRepositoryByID(rid)
+	repo, err := database.GetRepositoryByID(int64(rid))
 
 	if err != nil {
 		render(w, r, "403.html", make(responseContext)) // TODO: create 500
@@ -145,6 +147,6 @@ func viewAdminDeleteNotification(w http.ResponseWriter, r *http.Request) {
 		not.Delete()
 	}
 
-	uri := "/admin/repository/" + rid
+	uri := fmt.Sprintf("/admin/repository/%s", rid)
 	http.Redirect(w, r, uri, 302)
 }

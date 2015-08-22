@@ -48,7 +48,7 @@ func GetRepository(url string) *Repository {
 }
 
 // GetRepositoryByID returns the repository based on the ID.
-func GetRepositoryByID(id string) (*Repository, error) {
+func GetRepositoryByID(id int64) (*Repository, error) {
 	repo := &Repository{}
 	db.Preload("Notifications").Preload("Commands").Where("ID = ?", id).First(&repo)
 	return repo, nil

@@ -18,7 +18,7 @@ func Runner() {
 		jobID := <-RunQueue
 
 		job := database.GetJob(jobID)
-		repository, err := database.GetRepositoryByID(string(job.RepositoryID))
+		repository, err := database.GetRepositoryByID(job.RepositoryID)
 
 		if err != nil {
 			log.Println("Could not find repository for", job.Repository.URL)

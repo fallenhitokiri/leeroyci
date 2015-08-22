@@ -2,6 +2,7 @@ package web
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
@@ -47,7 +48,7 @@ func (r repositoryAdminForm) add(request *http.Request) error {
 	return err
 }
 
-func (r repositoryAdminForm) update(request *http.Request, rid string) error {
+func (r repositoryAdminForm) update(request *http.Request, rid int64) error {
 	err := request.ParseForm()
 
 	if err != nil {
@@ -113,10 +114,10 @@ func viewAdminEditRepository(w http.ResponseWriter, r *http.Request) {
 	ctx := make(responseContext)
 
 	vars := mux.Vars(r)
-	rid := vars["rid"]
+	rid, _ := strconv.Atoi(vars["rid"])
 
 	if r.Method == "POST" {
-		err := repositoryAdminForm{}.update(r, rid)
+		err := repositoryAdminForm{}.update(r, int64(rid))
 
 		if err == nil {
 			ctx["message"] = "Update successful."
@@ -125,7 +126,7 @@ func viewAdminEditRepository(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	repo, err := database.GetRepositoryByID(rid)
+	repo, err := database.GetRepositoryByID(int64(rid))
 
 	if err != nil {
 		ctx["error"] = err.Error()
@@ -138,9 +139,9 @@ func viewAdminEditRepository(w http.ResponseWriter, r *http.Request) {
 
 func viewAdminDeleteRepository(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	rid := vars["rid"]
+	rid, _ := strconv.Atoi(vars["rid"])
 
-	repo, err := database.GetRepositoryByID(rid)
+	repo, err := database.GetRepositoryByID(int64(rid))
 
 	if err == nil {
 		repo.Delete()

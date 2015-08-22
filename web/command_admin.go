@@ -1,7 +1,9 @@
 package web
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
@@ -70,9 +72,9 @@ func viewAdminCreateCommand(w http.ResponseWriter, r *http.Request) {
 	ctx := make(responseContext)
 
 	vars := mux.Vars(r)
-	rid := vars["rid"]
+	rid, _ := strconv.Atoi(vars["rid"])
 
-	repo, err := database.GetRepositoryByID(rid)
+	repo, err := database.GetRepositoryByID(int64(rid))
 
 	if err != nil {
 		render(w, r, "403.html", make(responseContext)) // TODO: create 500
@@ -92,7 +94,7 @@ func viewAdminCreateCommand(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			ctx["error"] = err.Error()
 		} else {
-			uri := "/admin/repository/" + rid
+			uri := fmt.Sprintf("/admin/repository/%d", rid)
 			http.Redirect(w, r, uri, 302)
 			return
 		}
@@ -106,10 +108,10 @@ func viewAdminEditCommand(w http.ResponseWriter, r *http.Request) {
 	ctx := make(responseContext)
 
 	vars := mux.Vars(r)
-	rid := vars["rid"]
+	rid, _ := strconv.Atoi(vars["rid"])
 	cid := vars["cid"]
 
-	repo, err := database.GetRepositoryByID(rid)
+	repo, err := database.GetRepositoryByID(int64(rid))
 
 	if err != nil {
 		render(w, r, "403.html", make(responseContext)) // TODO: create 500
@@ -155,6 +157,6 @@ func viewAdminDeleteCommand(w http.ResponseWriter, r *http.Request) {
 		com.Delete()
 	}
 
-	uri := "/admin/repository/" + rid
+	uri := fmt.Sprintf("/admin/repository/", rid)
 	http.Redirect(w, r, uri, 302)
 }
