@@ -14,7 +14,6 @@ type repositoryAdminForm struct {
 	Name string `schema:"name"`
 	URL  string `schema:"url"`
 
-	CommentPR bool   `schema:"comment_pr"`
 	ClosePR   bool   `schema:"close_pr"`
 	StatusPR  bool   `schema:"status_pr"`
 	AccessKey string `schema:"access_key"`
@@ -40,7 +39,6 @@ func (r repositoryAdminForm) add(request *http.Request) error {
 		form.Name,
 		form.URL,
 		form.AccessKey,
-		form.CommentPR,
 		form.ClosePR,
 		form.StatusPR,
 	)
@@ -74,7 +72,6 @@ func (r repositoryAdminForm) update(request *http.Request, rid int64) error {
 		form.Name,
 		form.URL,
 		form.AccessKey,
-		form.CommentPR,
 		form.ClosePR,
 		form.StatusPR,
 	)

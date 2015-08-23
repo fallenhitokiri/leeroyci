@@ -18,7 +18,6 @@ The following configuration shows all options Leeroy supports. We will go throug
            "Name": "Awesome Project"
            "URL": "https://github.com/fallenhitokiri/pushtest",
            "AccessKey": "bar",
-           "CommentPR": true,
            "ClosePR": true,
            "StatusPR": true,
            "Commands": [
@@ -62,7 +61,6 @@ The following configuration shows all options Leeroy supports. We will go throug
 - `Name` name for this project
 - `URL` URL on which your repository is hosted. It is required that it matches your repository URL or Leeroy will not run any builds
 - `AccessKey` you will likely need an access key to interact with your version control system, like a GitHub access token.
-- `CommentPR` if you open a pull request Leeroy will post a comment with the build status for HEAD
 - `ClosePR` if the build for HEAD failed Leeroy will close a pull request
 - `Commands` list of commands to run when a build is triggered (push / PR)
 - `Notify` list of notifications which will be triggered after a build finished

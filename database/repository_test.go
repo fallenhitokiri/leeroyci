@@ -5,9 +5,9 @@ import (
 )
 
 func TestAddRepositoryGetRepository(t *testing.T) {
-	r1, _ := CreateRepository("foo", "bar", "accessKey", false, false, false)
+	r1, _ := CreateRepository("foo", "bar", "accessKey", false, false)
 	r2 := GetRepository("bar")
-	r2.Update("baz", "bar", "accessKey", false, false, false)
+	r2.Update("baz", "bar", "accessKey", false, false)
 	r2.Delete()
 	r3 := GetRepository("bar")
 
@@ -25,8 +25,8 @@ func TestAddRepositoryGetRepository(t *testing.T) {
 }
 
 func TestJobs(t *testing.T) {
-	r1, _ := CreateRepository("name", "url", "accessKey", false, false, false)
-	r2, _ := CreateRepository("name2", "url2", "accessKey", false, false, false)
+	r1, _ := CreateRepository("name", "url", "accessKey", false, false)
+	r2, _ := CreateRepository("name2", "url2", "accessKey", false, false)
 
 	j1 := CreateJob(r1, "branch", "commit", "commitURL", "name", "email")
 	j2 := CreateJob(r1, "branch2", "commit", "commitURL", "name", "email")
@@ -46,7 +46,7 @@ func TestJobs(t *testing.T) {
 }
 
 func TestAddCommandCommand(t *testing.T) {
-	repo, _ := CreateRepository("", "", "", false, false, false)
+	repo, _ := CreateRepository("", "", "", false, false)
 	com1, err := CreateCommand(repo, "", "", "", CommandKindBuild)
 
 	if err != nil {
@@ -61,7 +61,7 @@ func TestAddCommandCommand(t *testing.T) {
 }
 
 func TestAddCommandGetCommandDifferentKind(t *testing.T) {
-	repo, _ := CreateRepository("", "", "", false, false, false)
+	repo, _ := CreateRepository("", "", "", false, false)
 	_, err := CreateCommand(repo, "", "", "", CommandKindBuild)
 
 	if err != nil {

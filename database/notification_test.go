@@ -5,7 +5,7 @@ import (
 )
 
 func TestNotificationCRUD(t *testing.T) {
-	r, _ := CreateRepository("name", "url", "accessKey", false, false, false)
+	r, _ := CreateRepository("name", "url", "accessKey", false, false)
 	n1, _ := CreateNotification("service", "arguments", r)
 	n2, _ := GetNotification(string(n1.ID))
 	n2.Update("service", "arguments2")
@@ -26,7 +26,7 @@ func TestNotificationCRUD(t *testing.T) {
 }
 
 func TestGetNotificationForRepoAndType(t *testing.T) {
-	r, _ := CreateRepository("name", "url", "accessKey", false, false, false)
+	r, _ := CreateRepository("name", "url", "accessKey", false, false)
 	not, _ := CreateNotification(NotificationServiceSlack, "arguments", r)
 
 	notGot, _ := GetNotificationForRepoAndType(r, NotificationServiceSlack)
@@ -37,7 +37,7 @@ func TestGetNotificationForRepoAndType(t *testing.T) {
 }
 
 func TestGetConfigValue(t *testing.T) {
-	r, _ := CreateRepository("name", "url", "accessKey", false, false, false)
+	r, _ := CreateRepository("name", "url", "accessKey", false, false)
 	not, _ := CreateNotification(NotificationServiceSlack, "", r)
 
 	_, err := not.GetConfigValue("foo")

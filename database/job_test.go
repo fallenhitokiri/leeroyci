@@ -5,7 +5,7 @@ import (
 )
 
 func TestCGDoneJob(t *testing.T) {
-	repo, _ := CreateRepository("foo", "baz", "accessKey", false, false, false)
+	repo, _ := CreateRepository("foo", "baz", "accessKey", false, false)
 
 	job := CreateJob(repo, "branch", "commit", "commitURL", "name", "email")
 	job.TasksDone()
@@ -22,7 +22,7 @@ func TestCGDoneJob(t *testing.T) {
 }
 
 func TestGetJobByCommit(t *testing.T) {
-	repo, _ := CreateRepository("foo", "baz", "accessKey", false, false, false)
+	repo, _ := CreateRepository("foo", "baz", "accessKey", false, false)
 	job := CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
 
 	j1 := GetJobByCommit("foo")

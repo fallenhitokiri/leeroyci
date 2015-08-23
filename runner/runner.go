@@ -6,6 +6,7 @@ import (
 	"os/exec"
 
 	"github.com/fallenhitokiri/leeroyci/database"
+	"github.com/fallenhitokiri/leeroyci/notification"
 )
 
 // RunQueue receives job IDs for which commands should run.
@@ -26,11 +27,21 @@ func Runner() {
 		}
 
 		run(job, repository, database.CommandKindTest)
-		run(job, repository, database.CommandKindBuild)
+		notification.Notify(job, notification.EVENT_TEST)
+
+		if job.Passed() {
+			run(job, repository, database.CommandKindBuild)
+			notification.Notify(job, notification.EVENT_BUILD)
+		}
+
 		job.TasksDone()
 
-		run(job, repository, database.CommandKindDeploy)
-		job.DeployDone()
+		if job.Passed() {
+			notification.Notify(job, notification.EVENT_DEPLOY_START)
+			run(job, repository, database.CommandKindDeploy)
+			job.DeployDone()
+			notification.Notify(job, notification.EVENT_DEPLOY_END)
+		}
 	}
 }
 

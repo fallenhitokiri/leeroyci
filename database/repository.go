@@ -12,7 +12,6 @@ type Repository struct {
 	Name string
 	URL  string
 
-	CommentPR bool
 	ClosePR   bool
 	StatusPR  bool
 	AccessKey string
@@ -25,12 +24,11 @@ type Repository struct {
 }
 
 // CreateRepository adds a new repository.
-func CreateRepository(name, url, accessKey string, commentPR, closePR, statusPR bool) (*Repository, error) {
+func CreateRepository(name, url, accessKey string, closePR, statusPR bool) (*Repository, error) {
 	repo := Repository{
 		Name:      name,
 		URL:       url,
 		AccessKey: accessKey,
-		CommentPR: commentPR,
 		ClosePR:   closePR,
 		StatusPR:  statusPR,
 	}
@@ -55,9 +53,8 @@ func GetRepositoryByID(id int64) (*Repository, error) {
 }
 
 // UpdateRepository updates an existing repository.
-func (r *Repository) Update(name, url, accessKey string, commentPR, closePR, statusPR bool) (*Repository, error) {
+func (r *Repository) Update(name, url, accessKey string, closePR, statusPR bool) (*Repository, error) {
 	r.Name = name
-	r.CommentPR = commentPR
 	r.StatusPR = statusPR
 	r.ClosePR = closePR
 	r.AccessKey = accessKey
@@ -92,22 +89,30 @@ func (r *Repository) Jobs() []Job {
 
 // Commands returns all commands for a repository, branch and kind
 func (r *Repository) GetCommands(branch, kind string) []Command {
-	noBranch := []Command{}
-	branches := []Command{}
+	commands := []Command{}
+	branchSpecific := []Command{}
 
 	db.Where(&Command{
 		RepositoryID: r.ID,
 		Kind:         kind,
 		Branch:       "",
-	}).Find(&noBranch)
+	}).Find(&commands)
 
 	if branch != "" {
+		existing := []int64{}
+
+		for _, command := range commands {
+			existing = append(existing, command.ID)
+		}
+
 		db.Where(&Command{
 			RepositoryID: r.ID,
 			Kind:         kind,
 			Branch:       branch,
-		}).Find(&branches)
+		}).Not("id", existing).Find(&branchSpecific)
+
+		commands = append(commands, branchSpecific...)
 	}
 
-	return append(noBranch, branches...)
+	return commands
 }

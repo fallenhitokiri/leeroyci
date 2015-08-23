@@ -6,7 +6,7 @@ import (
 )
 
 func TestCommandCRUD(t *testing.T) {
-	repo, _ := CreateRepository("", "", "", false, false, false)
+	repo, _ := CreateRepository("", "", "", false, false)
 
 	add, _ := CreateCommand(repo, "name", "execute", "branch", CommandKindBuild)
 	get1, _ := GetCommand(strconv.FormatInt(add.ID, 10))

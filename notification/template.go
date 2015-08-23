@@ -5,6 +5,7 @@ package notification
 import (
 	"bytes"
 	"html/template"
+	"log"
 
 	"github.com/GeertJohan/go.rice"
 
@@ -25,6 +26,8 @@ const (
 // event specifies what happened - tests completed e.x.
 // kind specifies the notification system.
 func message(job *database.Job, service, event, kind string) string {
+	logs := database.GetCommandLogsForJob(job.ID)
+
 	ctx := map[string]interface{}{
 		"TasksFinished":  job.TasksFinished,
 		"DeployFinished": job.DeployFinished,
@@ -34,12 +37,14 @@ func message(job *database.Job, service, event, kind string) string {
 		"CommitURL":      job.CommitURL,
 		"Name":           job.Name,
 		"Email":          job.Email,
-		"CommandLogs":    job.CommandLogs,
+		"CommandLogs":    logs,
+		"URL":            job.URL(),
 	}
 
 	tmpl, err := getTemplate(service, event, kind)
 
 	if err != nil {
+		log.Println(err)
 		return ""
 	}
 

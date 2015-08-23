@@ -100,10 +100,10 @@ func (p *pushCallback) createJob() error {
 		return nil
 	}
 
-	repository := database.GetRepository(p.repositoryURL())
+	repo := database.GetRepository(p.repositoryURL())
 
 	job := database.CreateJob(
-		repository,
+		repo,
 		p.branch(),
 		p.commit(),
 		p.commitURL(),
