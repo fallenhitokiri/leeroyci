@@ -79,8 +79,8 @@ func (n *Notification) GetConfigValue(key string) (string, error) {
 		return "", errors.New("No Arguments defined.")
 	}
 
-	for _, pair := range strings.Split(n.Arguments, ",") {
-		split := strings.Split(pair, "=")
+	for _, pair := range strings.Split(n.Arguments, ":::::") {
+		split := strings.Split(pair, ":::")
 
 		if split[0] == key {
 			return split[1], nil

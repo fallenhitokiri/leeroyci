@@ -77,6 +77,8 @@ func viewAdminCreateNotification(w http.ResponseWriter, r *http.Request) {
 	ctx["services"] = []string{
 		database.NotificationServiceEmail,
 		database.NotificationServiceSlack,
+		database.NotificationServiceCampfire,
+		database.NotificationServiceHipchat,
 	}
 
 	if r.Method == "POST" {

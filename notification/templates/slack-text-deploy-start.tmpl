@@ -1,0 +1,8 @@
+repository: {{ .Repository.Name }}
+branch: {{ .Branch }}
+
+deployment started
+
+{{ range .CommandLogs }}
+{{ .Name }}: {{ if .Passed }}success{{ else }}failed{{ end }}
+{{ end }}

@@ -18,6 +18,12 @@ func Notify(job *database.Job, event string) {
 		switch notificaiton.Service {
 		case database.NotificationServiceEmail:
 			sendEmail(job, event)
+		case database.NotificationServiceSlack:
+			sendSlack(job, event)
+		case database.NotificationServiceHipchat:
+			sendHipchat(job, event)
+		case database.NotificationServiceCampfire:
+			sendCampfire(job, event)
 		default:
 			continue
 		}
