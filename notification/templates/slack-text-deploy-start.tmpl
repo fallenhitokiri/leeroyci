@@ -1,7 +1,7 @@
 repository: {{ .Repository.Name }}
 branch: {{ .Branch }}
 
-deployment started
+deploy started
 
 {{ range .CommandLogs }}
 {{ .Name }}: {{ if .Passed }}success{{ else }}failed{{ end }}

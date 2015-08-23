@@ -821,15 +821,12 @@ body.outlook p {
                             branch <strong>{{ .Branch }}</strong>
                           </td>
                         </tr>
-                      </table>
-
-                      {{ range .CommandLogs }}
-                      <table class="tiny-button {{ if .Passed }}success{{ else }}alert{{ end }}">
                         <tr>
-                          <td>{{ .Name }}</td>
+                          <td>
+                            deploy <strong>started</strong>
+                          </td>
                         </tr>
                       </table>
-                      {{ end }}
 
                       <table class="tiny-button">
                         <tr>

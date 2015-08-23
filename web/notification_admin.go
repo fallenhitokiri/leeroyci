@@ -123,6 +123,8 @@ func viewAdminEditNotification(w http.ResponseWriter, r *http.Request) {
 	ctx["services"] = []string{
 		database.NotificationServiceEmail,
 		database.NotificationServiceSlack,
+		database.NotificationServiceHipchat,
+		database.NotificationServiceCampfire,
 	}
 
 	if r.Method == "POST" {

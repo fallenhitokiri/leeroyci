@@ -45,7 +45,7 @@ func TestGetConfigValue(t *testing.T) {
 		t.Error("Wrong return", err.Error())
 	}
 
-	not, _ = CreateNotification(NotificationServiceSlack, "foo=bar,zab=123", r)
+	not, _ = CreateNotification(NotificationServiceSlack, "foo:::bar:::::zab:::123", r)
 
 	_, err = not.GetConfigValue("baz")
 	if err.Error() != "Not found." {

@@ -16,17 +16,11 @@ func TestEndpointCampfire(t *testing.T) {
 }
 
 func TestPayloadCampfire(t *testing.T) {
-	repo := database.Repository{
-		Name: "repo",
-	}
+	database.NewDatabase()
+	repo, _ := database.CreateRepository("repo", "", "", false, false)
+	job := database.CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
 
-	job := database.Job{
-		Branch:     "branch",
-		Commit:     "1234",
-		Repository: repo,
-	}
-
-	pay, err := payloadCampfire(&job, EVENT_BUILD)
+	pay, err := payloadCampfire(job, EVENT_BUILD)
 
 	if err != nil {
 		t.Error(err.Error())
