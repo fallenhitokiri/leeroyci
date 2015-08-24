@@ -68,7 +68,7 @@ func (c commandAdminForm) update(request *http.Request, com *database.Command) e
 }
 
 func viewAdminCreateCommand(w http.ResponseWriter, r *http.Request) {
-	template := "command/admin/add.html"
+	template := "command/admin/create.html"
 	ctx := make(responseContext)
 
 	vars := mux.Vars(r)
@@ -104,7 +104,7 @@ func viewAdminCreateCommand(w http.ResponseWriter, r *http.Request) {
 }
 
 func viewAdminEditCommand(w http.ResponseWriter, r *http.Request) {
-	template := "command/admin/edit.html"
+	template := "command/admin/update.html"
 	ctx := make(responseContext)
 
 	vars := mux.Vars(r)
@@ -157,6 +157,6 @@ func viewAdminDeleteCommand(w http.ResponseWriter, r *http.Request) {
 		com.Delete()
 	}
 
-	uri := fmt.Sprintf("/admin/repository/", rid)
+	uri := fmt.Sprintf("/admin/repository/%s", rid)
 	http.Redirect(w, r, uri, 302)
 }

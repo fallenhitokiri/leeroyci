@@ -92,7 +92,7 @@ func viewAdminListUsers(w http.ResponseWriter, r *http.Request) {
 
 // viewAdminCreateUser creates a new user.
 func viewAdminCreateUser(w http.ResponseWriter, r *http.Request) {
-	template := "user/admin/add.html"
+	template := "user/admin/create.html"
 	ctx := make(responseContext)
 
 	if r.Method == "POST" {
@@ -111,7 +111,7 @@ func viewAdminCreateUser(w http.ResponseWriter, r *http.Request) {
 
 // viewAdminEditUser edits a user for a given uid.
 func viewAdminEditUser(w http.ResponseWriter, r *http.Request) {
-	template := "user/admin/edit.html"
+	template := "user/admin/update.html"
 	ctx := make(responseContext)
 
 	vars := mux.Vars(r)

@@ -33,8 +33,10 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="arguments">Arguments for the notification service (comma separated)</label>
-                    <input type="text" class="form-control" id="arguments" name="arguments" placeholder="Arguments" value="{{ .notification.Arguments }}">
+                    <label for="arguments">Arguments for the notification service</label>
+                    <p><input type="text" class="form-control" id="arguments" name="arguments" placeholder="Arguments" value="{{ .notification.Arguments }}"></p>
+                    <p>Separate keys and values with 3 <code>:</code> and key - value pairs with 5 <code>:</code>.</p>
+                    <p>Example <code>channel:::#dev:::::token:::foobar</code></p>
                 </div>
 
                 <button class="btn btn-info">Update Notification</button>

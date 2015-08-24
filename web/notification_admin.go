@@ -60,7 +60,7 @@ func (n notificationAdminForm) update(request *http.Request, not *database.Notif
 }
 
 func viewAdminCreateNotification(w http.ResponseWriter, r *http.Request) {
-	template := "notification/admin/add.html"
+	template := "notification/admin/create.html"
 	ctx := make(responseContext)
 
 	vars := mux.Vars(r)
@@ -97,7 +97,7 @@ func viewAdminCreateNotification(w http.ResponseWriter, r *http.Request) {
 }
 
 func viewAdminEditNotification(w http.ResponseWriter, r *http.Request) {
-	template := "notification/admin/edit.html"
+	template := "notification/admin/update.html"
 	ctx := make(responseContext)
 
 	vars := mux.Vars(r)

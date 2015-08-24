@@ -89,7 +89,7 @@ func viewAdminListRepositories(w http.ResponseWriter, r *http.Request) {
 }
 
 func viewAdminCreateRepository(w http.ResponseWriter, r *http.Request) {
-	template := "repository/admin/add.html"
+	template := "repository/admin/create.html"
 	ctx := make(responseContext)
 
 	if r.Method == "POST" {
@@ -107,7 +107,7 @@ func viewAdminCreateRepository(w http.ResponseWriter, r *http.Request) {
 }
 
 func viewAdminEditRepository(w http.ResponseWriter, r *http.Request) {
-	template := "repository/admin/edit.html"
+	template := "repository/admin/update.html"
 	ctx := make(responseContext)
 
 	vars := mux.Vars(r)
