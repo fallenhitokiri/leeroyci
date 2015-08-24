@@ -2,6 +2,9 @@ package web
 
 import (
 	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
 
 	"github.com/fallenhitokiri/leeroyci/database"
 )
@@ -13,10 +16,10 @@ func viewListJobs(w http.ResponseWriter, r *http.Request) {
 	ctx := make(responseContext)
 
 	offset := 0
-	param := r.URL.Query().Get("offset")
+	paramOffset := r.URL.Query().Get("offset")
 
-	if len(param) > 0 {
-		offset = stringToInt(param)
+	if len(paramOffset) > 0 {
+		offset = stringToInt(paramOffset)
 	}
 
 	ctx["jobs"] = database.GetJobs(offset, limit)
@@ -27,7 +30,21 @@ func viewListJobs(w http.ResponseWriter, r *http.Request) {
 	ctx["next_offset"] = next
 	ctx["first_page"] = first
 
-	render(w, r, "job/list_all.html", ctx)
+	render(w, r, "job/list.html", ctx)
+}
+
+// viewJobDetail shows a specific job with all related information.
+func viewShowJob(w http.ResponseWriter, r *http.Request) {
+	template := "job/detail.html"
+	ctx := make(responseContext)
+
+	vars := mux.Vars(r)
+	jobID, _ := strconv.Atoi(vars["jid"])
+
+	job := database.GetJob(int64(jobID))
+	ctx["job"] = job
+
+	render(w, r, template, ctx)
 }
 
 // returns the offset for the previous and next page.

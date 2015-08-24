@@ -24,6 +24,7 @@ func Routes() *mux.Router {
 	router.Handle("/callback/{service:[a-zA-Z]+}/{secret:[a-zA-Z]+}", chainUnauth.ThenFunc(viewCallback))
 
 	router.Handle("/", chainAuth.ThenFunc(viewListJobs))
+	router.Handle("/{jid:[0-9]+}", chainAuth.ThenFunc(viewShowJob))
 	router.Handle("/user/settings", chainAuth.ThenFunc(viewUserSettings))
 
 	router.Handle("/admin/users", chainAdmin.ThenFunc(viewAdminListUsers))

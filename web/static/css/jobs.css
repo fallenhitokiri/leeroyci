@@ -1,9 +1,9 @@
-.build-list {
+.job-list {
     list-style-type: none;
     padding:0;
 }
 
-.build-list .build-row {
+.job-list .job-row {
     background: #efefef;
     border-radius: 5px;
     border-width: 0 0 0 30px;
@@ -13,35 +13,40 @@
     margin:0 0 20px 0;
 }
 
-.build-list .build-success {
+.job-list .job-success {
     border-color: rgb(102, 188, 92);
 }
 
-.build-list .build-error {
+.job-list .job-error {
     border-color: rgb(212, 83, 83);
 }
 
-.build-list .build-pending {
+.job-list .job-pending {
     border-color: rgb(119, 119, 119);
 }
 
-.build-list .job-info {
+.job-list .job-info {
     font-size:1.4em;
     margin-bottom: 15px;
     display:block;
 }
 
-.build-list .job-details {
+.job-list .job-details {
     display:block;
 }
 
-.build-list .job-details span {
+.job-list .job-details span {
     margin-right: 20px;
 }
 
-.build-list .tasks {
+.job-list .tasks {
     display: block;
     margin-bottom: 20px;
     font-size: 1.2em;
+}
+
+.job-list a {
+    color:#000000;
+    text-decoration: none;
 }
 

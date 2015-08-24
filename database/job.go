@@ -136,5 +136,5 @@ func (j *Job) DeployDone() {
 
 func (j *Job) URL() string {
 	config := GetConfig()
-	return fmt.Sprintf("%sjob/%d", config.URL, j.ID)
+	return fmt.Sprintf("%s/%d", config.URL, j.ID)
 }
