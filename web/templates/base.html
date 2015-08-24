@@ -15,6 +15,12 @@
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container-fluid">
                 <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#user-menu" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
                     <a class="navbar-brand" href="/">
                         <!--<img alt="Brand" src="...">-->
                         LeeroyCI
@@ -23,15 +29,22 @@
 
                 <div class="collapse navbar-collapse" id="user-menu">
                     <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/">All Jobs</a></li>
+
+                        {{ if .user.Admin }}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin <span class="caret"></span></a>
+
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="/admin/users">User Management</a>
+                                <li><a href="/admin/repositories">Repository Management</a>
+                            </ul>
+                        </li>
+                        {{ end }}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ .user.FirstName }} <span class="caret"></span></a>
                             
                             <ul class="dropdown-menu" role="menu">
-                                {{ if .user.Admin }}
-                                    <li><a href="/admin/users">User Management</a>
-                                    <li><a href="/admin/repositories">Repository Management</a>
-                                    <li class="divider"></li>
-                                {{ end }}
                                 <li><a href="/user/settings">User Settings</a></li>
                                 <li><a href="/logout">Logout</a></li>
                             </ul>
