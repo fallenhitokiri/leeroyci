@@ -57,9 +57,9 @@ func (u userSettingsForm) update(request *http.Request) error {
 	return err
 }
 
-// viewUserSettings exposes configuration settings for a user account to the
+// viewUpdateUser exposes configuration settings for a user account to the
 // user. Admin status cannot be changed here.
-func viewUserSettings(w http.ResponseWriter, r *http.Request) {
+func viewUpdateUser(w http.ResponseWriter, r *http.Request) {
 	template := "user/settings.html"
 	ctx := make(responseContext)
 

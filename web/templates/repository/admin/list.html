@@ -5,7 +5,7 @@
 {{ define "content" }}
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
-        <h1>Repositories <a href="/admin/repository/add" class="btn btn-primary pull-right">Add Repository</a></h1>
+        <h1>Repositories <a href="/admin/repository/create" class="btn btn-primary pull-right">Add Repository</a></h1>
         <ul>
             {{ range .repositories }}
                 <li><a href="/admin/repository/{{ .ID }}">{{ .Name }}</a>

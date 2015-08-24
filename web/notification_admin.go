@@ -17,7 +17,7 @@ type notificationAdminForm struct {
 	Arguments string `schema:"arguments"`
 }
 
-func (n notificationAdminForm) add(request *http.Request, repo *database.Repository) error {
+func (n notificationAdminForm) create(request *http.Request, repo *database.Repository) error {
 	err := request.ParseForm()
 
 	if err != nil {
@@ -82,7 +82,7 @@ func viewAdminCreateNotification(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == "POST" {
-		err := notificationAdminForm{}.add(r, repo)
+		err := notificationAdminForm{}.create(r, repo)
 
 		if err != nil {
 			ctx["error"] = err.Error()
@@ -96,7 +96,7 @@ func viewAdminCreateNotification(w http.ResponseWriter, r *http.Request) {
 	render(w, r, template, ctx)
 }
 
-func viewAdminEditNotification(w http.ResponseWriter, r *http.Request) {
+func viewAdminUpdateNotification(w http.ResponseWriter, r *http.Request) {
 	template := "notification/admin/update.html"
 	ctx := make(responseContext)
 

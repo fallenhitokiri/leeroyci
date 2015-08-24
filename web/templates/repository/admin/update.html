@@ -54,7 +54,7 @@
     <div class="col-md-5 col-md-offset-1">
         <h3>
             Commands
-            <a href="/admin/repository/{{ .repository.ID }}/command/add" class="btn btn-sm btn-default pull-right">Add Command</a>
+            <a href="/admin/repository/{{ .repository.ID }}/command/create" class="btn btn-sm btn-default pull-right">Add Command</a>
         </h3>
 
         {{ if .repository.Commands }}
@@ -78,7 +78,7 @@
 
         <h3>
             Notifications
-            <a href="/admin/repository/{{ .repository.ID }}/notification/add" class="btn btn-sm btn-default pull-right">Add Notification</a>
+            <a href="/admin/repository/{{ .repository.ID }}/notification/create" class="btn btn-sm btn-default pull-right">Add Notification</a>
         </h3>
         {{ if .repository.Notifications }}
             <ul>

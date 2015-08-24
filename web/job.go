@@ -34,7 +34,7 @@ func viewListJobs(w http.ResponseWriter, r *http.Request) {
 }
 
 // viewJobDetail shows a specific job with all related information.
-func viewShowJob(w http.ResponseWriter, r *http.Request) {
+func viewDetailJob(w http.ResponseWriter, r *http.Request) {
 	template := "job/detail.html"
 	ctx := make(responseContext)
 

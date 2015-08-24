@@ -24,25 +24,26 @@ func Routes() *mux.Router {
 	router.Handle("/callback/{service:[a-zA-Z]+}/{secret:[a-zA-Z]+}", chainUnauth.ThenFunc(viewCallback))
 
 	router.Handle("/", chainAuth.ThenFunc(viewListJobs))
-	router.Handle("/{jid:[0-9]+}", chainAuth.ThenFunc(viewShowJob))
-	router.Handle("/user/settings", chainAuth.ThenFunc(viewUserSettings))
+	router.Handle("/{jid:[0-9]+}", chainAuth.ThenFunc(viewDetailJob))
+
+	router.Handle("/user/settings", chainAuth.ThenFunc(viewUpdateUser))
 
 	router.Handle("/admin/users", chainAdmin.ThenFunc(viewAdminListUsers))
-	router.Handle("/admin/user/add", chainAdmin.ThenFunc(viewAdminCreateUser))
-	router.Handle("/admin/user/{uid:[0-9]+}", chainAdmin.ThenFunc(viewAdminEditUser))
+	router.Handle("/admin/user/create", chainAdmin.ThenFunc(viewAdminCreateUser))
+	router.Handle("/admin/user/{uid:[0-9]+}", chainAdmin.ThenFunc(viewAdminUpdateUser))
 	router.Handle("/admin/user/delete/{uid:[0-9]+}", chainAdmin.ThenFunc(viewAdminDeleteUser))
 
 	router.Handle("/admin/repositories", chainAdmin.ThenFunc(viewAdminListRepositories))
-	router.Handle("/admin/repository/add", chainAdmin.ThenFunc(viewAdminCreateRepository))
-	router.Handle("/admin/repository/{rid:[0-9]+}", chainAdmin.ThenFunc(viewAdminEditRepository))
+	router.Handle("/admin/repository/create", chainAdmin.ThenFunc(viewAdminCreateRepository))
+	router.Handle("/admin/repository/{rid:[0-9]+}", chainAdmin.ThenFunc(viewAdminUpdateRepository))
 	router.Handle("/admin/repository/delete/{rid:[0-9]+}", chainAdmin.ThenFunc(viewAdminDeleteRepository))
 
-	router.Handle("/admin/repository/{rid:[0-9]+}/notification/add", chainAdmin.ThenFunc(viewAdminCreateNotification))
-	router.Handle("/admin/repository/{rid:[0-9]+}/notification/{nid:[0-9]+}", chainAdmin.ThenFunc(viewAdminEditNotification))
+	router.Handle("/admin/repository/{rid:[0-9]+}/notification/create", chainAdmin.ThenFunc(viewAdminCreateNotification))
+	router.Handle("/admin/repository/{rid:[0-9]+}/notification/{nid:[0-9]+}", chainAdmin.ThenFunc(viewAdminUpdateNotification))
 	router.Handle("/admin/repository/{rid:[0-9]+}/notification/delete/{nid:[0-9]+}", chainAdmin.ThenFunc(viewAdminDeleteNotification))
 
-	router.Handle("/admin/repository/{rid:[0-9]+}/command/add", chainAdmin.ThenFunc(viewAdminCreateCommand))
-	router.Handle("/admin/repository/{rid:[0-9]+}/command/{cid:[0-9]+}", chainAdmin.ThenFunc(viewAdminEditCommand))
+	router.Handle("/admin/repository/{rid:[0-9]+}/command/create", chainAdmin.ThenFunc(viewAdminCreateCommand))
+	router.Handle("/admin/repository/{rid:[0-9]+}/command/{cid:[0-9]+}", chainAdmin.ThenFunc(viewAdminUpdateCommand))
 	router.Handle("/admin/repository/{rid:[0-9]+}/command/delete/{cid:[0-9]+}", chainAdmin.ThenFunc(viewAdminDeleteCommand))
 
 	// add rice box to serve static files. Do not use the full middleware stack but

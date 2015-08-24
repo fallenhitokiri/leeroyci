@@ -5,7 +5,7 @@
 {{ define "content" }}
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
-        <h1>Users <a href="/admin/user/add" class="btn btn-primary pull-right">Add User</a></h1>
+        <h1>Users <a href="/admin/user/create" class="btn btn-primary pull-right">Add User</a></h1>
         <ul>
             {{ range .users }}
                 <li><a href="/admin/user/{{ .ID }}">{{ .FirstName }} {{ .LastName }}</a>

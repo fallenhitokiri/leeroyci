@@ -19,7 +19,7 @@ type commandAdminForm struct {
 	Execute string `schema:"execute"`
 }
 
-func (c commandAdminForm) add(request *http.Request, repo *database.Repository) error {
+func (c commandAdminForm) create(request *http.Request, repo *database.Repository) error {
 	err := request.ParseForm()
 
 	if err != nil {
@@ -89,7 +89,7 @@ func viewAdminCreateCommand(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == "POST" {
-		err := commandAdminForm{}.add(r, repo)
+		err := commandAdminForm{}.create(r, repo)
 
 		if err != nil {
 			ctx["error"] = err.Error()
@@ -103,7 +103,7 @@ func viewAdminCreateCommand(w http.ResponseWriter, r *http.Request) {
 	render(w, r, template, ctx)
 }
 
-func viewAdminEditCommand(w http.ResponseWriter, r *http.Request) {
+func viewAdminUpdateCommand(w http.ResponseWriter, r *http.Request) {
 	template := "command/admin/update.html"
 	ctx := make(responseContext)
 

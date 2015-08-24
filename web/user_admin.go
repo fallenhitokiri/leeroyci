@@ -18,8 +18,8 @@ type userAdminForm struct {
 	Admin     bool   `schema:"is_admin"`
 }
 
-// add creates a new user in the system.
-func (u userAdminForm) add(request *http.Request) error {
+// create creates a new user in the system.
+func (u userAdminForm) create(request *http.Request) error {
 	err := request.ParseForm()
 
 	if err != nil {
@@ -96,7 +96,7 @@ func viewAdminCreateUser(w http.ResponseWriter, r *http.Request) {
 	ctx := make(responseContext)
 
 	if r.Method == "POST" {
-		err := userAdminForm{}.add(r)
+		err := userAdminForm{}.create(r)
 
 		if err != nil {
 			ctx["error"] = err.Error()
@@ -109,8 +109,8 @@ func viewAdminCreateUser(w http.ResponseWriter, r *http.Request) {
 	render(w, r, template, ctx)
 }
 
-// viewAdminEditUser edits a user for a given uid.
-func viewAdminEditUser(w http.ResponseWriter, r *http.Request) {
+// viewAdminUpdateUser edits a user for a given uid.
+func viewAdminUpdateUser(w http.ResponseWriter, r *http.Request) {
 	template := "user/admin/update.html"
 	ctx := make(responseContext)
 

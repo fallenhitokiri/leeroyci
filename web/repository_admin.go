@@ -19,7 +19,7 @@ type repositoryAdminForm struct {
 	AccessKey string `schema:"access_key"`
 }
 
-func (r repositoryAdminForm) add(request *http.Request) error {
+func (r repositoryAdminForm) create(request *http.Request) error {
 	err := request.ParseForm()
 
 	if err != nil {
@@ -93,7 +93,7 @@ func viewAdminCreateRepository(w http.ResponseWriter, r *http.Request) {
 	ctx := make(responseContext)
 
 	if r.Method == "POST" {
-		err := repositoryAdminForm{}.add(r)
+		err := repositoryAdminForm{}.create(r)
 
 		if err != nil {
 			ctx["error"] = err.Error()
@@ -106,7 +106,7 @@ func viewAdminCreateRepository(w http.ResponseWriter, r *http.Request) {
 	render(w, r, template, ctx)
 }
 
-func viewAdminEditRepository(w http.ResponseWriter, r *http.Request) {
+func viewAdminUpdateRepository(w http.ResponseWriter, r *http.Request) {
 	template := "repository/admin/update.html"
 	ctx := make(responseContext)
 
