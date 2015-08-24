@@ -1,6 +1,7 @@
 package web
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -19,11 +20,11 @@ type repositoryAdminForm struct {
 	AccessKey string `schema:"access_key"`
 }
 
-func (r repositoryAdminForm) create(request *http.Request) error {
+func (r repositoryAdminForm) create(request *http.Request) (*database.Repository, error) {
 	err := request.ParseForm()
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	decoder := schema.NewDecoder()
@@ -32,10 +33,10 @@ func (r repositoryAdminForm) create(request *http.Request) error {
 	err = decoder.Decode(form, request.PostForm)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	_, err = database.CreateRepository(
+	repo, err := database.CreateRepository(
 		form.Name,
 		form.URL,
 		form.AccessKey,
@@ -43,7 +44,7 @@ func (r repositoryAdminForm) create(request *http.Request) error {
 		form.StatusPR,
 	)
 
-	return err
+	return repo, err
 }
 
 func (r repositoryAdminForm) update(request *http.Request, rid int64) error {
@@ -93,12 +94,13 @@ func viewAdminCreateRepository(w http.ResponseWriter, r *http.Request) {
 	ctx := make(responseContext)
 
 	if r.Method == "POST" {
-		err := repositoryAdminForm{}.create(r)
+		repo, err := repositoryAdminForm{}.create(r)
 
 		if err != nil {
 			ctx["error"] = err.Error()
 		} else {
-			http.Redirect(w, r, "/admin/repositories", 302)
+			uri := fmt.Sprintf("/admin/repository/%d", repo.ID)
+			http.Redirect(w, r, uri, 302)
 			return
 		}
 	}
