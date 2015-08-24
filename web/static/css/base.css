@@ -1,4 +1,10 @@
 body {
     padding-top:70px;
+    padding-bottom:20px;
     font-size: 1.3em;
+}
+
+.navbar-brand img {
+    height:30px;
+    margin-top: -5px;
 }
