@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	database.NewDatabase()
+	database.NewDatabase("", "")
 	go runner.Runner()
 
 	router := web.Routes()

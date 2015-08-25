@@ -2,6 +2,7 @@ package web
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
@@ -47,7 +48,7 @@ func (u userAdminForm) create(request *http.Request) error {
 }
 
 // update updates an existing user based on the form.
-func (u userAdminForm) update(request *http.Request, uid string) error {
+func (u userAdminForm) update(request *http.Request, uid int64) error {
 	err := request.ParseForm()
 
 	if err != nil {
@@ -115,10 +116,10 @@ func viewAdminUpdateUser(w http.ResponseWriter, r *http.Request) {
 	ctx := make(responseContext)
 
 	vars := mux.Vars(r)
-	uid := vars["uid"]
+	uid, _ := strconv.Atoi(vars["uid"])
 
 	if r.Method == "POST" {
-		err := userAdminForm{}.update(r, uid)
+		err := userAdminForm{}.update(r, int64(uid))
 
 		if err == nil {
 			ctx["message"] = "Update successful."
@@ -127,7 +128,7 @@ func viewAdminUpdateUser(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	user, err := database.GetUserByID(uid)
+	user, err := database.GetUserByID(int64(uid))
 
 	if err != nil {
 		ctx["error"] = err.Error()
@@ -141,9 +142,9 @@ func viewAdminUpdateUser(w http.ResponseWriter, r *http.Request) {
 // viewAdminDeleteUser deletes a user for a given uid.
 func viewAdminDeleteUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	uid := vars["uid"]
+	uid, _ := strconv.Atoi(vars["uid"])
 
-	user, err := database.GetUserByID(uid)
+	user, err := database.GetUserByID(int64(uid))
 
 	if err == nil {
 		user.Delete()

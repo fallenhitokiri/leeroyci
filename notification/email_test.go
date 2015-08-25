@@ -7,7 +7,6 @@ import (
 )
 
 func TestEmailSubject(t *testing.T) {
-	database.NewDatabase()
 	repo, _ := database.CreateRepository("repo", "bar", "accessKey", false, false)
 	job := database.CreateJob(repo, "branch", "1234", "commitURL", "foo", "bar")
 	job.TasksDone()

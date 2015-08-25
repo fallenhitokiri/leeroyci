@@ -6,12 +6,10 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	os.Setenv("DATABASE_URL", "sqlite3 :memory:")
-	NewDatabase()
+	NewDatabase("sqlite3", ":memory:")
 
 	i := m.Run()
 
-	os.Unsetenv("DATABASE_URL")
 	os.Exit(i)
 }
 
@@ -30,7 +28,7 @@ func TestEnvURL(t *testing.T) {
 		t.Error("Wrong driver", d)
 	}
 
-	if s != ":memory:" {
+	if s != "/Users/timo/tmp/leeory.sqlite3" {
 		t.Error("Wrong connection string", s)
 	}
 }

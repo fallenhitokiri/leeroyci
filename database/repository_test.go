@@ -74,3 +74,24 @@ func TestAddCommandGetCommandDifferentKind(t *testing.T) {
 		t.Error("Wrong number of commands", len(coms))
 	}
 }
+
+func TestGetRepositoryByID(t *testing.T) {
+	repo, _ := CreateRepository("", "", "", false, false)
+	_, err := GetRepositoryByID(repo.ID)
+
+	if err != nil {
+		t.Error(err)
+	}
+}
+
+func TestListRepositories(t *testing.T) {
+	db.Exec("DELETE FROM repositories WHERE id > 0")
+	CreateRepository("", "", "", false, false)
+	CreateRepository("", "", "", false, false)
+	CreateRepository("", "", "", false, false)
+	repos := ListRepositories()
+
+	if len(repos) != 3 {
+		t.Error("Wrong repository count", len(repos))
+	}
+}

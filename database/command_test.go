@@ -26,3 +26,39 @@ func TestCommandCRUD(t *testing.T) {
 		t.Error("Not deleted")
 	}
 }
+
+func TestWrongKind(t *testing.T) {
+	repo, _ := CreateRepository("", "", "", false, false)
+	_, err := CreateCommand(repo, "name", "execute", "branch", "baz")
+
+	if err == nil {
+		t.Error("No error")
+	}
+}
+
+func TestCommandLogPassed(t *testing.T) {
+	log := CommandLog{Return: ""}
+
+	if log.Passed() == false {
+		t.Error("Passed not true")
+	}
+
+	log.Return = "1"
+
+	if log.Passed() == true {
+		t.Error("Passed not false")
+	}
+}
+
+func TestCommandLogCR(t *testing.T) {
+	repo, _ := CreateRepository("asdf", "", "", false, false)
+	com, _ := CreateCommand(repo, "name", "execute", "branch", CommandKindBuild)
+	job := CreateJob(repo, "branch", "commit", "commitURL", "name", "email")
+	CreateCommandLog(com, job, "", "foo")
+
+	got := GetCommandLogsForJob(job.ID)
+
+	if len(got) != 1 {
+		t.Error("Wrong length", len(got))
+	}
+}

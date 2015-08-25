@@ -16,10 +16,12 @@ var db gorm.DB
 var Configured bool
 
 // NewDatabase established a database connection and stores it in `db`.
-func NewDatabase() error {
-	d, s := envURL()
+func NewDatabase(driver, options string) error {
+	if driver == "" {
+		driver, options = envURL()
+	}
 
-	sql, err := gorm.Open(d, s)
+	sql, err := gorm.Open(driver, options)
 
 	if err != nil {
 		return err

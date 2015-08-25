@@ -56,7 +56,7 @@ func GetUserBySession(key string) (*User, error) {
 }
 
 // GetUserByID returns the user for a given ID.
-func GetUserByID(id string) (*User, error) {
+func GetUserByID(id int64) (*User, error) {
 	u := &User{}
 	db.Where("ID = ?", id).First(u)
 
@@ -125,15 +125,23 @@ func (u *User) Delete() error {
 
 // Add a session to this user.
 func (u *User) NewSession() string {
-	u.Session = u.generateSessionID(sessionDictionary, sessionLength)
-	db.Save(u)
-	return u.Session
+	for {
+		key := generateSessionID(u.Email, sessionDictionary, sessionLength)
+
+		_, err := GetUserBySession(key)
+
+		if err != nil {
+			u.Session = key
+			db.Save(u)
+			return u.Session
+		}
+	}
 }
 
 // generateSessionID generates a new session ID for a user combining the
 // email address and a random string.
 // dictionary and length are optional parameters used for testing.
-func (u *User) generateSessionID(dictionary string, length int) string {
+func generateSessionID(email, dictionary string, length int) string {
 	var random = make([]byte, length)
 	rand.Read(random)
 
@@ -141,7 +149,7 @@ func (u *User) generateSessionID(dictionary string, length int) string {
 		random[k] = dictionary[v%byte(len(dictionary))]
 	}
 
-	joined := strings.Join([]string{u.Email, string(random)}, "")
+	joined := strings.Join([]string{email, string(random)}, "")
 
 	hash := sha512.New()
 	hash.Write([]byte(joined))

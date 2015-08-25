@@ -16,7 +16,6 @@ func TestEndpointCampfire(t *testing.T) {
 }
 
 func TestPayloadCampfire(t *testing.T) {
-	database.NewDatabase()
 	repo, _ := database.CreateRepository("repo", "", "", false, false)
 	job := database.CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
 
