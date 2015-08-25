@@ -62,7 +62,7 @@ func CreateCommand(repo *Repository, name, execute, branch, kind string) (*Comma
 }
 
 // GetCommand returns a command for a specific ID.
-func GetCommand(id string) (*Command, error) {
+func GetCommand(id int64) (*Command, error) {
 	c := &Command{}
 	db.Where("ID = ?", id).First(&c)
 	return c, nil

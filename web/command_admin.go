@@ -109,7 +109,7 @@ func viewAdminUpdateCommand(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	rid, _ := strconv.Atoi(vars["rid"])
-	cid := vars["cid"]
+	cid, _ := strconv.Atoi(vars["cid"])
 
 	repo, err := database.GetRepositoryByID(int64(rid))
 
@@ -118,7 +118,7 @@ func viewAdminUpdateCommand(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	com, err := database.GetCommand(cid)
+	com, err := database.GetCommand(int64(cid))
 
 	if err != nil {
 		render(w, r, "403.html", make(responseContext)) // TODO: create 500
@@ -149,9 +149,9 @@ func viewAdminUpdateCommand(w http.ResponseWriter, r *http.Request) {
 func viewAdminDeleteCommand(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	rid := vars["rid"]
-	cid := vars["cid"]
+	cid, _ := strconv.Atoi(vars["cid"])
 
-	com, err := database.GetCommand(cid)
+	com, err := database.GetCommand(int64(cid))
 
 	if err == nil {
 		com.Delete()
