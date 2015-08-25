@@ -102,7 +102,7 @@ func viewAdminUpdateNotification(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	rid, _ := strconv.Atoi(vars["rid"])
-	nid := vars["nid"]
+	nid, _ := strconv.Atoi(vars["nid"])
 
 	repo, err := database.GetRepositoryByID(int64(rid))
 
@@ -111,7 +111,7 @@ func viewAdminUpdateNotification(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	not, err := database.GetNotification(nid)
+	not, err := database.GetNotification(int64(nid))
 
 	if err != nil {
 		render(w, r, "403.html", make(responseContext)) // TODO: create 500
@@ -143,9 +143,9 @@ func viewAdminUpdateNotification(w http.ResponseWriter, r *http.Request) {
 func viewAdminDeleteNotification(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	rid := vars["rid"]
-	nid := vars["nid"]
+	nid, _ := strconv.Atoi(vars["nid"])
 
-	not, err := database.GetNotification(nid)
+	not, err := database.GetNotification(int64(nid))
 
 	if err == nil {
 		not.Delete()

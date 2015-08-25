@@ -47,7 +47,7 @@ func CreateNotification(service, arguments string, repo *Repository) (*Notificat
 }
 
 // GetNotification returns a notification.
-func GetNotification(id string) (*Notification, error) {
+func GetNotification(id int64) (*Notification, error) {
 	not := &Notification{}
 	db.Where("id = ?", id).First(&not)
 	return not, nil
