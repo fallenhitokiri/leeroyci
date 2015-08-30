@@ -42,7 +42,7 @@ type CommandLog struct {
 	JobID int64
 }
 
-// AddCommand adds a new command to a repository.
+// CreateCommand adds a new command to a repository.
 func CreateCommand(repo *Repository, name, execute, branch, kind string) (*Command, error) {
 	if kind != CommandKindTest && kind != CommandKindBuild && kind != CommandKindDeploy {
 		return nil, errors.New("wrong kind")
@@ -80,7 +80,7 @@ func (c *Command) Update(name, kind, branch, execute string) error {
 	return nil
 }
 
-// DeleteCommand deletes a command.
+// Delete deletes a command.
 func (c *Command) Delete() {
 	db.Delete(c)
 }
@@ -99,6 +99,7 @@ func CreateCommandLog(command *Command, job *Job, ret, out string) *CommandLog {
 	return &log
 }
 
+// GetCommandLogsForJob returns all logs for a job.
 func GetCommandLogsForJob(id int64) []*CommandLog {
 	var logs []*CommandLog
 	db.Where("job_id = ?", id).Find(&logs)

@@ -26,7 +26,7 @@ type User struct {
 
 // ListUsers returns a list of all users.
 func ListUsers() []*User {
-	u := make([]*User, 0)
+	var u []*User
 	db.Find(&u)
 	return u
 }
@@ -116,14 +116,14 @@ func (u *User) Update(email, firstName, lastName, password string, admin bool) (
 	return u, nil
 }
 
-// DeleteUser deletes an existing user.
+// Delete this user.
 func (u *User) Delete() error {
 	db.Delete(u)
 
 	return nil
 }
 
-// Add a session to this user.
+// NewSession generates a session key and stores it.
 func (u *User) NewSession() string {
 	for {
 		key := generateSessionID(u.Email, sessionDictionary, sessionLength)

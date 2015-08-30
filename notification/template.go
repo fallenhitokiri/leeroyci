@@ -12,14 +12,18 @@ import (
 	"github.com/fallenhitokiri/leeroyci/database"
 )
 
+// Supported events
 const (
-	EVENT_TEST         = "test"
-	EVENT_BUILD        = "build"
-	EVENT_DEPLOY_START = "deploy-start"
-	EVENT_DEPLOY_END   = "deploy-end"
+	EventTest        = "test"
+	EventBuild       = "build"
+	EventDeployStart = "deploy-start"
+	EventDeployEnd   = "deploy-end"
+)
 
-	TYPE_HTML = "html"
-	TYPE_TEXT = "text"
+// Event notification formats
+const (
+	TypeHTML = "html"
+	TypeText = "text"
 )
 
 // message returns a formatted message to send through a notification system.

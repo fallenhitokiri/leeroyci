@@ -17,7 +17,7 @@ func TestBuildSlack(t *testing.T) {
 		Repository: repo,
 	}
 
-	_, err := payloadSlack(&job, EVENT_BUILD, "foo")
+	_, err := payloadSlack(&job, EventBuild, "foo")
 
 	if err != nil {
 		t.Error(err)

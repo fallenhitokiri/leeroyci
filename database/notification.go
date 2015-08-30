@@ -16,7 +16,7 @@ const (
 	// NotificationServiceCampfire type for campfire notifications.
 	NotificationServiceCampfire = "campfire"
 
-	// NotificationServiceHipChat type for hipchat notifications.
+	// NotificationServiceHipchat type for hipchat notifications.
 	NotificationServiceHipchat = "hipchat"
 )
 
@@ -60,7 +60,7 @@ func GetNotificationForRepoAndType(repo *Repository, service string) (*Notificat
 	return not, nil
 }
 
-// UpdateNotification updates a notification.
+// Update this notification.
 func (n *Notification) Update(service, arguments string) error {
 	n.Service = service
 	n.Arguments = arguments
@@ -68,7 +68,7 @@ func (n *Notification) Update(service, arguments string) error {
 	return nil
 }
 
-// DeleteNotification deletes a notification.
+// Delete this notification.
 func (n *Notification) Delete() {
 	db.Delete(n)
 }

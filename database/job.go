@@ -134,6 +134,7 @@ func (j *Job) DeployDone() {
 	db.Save(j)
 }
 
+// URL returns the URL for this job, including the configured server URL.
 func (j *Job) URL() string {
 	config := GetConfig()
 	return fmt.Sprintf("%s/%d", config.URL, j.ID)

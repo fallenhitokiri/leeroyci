@@ -8,13 +8,13 @@ import (
 )
 
 func TestGetTemplate(t *testing.T) {
-	_, err := getTemplate("email", EVENT_TEST, "text")
+	_, err := getTemplate("email", EventTest, "text")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	_, err = getTemplate("foo", EVENT_TEST, "email-asdf")
+	_, err = getTemplate("foo", EventTest, "email-asdf")
 
 	if err == nil {
 		t.Error("No error")
@@ -30,7 +30,7 @@ func TestMessage(t *testing.T) {
 		Email:     "foo@bar.tld",
 	}
 
-	tmpl := message(&j, "email", EVENT_TEST, "text")
+	tmpl := message(&j, "email", EventTest, "text")
 
 	if !strings.Contains(tmpl, "branch: foo") {
 		t.Error("branch name not found", tmpl)

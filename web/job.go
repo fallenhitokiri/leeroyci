@@ -24,7 +24,7 @@ func viewListJobs(w http.ResponseWriter, r *http.Request) {
 
 	ctx["jobs"] = database.GetJobs(offset, limit)
 
-	prev, next, first := previous_next_number(offset)
+	prev, next, first := previousNextNumber(offset)
 
 	ctx["previous_offset"] = prev
 	ctx["next_offset"] = next
@@ -48,7 +48,7 @@ func viewDetailJob(w http.ResponseWriter, r *http.Request) {
 }
 
 // returns the offset for the previous and next page.
-func previous_next_number(offset int) (int, int, bool) {
+func previousNextNumber(offset int) (int, int, bool) {
 	count := database.NumberOfJobs()
 	prev := offset - limit
 	next := offset + limit

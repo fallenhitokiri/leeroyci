@@ -54,7 +54,7 @@ func sendSlack(job *database.Job, event string) {
 
 // Build the payload to send to Slack.
 func payloadSlack(job *database.Job, event, channel string) ([]byte, error) {
-	msg := message(job, database.NotificationServiceSlack, event, TYPE_TEXT)
+	msg := message(job, database.NotificationServiceSlack, event, TypeText)
 
 	payload := slackPayload{
 		Channel:  channel,

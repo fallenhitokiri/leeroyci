@@ -83,7 +83,7 @@ func sendHipchat(job *database.Job, event string) {
 
 // Convert a job to a hipchat payload.
 func payloadHipchat(job *database.Job, event, channel string) hipchatPayload {
-	msg := message(job, database.NotificationServiceHipchat, event, TYPE_TEXT)
+	msg := message(job, database.NotificationServiceHipchat, event, TypeText)
 
 	return hipchatPayload{
 		Color:   "green",

@@ -52,7 +52,7 @@ func GetRepositoryByID(id int64) (*Repository, error) {
 	return repo, nil
 }
 
-// UpdateRepository updates an existing repository.
+// Update this repository.
 func (r *Repository) Update(name, url, accessKey string, closePR, statusPR bool) (*Repository, error) {
 	r.Name = name
 	r.StatusPR = statusPR
@@ -66,12 +66,12 @@ func (r *Repository) Update(name, url, accessKey string, closePR, statusPR bool)
 
 // ListRepositories returns all repositories.
 func ListRepositories() []*Repository {
-	repos := make([]*Repository, 0)
+	var repos []*Repository
 	db.Find(&repos)
 	return repos
 }
 
-// DeleteRepository deletes an existing repository.
+// Delete this repository.
 func (r *Repository) Delete() error {
 	db.Delete(r)
 
@@ -87,7 +87,7 @@ func (r *Repository) Jobs() []Job {
 	return jobs
 }
 
-// Commands returns all commands for a repository, branch and kind
+// GetCommands returns all commands for a repository, branch and kind
 func (r *Repository) GetCommands(branch, kind string) []Command {
 	commands := []Command{}
 	branchSpecific := []Command{}

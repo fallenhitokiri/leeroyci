@@ -11,10 +11,10 @@ func TestEmailSubject(t *testing.T) {
 	job := database.CreateJob(repo, "branch", "1234", "commitURL", "foo", "bar")
 	job.TasksDone()
 
-	build := emailSubject(job, EVENT_BUILD)
-	test := emailSubject(job, EVENT_TEST)
-	deployStart := emailSubject(job, EVENT_DEPLOY_START)
-	deployEnd := emailSubject(job, EVENT_DEPLOY_END)
+	build := emailSubject(job, EventBuild)
+	test := emailSubject(job, EventTest)
+	deployStart := emailSubject(job, EventDeployStart)
+	deployEnd := emailSubject(job, EventDeployEnd)
 
 	if build != "repo/branch build success" {
 		t.Error("Wrong message", build)

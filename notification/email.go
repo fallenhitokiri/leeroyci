@@ -17,8 +17,8 @@ import (
 func sendEmail(job *database.Job, event string) {
 	mailServer := database.GetMailServer()
 
-	htmlMessage := message(job, database.NotificationServiceEmail, event, TYPE_HTML)
-	txtMessage := message(job, database.NotificationServiceEmail, event, TYPE_TEXT)
+	htmlMessage := message(job, database.NotificationServiceEmail, event, TypeHTML)
+	txtMessage := message(job, database.NotificationServiceEmail, event, TypeText)
 	subject := emailSubject(job, event)
 	recipient := mail.Address{
 		Name:    job.Name,
@@ -42,19 +42,19 @@ func sendEmail(job *database.Job, event string) {
 
 // emailSubject returns the subject for an email.
 func emailSubject(job *database.Job, event string) string {
-	if event == EVENT_BUILD {
+	if event == EventBuild {
 		return fmt.Sprintf("%s/%s build %s", job.Repository.Name, job.Branch, job.Status())
 	}
 
-	if event == EVENT_TEST {
+	if event == EventTest {
 		return fmt.Sprintf("%s/%s tests %s", job.Repository.Name, job.Branch, job.Status())
 	}
 
-	if event == EVENT_DEPLOY_START {
+	if event == EventDeployStart {
 		return fmt.Sprintf("%s/%s deployment started", job.Repository.Name, job.Branch)
 	}
 
-	if event == EVENT_DEPLOY_END {
+	if event == EventDeployEnd {
 		return fmt.Sprintf("%s/%s deploy %s", job.Repository.Name, job.Branch, job.Status())
 	}
 

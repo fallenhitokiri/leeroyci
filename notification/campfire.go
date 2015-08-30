@@ -71,7 +71,7 @@ func sendCampfire(job *database.Job, event string) {
 
 // Build the payload to send to Campfire.
 func payloadCampfire(job *database.Job, event string) ([]byte, error) {
-	msg := message(job, database.NotificationServiceCampfire, event, TYPE_TEXT)
+	msg := message(job, database.NotificationServiceCampfire, event, TypeText)
 
 	p := campfirePayload{
 		Message: &campfireMessage{

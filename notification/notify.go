@@ -6,6 +6,8 @@ import (
 	"github.com/fallenhitokiri/leeroyci/database"
 )
 
+// Notify sends all relevant notifications for a job that are configured for
+// the jobs repository.
 func Notify(job *database.Job, event string) {
 	repo, err := database.GetRepositoryByID(job.RepositoryID)
 

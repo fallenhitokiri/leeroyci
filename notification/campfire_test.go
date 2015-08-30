@@ -19,7 +19,7 @@ func TestPayloadCampfire(t *testing.T) {
 	repo, _ := database.CreateRepository("repo", "", "", false, false)
 	job := database.CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
 
-	pay, err := payloadCampfire(job, EVENT_BUILD)
+	pay, err := payloadCampfire(job, EventBuild)
 
 	if err != nil {
 		t.Error(err.Error())
