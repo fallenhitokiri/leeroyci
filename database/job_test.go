@@ -144,3 +144,37 @@ func TestJobURL(t *testing.T) {
 		t.Error("Wrong URL", job.URL())
 	}
 }
+
+func TestJobShouldBuild(t *testing.T) {
+	AddConfig("secret", "url", "cert", "key")
+	repo, _ := CreateRepository("foo", "baz", "accessKey", false, false)
+	job := CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
+	CreateCommand(repo, "name", "execute", "branch", CommandKindTest)
+
+	if job.ShouldBuild() == true {
+		t.Error("ShouldBuild = true")
+	}
+
+	CreateCommand(repo, "name", "execute", "branch", CommandKindBuild)
+
+	if job.ShouldBuild() == false {
+		t.Error("ShouldBuild = false")
+	}
+}
+
+func TestJobShouldDeploy(t *testing.T) {
+	AddConfig("secret", "url", "cert", "key")
+	repo, _ := CreateRepository("foo", "baz", "accessKey", false, false)
+	job := CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
+	CreateCommand(repo, "name", "execute", "branch", CommandKindTest)
+
+	if job.ShouldDeploy() == true {
+		t.Error("ShouldDeploy = true")
+	}
+
+	CreateCommand(repo, "name", "execute", "branch", CommandKindDeploy)
+
+	if job.ShouldDeploy() == false {
+		t.Error("ShouldDeploy = false")
+	}
+}

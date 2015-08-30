@@ -29,14 +29,14 @@ func Runner() {
 		run(job, repository, database.CommandKindTest)
 		notification.Notify(job, notification.EventTest)
 
-		if job.Passed() {
+		if job.Passed() && job.ShouldBuild() {
 			run(job, repository, database.CommandKindBuild)
 			notification.Notify(job, notification.EventBuild)
 		}
 
 		job.TasksDone()
 
-		if job.Passed() {
+		if job.Passed() && job.ShouldDeploy() {
 			notification.Notify(job, notification.EventDeployStart)
 			run(job, repository, database.CommandKindDeploy)
 			job.DeployDone()

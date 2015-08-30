@@ -139,3 +139,25 @@ func (j *Job) URL() string {
 	config := GetConfig()
 	return fmt.Sprintf("%s/%d", config.URL, j.ID)
 }
+
+// ShouldBuild returns true if there are build commands for this job.
+func (j *Job) ShouldBuild() bool {
+	commands := j.Repository.GetCommands(j.Branch, CommandKindBuild)
+
+	if len(commands) > 0 {
+		return true
+	}
+
+	return false
+}
+
+// ShouldDeploy returns true if there are deploy commands for this job.
+func (j *Job) ShouldDeploy() bool {
+	commands := j.Repository.GetCommands(j.Branch, CommandKindDeploy)
+
+	if len(commands) > 0 {
+		return true
+	}
+
+	return false
+}

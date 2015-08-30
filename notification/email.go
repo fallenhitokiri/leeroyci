@@ -43,11 +43,11 @@ func sendEmail(job *database.Job, event string) {
 // emailSubject returns the subject for an email.
 func emailSubject(job *database.Job, event string) string {
 	if event == EventBuild {
-		return fmt.Sprintf("%s/%s build %s", job.Repository.Name, job.Branch, job.Status())
+		return fmt.Sprintf("%s/%s build", job.Repository.Name, job.Branch)
 	}
 
 	if event == EventTest {
-		return fmt.Sprintf("%s/%s tests %s", job.Repository.Name, job.Branch, job.Status())
+		return fmt.Sprintf("%s/%s tests", job.Repository.Name, job.Branch)
 	}
 
 	if event == EventDeployStart {

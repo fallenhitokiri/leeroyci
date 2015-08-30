@@ -16,11 +16,11 @@ func TestEmailSubject(t *testing.T) {
 	deployStart := emailSubject(job, EventDeployStart)
 	deployEnd := emailSubject(job, EventDeployEnd)
 
-	if build != "repo/branch build success" {
+	if build != "repo/branch build" {
 		t.Error("Wrong message", build)
 	}
 
-	if test != "repo/branch tests success" {
+	if test != "repo/branch tests" {
 		t.Error("Wrong message", test)
 	}
 

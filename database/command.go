@@ -37,7 +37,7 @@ type CommandLog struct {
 	ID     int64
 	Name   string // we only keep the name, no reference to the command, in case it changes.
 	Return string
-	Output string
+	Output string `sql:"type:text"`
 
 	JobID int64
 }
