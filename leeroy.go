@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/fallenhitokiri/leeroyci/database"
@@ -13,5 +14,10 @@ func main() {
 	go runner.Runner()
 
 	router := web.Routes()
-	http.ListenAndServe(":8000", router)
+	config := database.GetConfig()
+	if config.Cert != "" {
+		log.Fatalln(http.ListenAndServeTLS(":8000", config.Cert, config.Key, router))
+	} else {
+		log.Fatalln(http.ListenAndServe(":8000", router))
+	}
 }
