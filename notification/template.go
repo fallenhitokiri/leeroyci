@@ -59,7 +59,7 @@ func message(job *database.Job, service, event, kind string) string {
 
 // getTemplate returns the template to use for a notification.
 func getTemplate(service, event, kind string) (*template.Template, error) {
-	box, err := rice.FindBox("templates")
+	box, err := rice.FindBox("messages")
 	if err != nil {
 		return nil, err
 	}
