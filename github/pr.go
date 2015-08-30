@@ -79,7 +79,7 @@ func (p *pullRequestCallback) updatePR() {
 		}
 
 		nilTime := time.Time{}
-		if job.TasksFinished == nilTime {
+		if !job.TasksFinished.After(nilTime) {
 			time.Sleep(10 * time.Second)
 			continue
 		}

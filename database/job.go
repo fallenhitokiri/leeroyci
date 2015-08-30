@@ -3,7 +3,6 @@ package database
 
 import (
 	"fmt"
-	//"log"
 	"time"
 )
 
@@ -112,7 +111,8 @@ func (j *Job) Passed() bool {
 // Status returns the current status fo the job.
 func (j *Job) Status() string {
 	n := time.Time{}
-	if j.TasksFinished != n {
+
+	if j.TasksFinished.After(n) {
 		if j.Passed() {
 			return JobStatusSuccess
 		}
