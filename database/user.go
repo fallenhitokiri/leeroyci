@@ -4,6 +4,7 @@ package database
 import (
 	"crypto/rand"
 	"crypto/sha512"
+	"encoding/base64"
 	"errors"
 	"strings"
 
@@ -154,7 +155,7 @@ func generateSessionID(email, dictionary string, length int) string {
 	hash := sha512.New()
 	hash.Write([]byte(joined))
 
-	return string(hash.Sum(nil))
+	return base64.StdEncoding.EncodeToString(hash.Sum(nil))
 }
 
 // HashPassword generates a hash using bcrypt.
