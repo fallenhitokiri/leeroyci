@@ -1,0 +1,57 @@
+{{ define "title" }}Update Mailserver{{ end }}
+
+{{ define "body" }}admin-mailserver-update{{ end }}
+
+{{ define "content" }}
+<div class="row">
+    <div class="col-md-6">
+        <form action="/admin/mailserver/update" method="POST">
+            <fieldset>
+                <h1>{{ .repository.Name }}</h1>
+                {{ if .message }}
+                    <div class="alert alert-success">
+                        {{ .message }}
+                    </div>
+                {{ end }}
+
+                {{ if .error }}
+                    <div class="alert alert-danger">
+                        {{ .error }}
+                    </div>
+                {{ end }}
+
+                <div class="form-group">
+                    <label for="host">SMTP Host</label>
+                    <input type="text" class="form-control" id="host" name="host" placeholder="Mailserver Host" value="{{ .server.Host }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="port">SMTP Port</label>
+                    <input type="text" class="form-control" id="port" name="port" placeholder="Port" value="{{ .server.Port }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="user">SMTP User</label>
+                    <input type="text" class="form-control" id="user" name="user" placeholder="User" value="{{ .server.User }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">SMTP Password</label>
+                    <input type="text" class="form-control" id="password" name="password" placeholder="password" value="{{ .server.Password }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="sender">Sender</label>
+                    <input type="text" class="form-control" id="sender" name="sender" placeholder="Mail Sender" value="{{ .server.Sender }}">
+                </div>
+
+                <button class="btn btn-info">Update Mailserver</button>
+            </fieldset>
+        </form>
+    </div>
+</div>
+{{ end }}
+
+{{ define "js" }}{{ end }}
+
+{{ define "css" }}{{ end }}

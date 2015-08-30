@@ -38,6 +38,8 @@ func Routes() *mux.Router {
 	router.Handle("/admin/repository/{rid:[0-9]+}", chainAdmin.ThenFunc(viewAdminUpdateRepository))
 	router.Handle("/admin/repository/delete/{rid:[0-9]+}", chainAdmin.ThenFunc(viewAdminDeleteRepository))
 
+	router.Handle("/admin/mailserver/update", chainAdmin.ThenFunc(viewAdminUpdateMailserver))
+
 	router.Handle("/admin/repository/{rid:[0-9]+}/notification/create", chainAdmin.ThenFunc(viewAdminCreateNotification))
 	router.Handle("/admin/repository/{rid:[0-9]+}/notification/{nid:[0-9]+}", chainAdmin.ThenFunc(viewAdminUpdateNotification))
 	router.Handle("/admin/repository/{rid:[0-9]+}/notification/delete/{nid:[0-9]+}", chainAdmin.ThenFunc(viewAdminDeleteNotification))
