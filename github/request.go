@@ -45,5 +45,5 @@ func addHeaders(token string, req *http.Request) {
 	t := base64.URLEncoding.EncodeToString([]byte(token))
 
 	req.Header.Add("content-type", "application/json")
-	req.Header.Add("Authorization", "Basic "+t)
+	req.Header.Add("Authorization", "token "+t)
 }
