@@ -95,24 +95,15 @@ func (r *Repository) GetCommands(branch, kind string) []Command {
 	db.Where(&Command{
 		RepositoryID: r.ID,
 		Kind:         kind,
-		Branch:       "",
-	}).Find(&commands)
-
-	if len(commands) == 0 {
-		return commands
-	}
-
-	existing := []int64{}
-
-	for _, command := range commands {
-		existing = append(existing, command.ID)
-	}
+	}).Where(
+		"branch LIKE ''",
+	).Find(&commands)
 
 	db.Where(&Command{
 		RepositoryID: r.ID,
 		Kind:         kind,
 		Branch:       branch,
-	}).Not("id", existing).Find(&branchSpecific)
+	}).Find(&branchSpecific)
 
 	commands = append(commands, branchSpecific...)
 
