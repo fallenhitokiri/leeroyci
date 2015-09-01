@@ -37,12 +37,18 @@ func Runner() {
 		job.TasksDone()
 
 		if job.Passed() && job.ShouldDeploy() {
-			notification.Notify(job, notification.EventDeployStart)
-			run(job, repository, database.CommandKindDeploy)
-			job.DeployDone()
-			notification.Notify(job, notification.EventDeployEnd)
+			go deploy(job, repository)
 		}
 	}
+}
+
+// deploy is a wrapper around the run commnad to make running the deploy commands
+// in a separate go routine more convenient.
+func deploy(job *database.Job, repository *database.Repository) {
+	notification.Notify(job, notification.EventDeployStart)
+	run(job, repository, database.CommandKindDeploy)
+	job.DeployDone()
+	notification.Notify(job, notification.EventDeployEnd)
 }
 
 // run runs the command that is specified in Command.Execute and creates the

@@ -25,7 +25,7 @@ type pullRequestCallback struct {
 
 type pullRequest struct {
 	URL         string `json:"url"`
-	State       string
+	State       string `json:"state"`
 	CommentsURL string `json:"comments_url"`
 	StatusURL   string `json:"statuses_url"`
 	Head        pullRequestCommit
