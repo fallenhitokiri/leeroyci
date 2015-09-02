@@ -2,6 +2,7 @@
 package database
 
 import (
+	"log"
 	"os"
 	"strings"
 
@@ -62,7 +63,8 @@ func envURL() (string, string) {
 	s := strings.SplitN(dbURL, " ", 2)
 
 	if len(s) != 2 {
-		panic("Invalid DATABASE_URL")
+		log.Println("Invalid DATABASE_URL - using sqlite3 `leeroy.sqlite3`")
+		return "sqlite3", "leeroy.sqlite3"
 	}
 
 	return s[0], s[1]
