@@ -4,7 +4,6 @@ package github
 
 import (
 	"bytes"
-	"encoding/base64"
 	"io/ioutil"
 	"net/http"
 )
@@ -42,8 +41,6 @@ func makeRequest(method string, url string, token string, payload []byte) ([]byt
 // AddHeaders adds all headers to a request to conform to GitHubs API.
 // token is the API token that will be used for the request.
 func addHeaders(token string, req *http.Request) {
-	t := base64.URLEncoding.EncodeToString([]byte(token))
-
 	req.Header.Add("content-type", "application/json")
-	req.Header.Add("Authorization", "token "+t)
+	req.Header.Add("Authorization", "token "+token)
 }
