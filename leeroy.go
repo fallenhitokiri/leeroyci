@@ -16,8 +16,8 @@ func main() {
 	router := web.Routes()
 	config := database.GetConfig()
 	if config.Cert != "" {
-		log.Fatalln(http.ListenAndServeTLS(":8000", config.Cert, config.Key, router))
+		log.Fatalln(http.ListenAndServeTLS(":8082", config.Cert, config.Key, router))
 	} else {
-		log.Fatalln(http.ListenAndServe(":8000", router))
+		log.Fatalln(http.ListenAndServe(":8082", router))
 	}
 }
