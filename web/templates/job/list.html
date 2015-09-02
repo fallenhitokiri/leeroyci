@@ -8,30 +8,30 @@
         {{ if .jobs }}
             <ul class="job-list">
                 {{ range .jobs }}
-                    <a href="/{{ .ID }}">
-                    <li class="job-row job-{{ .Status }}">
-                        <span class="job-info">{{ .Repository.Name }} <strong>{{ .Branch }}</strong></span>
+                    {{ if ne .Status "pending" }}<a href="/{{ .ID }}">{{ end }}
+                        <li class="job-row job-{{ .Status }}">
+                            <span class="job-info">{{ .Repository.Name }} <strong>{{ .Branch }}</strong></span>
 
-                        <span class="tasks">
-                            {{ range .CommandLogs }}
-                                <span class="label {{ if .Passed }}label-success{{ else }}label-danger{{ end }}">{{ .Name }}</span>
-                            {{ end }}
-                        </span>
-
-                        <span class="job-details">
-                            <span class="label label-primary">
-                                {{ .Name }} &lt;{{ .Email }}&gt;
-                            </span>
-                            <span class="label label-default">
-                                {{ .Commit }}
+                            <span class="tasks">
+                                {{ range .CommandLogs }}
+                                    <span class="label {{ if .Passed }}label-success{{ else }}label-danger{{ end }}">{{ .Name }}</span>
+                                {{ end }}
                             </span>
 
-                            <span class="label label-default">
-                                {{ .CreatedAt }}
+                            <span class="job-details">
+                                <span class="label label-primary">
+                                    {{ .Name }} &lt;{{ .Email }}&gt;
+                                </span>
+                                <span class="label label-default">
+                                    {{ .Commit }}
+                                </span>
+
+                                <span class="label label-default">
+                                    {{ .CreatedAt }}
+                                </span>
                             </span>
-                        </span>
-                    </li>
-                    </a>
+                        </li>
+                    {{ if ne .Status "pending" }}</a>{{ end }}
                 {{ end }}
 
                 <li>
