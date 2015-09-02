@@ -67,3 +67,7 @@ func envURL() (string, string) {
 
 	return s[0], s[1]
 }
+
+func NewInMemoryDatabase() {
+	NewDatabase("sqlite3", ":memory:")
+}

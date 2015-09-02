@@ -6,7 +6,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	NewDatabase("sqlite3", ":memory:")
+	NewInMemoryDatabase()
 
 	i := m.Run()
 
