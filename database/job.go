@@ -17,6 +17,7 @@ const (
 type Job struct {
 	ID int64
 
+	TasksStarted   time.Time
 	TasksFinished  time.Time
 	DeployFinished time.Time
 
@@ -157,6 +158,29 @@ func (j *Job) ShouldDeploy() bool {
 
 	if len(commands) > 0 {
 		return true
+	}
+
+	return false
+}
+
+// Started sets the started time to now indicating that this job
+// started running.
+func (j *Job) Started() {
+	j.TasksStarted = time.Now()
+	db.Save(j)
+}
+
+// IsRunning returns true if this job is not finished with all its
+// tasks.
+func (j *Job) IsRunning() bool {
+	nilTime := time.Time{}
+
+	if j.TasksStarted.After(nilTime) {
+		if j.ShouldDeploy() && !j.DeployFinished.After(nilTime) {
+			return true
+		} else if !j.TasksFinished.After(nilTime) {
+			return true
+		}
 	}
 
 	return false

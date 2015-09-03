@@ -178,3 +178,49 @@ func TestJobShouldDeploy(t *testing.T) {
 		t.Error("ShouldDeploy = false")
 	}
 }
+
+func TestJobStarted(t *testing.T) {
+	AddConfig("secret", "url", "cert", "key")
+	repo, _ := CreateRepository("foo", "baz", "accessKey", false, false)
+	job := CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
+
+	job.Started()
+
+	if !job.TasksStarted.After(time.Time{}) {
+		t.Error("No started time.")
+	}
+}
+
+func TestJobIsRunningTasks(t *testing.T) {
+	AddConfig("secret", "url", "cert", "key")
+	repo, _ := CreateRepository("foo", "baz", "accessKey", false, false)
+	job := CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
+
+	if job.IsRunning() {
+		t.Error("Job is running, but should not - no start / end")
+	}
+
+	job.Started()
+
+	if !job.IsRunning() {
+		t.Error("Job is not running, but should - start")
+	}
+
+	job.TasksDone()
+
+	if job.IsRunning() {
+		t.Error("Job is running, but should not - start / end")
+	}
+
+	CreateCommand(repo, "name", "execute", "branch", CommandKindDeploy)
+
+	if !job.IsRunning() {
+		t.Error("Job should be running - deploy, but is not")
+	}
+
+	job.DeployDone()
+
+	if job.IsRunning() {
+		t.Error("Job is running, but should not")
+	}
+}

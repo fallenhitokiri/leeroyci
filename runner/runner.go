@@ -26,6 +26,8 @@ func Runner() {
 			return
 		}
 
+		job.Started()
+
 		run(job, repository, database.CommandKindTest)
 		notification.Notify(job, notification.EventTest)
 

@@ -10,7 +10,10 @@
                 {{ range .jobs }}
                     {{ if ne .Status "pending" }}<a href="/{{ .ID }}">{{ end }}
                         <li class="job-row job-{{ .Status }}">
-                            <span class="job-info">{{ .Repository.Name }} <strong>{{ .Branch }}</strong></span>
+                            <span class="job-info">
+                                {{ .Repository.Name }} <strong>{{ .Branch }}</strong>
+                                <span class="label label-primary pull-right">{{ if .IsRunning }}running{{ end }}</span>
+                            </span>
 
                             <span class="tasks">
                                 {{ range .CommandLogs }}
