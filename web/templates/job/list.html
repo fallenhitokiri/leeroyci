@@ -12,7 +12,22 @@
                         <li class="job-row job-{{ .Status }}">
                             <span class="job-info">
                                 {{ .Repository.Name }} <strong>{{ .Branch }}</strong>
-                                <span class="label label-primary pull-right">{{ if .IsRunning }}running{{ end }}</span>
+
+                                {{ if .IsRunning }}
+                                    <span class="label label-primary pull-right">running</span>
+                                {{ end }}
+
+                                {{ if not .IsRunning }}
+                                    {{ if .Cancelled }}
+                                        <span class="label label-warning pull-right">cancelled</span>
+                                    {{ else }}
+                                        {{ if not .Done }}
+                                            <span class="pull-right">
+                                                <a href="/{{ .ID }}/cancel" class="btn btn-danger">Cancel</a>
+                                            </span>
+                                        {{ end }}
+                                    {{ end }}
+                                {{ end }}
                             </span>
 
                             <span class="tasks">

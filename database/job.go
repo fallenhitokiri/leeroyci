@@ -17,6 +17,7 @@ const (
 type Job struct {
 	ID int64
 
+	Cancelled      bool
 	TasksStarted   time.Time
 	TasksFinished  time.Time
 	DeployFinished time.Time
@@ -46,6 +47,7 @@ func CreateJob(repo *Repository, branch, commit, commitURL, name, email string) 
 		CommitURL:  commitURL,
 		Name:       name,
 		Email:      email,
+		Cancelled:  false,
 	}
 
 	db.Save(j)
@@ -173,15 +175,24 @@ func (j *Job) Started() {
 // IsRunning returns true if this job is not finished with all its
 // tasks.
 func (j *Job) IsRunning() bool {
-	nilTime := time.Time{}
-
-	if j.TasksStarted.After(nilTime) {
-		if j.ShouldDeploy() && !j.DeployFinished.After(nilTime) {
-			return true
-		} else if !j.TasksFinished.After(nilTime) {
-			return true
-		}
+	if j.TasksStarted.After(time.Time{}) && !j.Done() {
+		return true
 	}
-
 	return false
+}
+
+// Done returns true if all commands finished executing.
+func (j *Job) Done() bool {
+	if j.ShouldDeploy() && !j.DeployFinished.After(time.Time{}) {
+		return false
+	} else if !j.TasksFinished.After(time.Time{}) {
+		return false
+	}
+	return true
+}
+
+// Cancel cancels a job.
+func (j *Job) Cancel() {
+	j.Cancelled = true
+	db.Save(j)
 }

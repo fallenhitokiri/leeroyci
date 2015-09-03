@@ -47,6 +47,17 @@ func viewDetailJob(w http.ResponseWriter, r *http.Request) {
 	render(w, r, template, ctx)
 }
 
+// viewCancelJob cancels a job.
+func viewCancelJob(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	jobID, _ := strconv.Atoi(vars["jid"])
+
+	job := database.GetJob(int64(jobID))
+	job.Cancel()
+
+	http.Redirect(w, r, "/", 302)
+}
+
 // returns the offset for the previous and next page.
 func previousNextNumber(offset int) (int, int, bool) {
 	count := database.NumberOfJobs()

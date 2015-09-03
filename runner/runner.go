@@ -21,6 +21,11 @@ func Runner() {
 		job := database.GetJob(jobID)
 		repository, err := database.GetRepositoryByID(job.RepositoryID)
 
+		if job.Cancelled == true {
+			log.Println("Job cancelled, not running commands", job.ID)
+			continue
+		}
+
 		if err != nil {
 			log.Println("Could not find repository for", job.Repository.URL)
 			return
