@@ -58,7 +58,7 @@ func CreateJob(repo *Repository, branch, commit, commitURL, name, email string) 
 // GetJob returns a job for a given ID.
 func GetJob(id int64) *Job {
 	j := &Job{}
-	db.Preload("Repository").Preload("CommandLogs").Where("ID = ?", id).First(&j)
+	db.Preload("Repository").Preload("CommandLogs").Where("ID = ?", id).Last(&j)
 	return j
 }
 

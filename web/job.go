@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/fallenhitokiri/leeroyci/database"
+	"github.com/fallenhitokiri/leeroyci/runner"
 )
 
 const limit = 20
@@ -54,6 +55,26 @@ func viewCancelJob(w http.ResponseWriter, r *http.Request) {
 
 	job := database.GetJob(int64(jobID))
 	job.Cancel()
+
+	http.Redirect(w, r, "/", 302)
+}
+
+// viewRerunJob resets a job status and enqueues it agian.
+func viewRerunJob(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	jobID, _ := strconv.Atoi(vars["jid"])
+
+	old := database.GetJob(int64(jobID))
+	job := database.CreateJob(
+		&old.Repository,
+		old.Branch,
+		old.Commit,
+		old.CommitURL,
+		old.Name,
+		old.Email,
+	)
+
+	runner.RunQueue <- job.ID
 
 	http.Redirect(w, r, "/", 302)
 }
