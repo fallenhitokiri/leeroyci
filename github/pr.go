@@ -107,8 +107,14 @@ func (p *pullRequestCallback) isCurrent() bool {
 	repo := database.GetRepository(p.repositoryURL())
 	response, err := makeRequest("GET", p.PR.URL, repo.AccessKey, nil)
 
+	log.Println("----------------------------------------------")
+	log.Println("Accesskey", repo.AccessKey)
+	log.Println("URL", p.PR.URL)
+
 	if err != nil {
+		log.Println("err1")
 		log.Println(err)
+		log.Println("----------------------------------------------")
 		return false
 	}
 
@@ -116,15 +122,22 @@ func (p *pullRequestCallback) isCurrent() bool {
 	err = json.Unmarshal(response, &pr)
 
 	if err != nil {
+		log.Println("Unmarshal")
 		log.Println(err)
+		log.Println("----------------------------------------------")
 		return false
 	}
 
 	if pr.Head.Commit != p.PR.Head.Commit {
+		log.Println("Head fetched", pr.Head.Commit)
+		log.Println("PR Head", p.PR.Head.Commit)
+		log.Println("----------------------------------------------")
 		return false
 	}
 
 	if pr.State != "open" {
+		log.Println("not open")
+		log.Println("----------------------------------------------")
 		return false
 	}
 
