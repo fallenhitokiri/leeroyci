@@ -74,7 +74,11 @@ func viewRerunJob(w http.ResponseWriter, r *http.Request) {
 		old.Email,
 	)
 
-	runner.RunQueue <- job.ID
+	queueJob := runner.QueueJob{
+		JobID: job.ID,
+	}
+
+	queueJob.Enqueue()
 
 	http.Redirect(w, r, "/", 302)
 }

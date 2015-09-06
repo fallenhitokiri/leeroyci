@@ -9,16 +9,28 @@ import (
 	"github.com/fallenhitokiri/leeroyci/notification"
 )
 
+// QueueJob represents a job put on the runner queue. The status channel is
+// used to notify about finished builds.
+type QueueJob struct {
+	JobID  int64
+	Status chan bool
+}
+
+// Enqueue a job for running.
+func (q *QueueJob) Enqueue() {
+	runQueue <- q
+}
+
 // RunQueue receives job IDs for which commands should run.
-var RunQueue = make(chan int64, 100)
+var runQueue = make(chan *QueueJob, 100)
 
 // Runner waits for jobs to be pushed on RunQueue and runs all commands. It also
 // creates the command logs and sends the necessary notifications.
 func Runner() {
 	for {
-		jobID := <-RunQueue
+		queueJob := <-runQueue
 
-		job := database.GetJob(jobID)
+		job := database.GetJob(queueJob.JobID)
 		repository, err := database.GetRepositoryByID(job.RepositoryID)
 
 		if job.Cancelled == true {
@@ -42,6 +54,10 @@ func Runner() {
 		}
 
 		job.TasksDone()
+
+		if queueJob.Status != nil {
+			queueJob.Status <- true
+		}
 
 		if job.Passed() && job.ShouldDeploy() {
 			go deploy(job, repository)

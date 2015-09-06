@@ -50,8 +50,9 @@ type pushRepository struct {
 	Name        string
 	URL         string
 	Description string
-	CreatedAt   int64 `json:"created_at"`
-	PushedAt    int64 `json:"pushed_at"`
+	CreatedAt   int64  `json:"created_at"`
+	PushedAt    int64  `json:"pushed_at"`
+	StatusURL   string `json:"statuses_url"`
 }
 
 // repositoryURL returns the URL for the repository
@@ -93,6 +94,10 @@ func (p *pushCallback) shouldRun() bool {
 	return true
 }
 
+func (p *pushCallback) statusURL() string {
+	return strings.Replace(p.Repository.StatusURL, "{sha}", p.commit(), 1)
+}
+
 // createJob adds a new job to the database.
 func (p *pushCallback) createJob() error {
 	if p.shouldRun() == false {
@@ -111,7 +116,20 @@ func (p *pushCallback) createJob() error {
 		p.email(),
 	)
 
-	runner.RunQueue <- job.ID
+	status := make(chan bool, 1)
+
+	queueJob := runner.QueueJob{
+		JobID:  job.ID,
+		Status: status,
+	}
+
+	queueJob.Enqueue()
+
+	if repo.StatusPR {
+		<-status
+		job = database.GetJob(job.ID)
+		postStatus(job, repo, p.statusURL())
+	}
 
 	return nil
 }
@@ -133,5 +151,5 @@ func handlePush(req *http.Request) {
 		return
 	}
 
-	callback.createJob()
+	go callback.createJob()
 }

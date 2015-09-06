@@ -40,26 +40,6 @@ type pullRequestRepository struct {
 	HTMLURL string `json:"html_url"`
 }
 
-// Payload to update / close a PR / commit.
-type postStatus struct {
-	State       string `json:"state"`
-	TargetURL   string `json:"target_url"`
-	Description string `json:"description"`
-	Context     string `json:"context"`
-}
-
-// status messages linked to their status code.
-var statusMessages = map[int]map[string]string{
-	statusSuccess: map[string]string{
-		"state":       "success",
-		"description": "Build successful",
-	},
-	statusFailed: map[string]string{
-		"state":       "failure",
-		"description": "Build failed",
-	},
-}
-
 func (p *pullRequestCallback) repositoryURL() string {
 	return p.PR.Head.Repository.HTMLURL
 }
@@ -107,14 +87,7 @@ func (p *pullRequestCallback) isCurrent() bool {
 	repo := database.GetRepository(p.repositoryURL())
 	response, err := makeRequest("GET", p.PR.URL, repo.AccessKey, nil)
 
-	log.Println("----------------------------------------------")
-	log.Println("Accesskey", repo.AccessKey)
-	log.Println("URL", p.PR.URL)
-
 	if err != nil {
-		log.Println("err1")
-		log.Println(err)
-		log.Println("----------------------------------------------")
 		return false
 	}
 
@@ -122,22 +95,14 @@ func (p *pullRequestCallback) isCurrent() bool {
 	err = json.Unmarshal(response, &pr)
 
 	if err != nil {
-		log.Println("Unmarshal")
-		log.Println(err)
-		log.Println("----------------------------------------------")
 		return false
 	}
 
 	if pr.Head.Commit != p.PR.Head.Commit {
-		log.Println("Head fetched", pr.Head.Commit)
-		log.Println("PR Head", p.PR.Head.Commit)
-		log.Println("----------------------------------------------")
 		return false
 	}
 
 	if pr.State != "open" {
-		log.Println("not open")
-		log.Println("----------------------------------------------")
 		return false
 	}
 
@@ -178,22 +143,6 @@ func (p *pullRequestCallback) closePR(job *database.Job, repo *database.Reposito
 
 	if err != nil {
 		log.Println(err)
-	}
-}
-
-// newStatus returns a status struct with the correct URL and messages.
-func newStatus(job *database.Job) *postStatus {
-	state := statusSuccess
-
-	if !job.Passed() {
-		state = statusFailed
-	}
-
-	return &postStatus{
-		State:       statusMessages[state]["state"],
-		TargetURL:   job.URL(),
-		Description: statusMessages[state]["description"],
-		Context:     "continuous-integration/leeeroyci",
 	}
 }
 
