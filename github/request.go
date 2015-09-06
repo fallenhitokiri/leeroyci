@@ -12,6 +12,11 @@ import (
 	"github.com/fallenhitokiri/leeroyci/database"
 )
 
+var (
+	statusSuccess = 1
+	statusFailed  = 2
+)
+
 // Payload to update / close a PR / commit.
 type commitStatus struct {
 	State       string `json:"state"`
@@ -30,6 +35,10 @@ var statusMessages = map[int]map[string]string{
 		"state":       "failure",
 		"description": "Build failed",
 	},
+}
+
+type update struct {
+	State string `json:"state"`
 }
 
 // newStatus returns a status struct with the correct URL and messages.
@@ -58,6 +67,23 @@ func postStatus(job *database.Job, repo *database.Repository, URL string) {
 	}
 
 	_, err = makeRequest("POST", URL, repo.AccessKey, payload)
+
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+func closePR(job *database.Job, repo *database.Repository, URL string) {
+	status := newStatus(job)
+	status.State = "closed"
+	payload, err := json.Marshal(&status)
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	_, err = makeRequest("PATCH", URL, repo.AccessKey, payload)
 
 	if err != nil {
 		log.Println(err)

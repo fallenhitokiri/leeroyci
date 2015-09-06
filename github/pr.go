@@ -12,11 +12,6 @@ import (
 	"github.com/fallenhitokiri/leeroyci/database"
 )
 
-var (
-	statusSuccess = 1
-	statusFailed  = 2
-)
-
 type pullRequestCallback struct {
 	Number int
 	Action string
@@ -71,12 +66,8 @@ func (p *pullRequestCallback) updatePR() {
 			return
 		}
 
-		if repository.StatusPR {
-			p.postStatus(job, repository)
-		}
-
 		if repository.ClosePR && job.Passed() == false {
-			p.closePR(job, repository)
+			closePR(job, repository, p.PR.URL)
 		}
 
 		return
@@ -107,43 +98,6 @@ func (p *pullRequestCallback) isCurrent() bool {
 	}
 
 	return true
-}
-
-func (p *pullRequestCallback) postStatus(job *database.Job, repo *database.Repository) {
-	status := newStatus(job)
-	payload, err := json.Marshal(&status)
-
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	_, err = makeRequest("POST", p.PR.StatusURL, repo.AccessKey, payload)
-
-	if err != nil {
-		log.Println(err)
-	}
-}
-
-type update struct {
-	State string `json:"state"`
-}
-
-func (p *pullRequestCallback) closePR(job *database.Job, repo *database.Repository) {
-	status := newStatus(job)
-	status.State = "closed"
-	payload, err := json.Marshal(&status)
-
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	_, err = makeRequest("PATCH", p.PR.URL, repo.AccessKey, payload)
-
-	if err != nil {
-		log.Println(err)
-	}
 }
 
 func handlePR(req *http.Request) {
