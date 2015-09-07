@@ -14,6 +14,7 @@ const limit = 20
 
 // viewListJobs shows a paginated list of all jobs.
 func viewListJobs(w http.ResponseWriter, r *http.Request) {
+	template := "job/list.html"
 	ctx := make(responseContext)
 
 	offset := 0
@@ -31,7 +32,7 @@ func viewListJobs(w http.ResponseWriter, r *http.Request) {
 	ctx["next_offset"] = next
 	ctx["first_page"] = first
 
-	render(w, r, "job/list.html", ctx)
+	render(w, r, template, ctx)
 }
 
 // viewJobDetail shows a specific job with all related information.
@@ -81,6 +82,19 @@ func viewRerunJob(w http.ResponseWriter, r *http.Request) {
 	queueJob.Enqueue()
 
 	http.Redirect(w, r, "/", 302)
+}
+
+// viewSearchJobs returns a list of jobs filtered by the search string.
+func viewSearchJobs(w http.ResponseWriter, r *http.Request) {
+	template := "job/list.html"
+	ctx := make(responseContext)
+
+	query := r.URL.Query().Get("query")
+
+	ctx["jobs"] = database.SearchJobs(query)
+	ctx["query"] = query
+
+	render(w, r, template, ctx)
 }
 
 // returns the offset for the previous and next page.

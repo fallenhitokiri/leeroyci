@@ -148,7 +148,7 @@ func (j *Job) ShouldBuild() bool {
 	commands := j.Repository.GetCommands(j.Branch, CommandKindBuild)
 
 	if len(commands) > 0 {
-		return true
+		return j.Passed()
 	}
 
 	return false
@@ -159,7 +159,7 @@ func (j *Job) ShouldDeploy() bool {
 	commands := j.Repository.GetCommands(j.Branch, CommandKindDeploy)
 
 	if len(commands) > 0 {
-		return true
+		return j.Passed()
 	}
 
 	return false
@@ -195,4 +195,25 @@ func (j *Job) Done() bool {
 func (j *Job) Cancel() {
 	j.Cancelled = true
 	db.Save(j)
+}
+
+// SearchJobs returns all jobs where the branch or commit contains the query
+// string.
+func SearchJobs(query string) []*Job {
+	var branch []*Job
+	var commits []*Job
+
+	like := "%" + query + "%"
+
+	db.Preload(
+		"Repository",
+	).Preload(
+		"CommandLogs",
+	).Where(
+		"(branch LIKE ? OR commit_sha LIKE ?)", like, like,
+	).Order(
+		"created_at desc",
+	).Find(&branch)
+
+	return append(branch, commits...)
 }

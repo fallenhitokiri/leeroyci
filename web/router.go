@@ -27,6 +27,7 @@ func Routes() *mux.Router {
 	router.Handle("/{jid:[0-9]+}", chainAuth.ThenFunc(viewDetailJob))
 	router.Handle("/{jid:[0-9]+}/cancel", chainAuth.ThenFunc(viewCancelJob))
 	router.Handle("/{jid:[0-9]+}/rerun", chainAuth.ThenFunc(viewRerunJob))
+	router.Handle("/search", chainAuth.ThenFunc(viewSearchJobs))
 
 	router.Handle("/user/settings", chainAuth.ThenFunc(viewUpdateUser))
 

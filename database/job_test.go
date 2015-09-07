@@ -71,7 +71,7 @@ func TestGetJobs(t *testing.T) {
 }
 
 func TestNumberOfJobs(t *testing.T) {
-	db.Exec("DELETE FROM jobs WHERE id > 0")
+	NewInMemoryDatabase()
 	repo, _ := CreateRepository("foo", "baz", "accessKey", false, false)
 	CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
 	CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
@@ -192,6 +192,7 @@ func TestJobStarted(t *testing.T) {
 }
 
 func TestJobIsRunningTasks(t *testing.T) {
+	NewInMemoryDatabase()
 	AddConfig("secret", "url", "cert", "key")
 	repo, _ := CreateRepository("foo", "baz", "accessKey", false, false)
 	job := CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
