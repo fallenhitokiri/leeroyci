@@ -7,6 +7,8 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"github.com/justinas/alice"
+
+	"github.com/fallenhitokiri/leeroyci/websocket"
 )
 
 var sessionStore = sessions.NewCookieStore([]byte("something-very-secret"))
@@ -59,6 +61,8 @@ func Routes() *mux.Router {
 	box := rice.MustFindBox("static")
 	staticFileServer := http.StripPrefix("/static/", http.FileServer(box.HTTPBox()))
 	router.Handle("/static/{path:.*}", middlewareLogging(staticFileServer))
+
+	router.Handle("/websocket", websocket.GetHandler())
 
 	return router
 }

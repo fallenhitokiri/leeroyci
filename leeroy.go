@@ -8,10 +8,12 @@ import (
 	"github.com/fallenhitokiri/leeroyci/database"
 	"github.com/fallenhitokiri/leeroyci/runner"
 	"github.com/fallenhitokiri/leeroyci/web"
+	"github.com/fallenhitokiri/leeroyci/websocket"
 )
 
 func main() {
 	database.NewDatabase("", "")
+	websocket.NewServer()
 	go runner.Runner()
 
 	router := web.Routes()
