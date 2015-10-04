@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"code.google.com/p/go.net/websocket"
+	"golang.org/x/net/websocket"
 )
 
 func TestClient(t *testing.T) {

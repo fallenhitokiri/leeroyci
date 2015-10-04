@@ -4,14 +4,17 @@ import (
 	"fmt"
 	"log"
 
-	"code.google.com/p/go.net/websocket"
+	"golang.org/x/net/websocket"
 )
 
 var origin = "http://localhost/"
 var url = "ws://localhost:8082/websocket"
 
 func main() {
-	ws, err := websocket.Dial(url, "", origin)
+	config, err := websocket.NewConfig(url, origin)
+	config.Header["accesskey"] = []string{"gNV/bxhxG)IrvEeaZK_mA2HkCxC2yu!bHjGK!(MLNQ1tuDnUKyGBL9G/rGhXHNzU"}
+
+	ws, err := websocket.DialConfig(config)
 	if err != nil {
 		log.Fatal(err)
 	}
