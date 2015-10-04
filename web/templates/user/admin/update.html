@@ -43,7 +43,7 @@
                 <div class="form-group">
                     <label for="is_admin">Is an admin user</label>
                     <input type="checkbox" class="form-control" id="is_admin" name="is_admin" {{ if .edit_user.Admin }}checked{{ end }}>
-                </div>                
+                </div>
 
                 <button class="btn btn-info">Update User</button>
                 <a href="/admin/user/delete/{{ .edit_user.ID }}" class="btn btn-danger pull-right">Delete User</a>

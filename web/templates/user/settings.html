@@ -46,7 +46,12 @@
                     <input type="text" class="form-control" id="new_password" name="new_password" placeholder="Enter password">
                 </div>
 
-                <button class="btn btn-info">Update</button>
+                <div class="form-group">
+                    <p><strong>Access Key:</strong> {{ .user.AccessKey }}</p>
+                </div>
+
+                <button class="btn btn-info pull-right">Update</button>
+                <a href="/user/regenerate-accesskey" class="btn btn-default">Regenrate Access Key</a>
             </fieldset>
         </form>
     </div>
