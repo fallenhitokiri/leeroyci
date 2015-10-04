@@ -109,3 +109,20 @@ func TestGetUserbyID(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestNewAccessKey(t *testing.T) {
+	NewInMemoryDatabase()
+	user, _ := CreateUser("foo@bar.tld", "foo", "bar", "adsf", false)
+
+	key := user.NewAccessKey()
+
+	user2, err := GetUserByAccessKey(key)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if user.ID != user2.ID {
+		t.Error("Got the wrong user.")
+	}
+}
