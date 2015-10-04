@@ -12,9 +12,9 @@ import (
 )
 
 const sessionDictionary = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-const accessKeyDictionary = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+const accessKeyDictionary = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_?!+=%$&/()"
 const sessionLength = 256
-const accessKeyLength = 32
+const accessKeyLength = 64
 
 // User stores a user account including the password using bcrypt.
 type User struct {
@@ -196,10 +196,7 @@ func generateAccessKey(dictionary string, length int) string {
 		random[k] = dictionary[v%byte(len(dictionary))]
 	}
 
-	hash := sha512.New()
-	hash.Write([]byte(random))
-
-	return base64.StdEncoding.EncodeToString(hash.Sum(nil))
+	return string(random)
 }
 
 // HashPassword generates a hash using bcrypt.
