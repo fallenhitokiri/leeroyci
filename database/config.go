@@ -39,7 +39,7 @@ func GetConfig() *Config {
 	c := &Config{}
 	db.First(c)
 
-	if c.Parallel < 1 {
+	if c.Parallel < 1 && c.ID != 0 {
 		c.Parallel = 1
 		db.Save(c)
 	}
