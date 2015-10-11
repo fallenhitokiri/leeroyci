@@ -7,6 +7,8 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"github.com/justinas/alice"
+
+	"github.com/fallenhitokiri/leeroyci/websocket"
 )
 
 var sessionStore = sessions.NewCookieStore([]byte("something-very-secret"))
@@ -30,6 +32,7 @@ func Routes() *mux.Router {
 	router.Handle("/search", chainAuth.ThenFunc(viewSearchJobs))
 
 	router.Handle("/user/settings", chainAuth.ThenFunc(viewUpdateUser))
+	router.Handle("/user/regenerate-accesskey", chainAuth.ThenFunc(viewRegenrateAccessKey))
 
 	router.Handle("/admin/users", chainAdmin.ThenFunc(viewAdminListUsers))
 	router.Handle("/admin/user/create", chainAdmin.ThenFunc(viewAdminCreateUser))
@@ -59,6 +62,8 @@ func Routes() *mux.Router {
 	box := rice.MustFindBox("static")
 	staticFileServer := http.StripPrefix("/static/", http.FileServer(box.HTTPBox()))
 	router.Handle("/static/{path:.*}", middlewareLogging(staticFileServer))
+
+	router.Handle("/websocket", middlewareAccessKey(websocket.GetHandler()))
 
 	return router
 }

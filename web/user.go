@@ -75,3 +75,10 @@ func viewUpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	render(w, r, template, ctx)
 }
+
+// viewRegenrateAccessKey regenerates the access key for a user.
+func viewRegenrateAccessKey(w http.ResponseWriter, r *http.Request) {
+	user := context.Get(r, contextUser).(*database.User)
+	user.NewAccessKey()
+	http.Redirect(w, r, "/user/settings", 302)
+}

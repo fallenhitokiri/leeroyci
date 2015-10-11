@@ -16,6 +16,8 @@ func Notify(job *database.Job, event string) {
 		return
 	}
 
+	sendWebsocket(job, event)
+
 	for _, notificaiton := range repo.Notifications {
 		switch notificaiton.Service {
 		case database.NotificationServiceEmail:

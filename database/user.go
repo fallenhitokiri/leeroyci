@@ -12,7 +12,9 @@ import (
 )
 
 const sessionDictionary = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+const accessKeyDictionary = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_?!+=%$&/()"
 const sessionLength = 256
+const accessKeyLength = 64
 
 // User stores a user account including the password using bcrypt.
 type User struct {
@@ -23,6 +25,7 @@ type User struct {
 	Password  string
 	Admin     bool
 	Session   string
+	AccessKey string
 }
 
 // ListUsers returns a list of all users.
@@ -48,6 +51,18 @@ func GetUser(email string) (*User, error) {
 func GetUserBySession(key string) (*User, error) {
 	u := &User{}
 	db.Where("session = ?", key).First(u)
+
+	if u.ID == 0 {
+		return nil, errors.New("Could not find user.")
+	}
+
+	return u, nil
+}
+
+// GetUserByAccessKey returns the user for a given access key.
+func GetUserByAccessKey(key string) (*User, error) {
+	u := &User{}
+	db.Where("access_key = ?", key).First(u)
 
 	if u.ID == 0 {
 		return nil, errors.New("Could not find user.")
@@ -139,9 +154,23 @@ func (u *User) NewSession() string {
 	}
 }
 
+// NewAccessKey generates a access key and stores it.
+func (u *User) NewAccessKey() string {
+	for {
+		key := generateAccessKey(accessKeyDictionary, accessKeyLength)
+
+		_, err := GetUserByAccessKey(key)
+
+		if err != nil {
+			u.AccessKey = key
+			db.Save(u)
+			return u.AccessKey
+		}
+	}
+}
+
 // generateSessionID generates a new session ID for a user combining the
 // email address and a random string.
-// dictionary and length are optional parameters used for testing.
 func generateSessionID(email, dictionary string, length int) string {
 	var random = make([]byte, length)
 	rand.Read(random)
@@ -156,6 +185,18 @@ func generateSessionID(email, dictionary string, length int) string {
 	hash.Write([]byte(joined))
 
 	return base64.StdEncoding.EncodeToString(hash.Sum(nil))
+}
+
+// generateAccessKey generates a new access key for a user.
+func generateAccessKey(dictionary string, length int) string {
+	var random = make([]byte, length)
+	rand.Read(random)
+
+	for k, v := range random {
+		random[k] = dictionary[v%byte(len(dictionary))]
+	}
+
+	return string(random)
 }
 
 // HashPassword generates a hash using bcrypt.
