@@ -136,7 +136,7 @@ func TestJobDeployDone(t *testing.T) {
 
 func TestJobURL(t *testing.T) {
 	db.Exec("DELETE FROM jobs WHERE id > 0")
-	AddConfig("secret", "url", "cert", "key")
+	AddConfig("secret", "url", "cert", "key", 1)
 	repo, _ := CreateRepository("foo", "baz", "accessKey", false, false)
 	job := CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
 
@@ -146,7 +146,7 @@ func TestJobURL(t *testing.T) {
 }
 
 func TestJobShouldBuild(t *testing.T) {
-	AddConfig("secret", "url", "cert", "key")
+	AddConfig("secret", "url", "cert", "key", 1)
 	repo, _ := CreateRepository("foo", "baz", "accessKey", false, false)
 	job := CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
 	CreateCommand(repo, "name", "execute", "branch", CommandKindTest)
@@ -163,7 +163,7 @@ func TestJobShouldBuild(t *testing.T) {
 }
 
 func TestJobShouldDeploy(t *testing.T) {
-	AddConfig("secret", "url", "cert", "key")
+	AddConfig("secret", "url", "cert", "key", 1)
 	repo, _ := CreateRepository("foo", "baz", "accessKey", false, false)
 	job := CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
 	CreateCommand(repo, "name", "execute", "branch", CommandKindTest)
@@ -180,7 +180,7 @@ func TestJobShouldDeploy(t *testing.T) {
 }
 
 func TestJobStarted(t *testing.T) {
-	AddConfig("secret", "url", "cert", "key")
+	AddConfig("secret", "url", "cert", "key", 1)
 	repo, _ := CreateRepository("foo", "baz", "accessKey", false, false)
 	job := CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
 
@@ -193,7 +193,7 @@ func TestJobStarted(t *testing.T) {
 
 func TestJobIsRunningTasks(t *testing.T) {
 	NewInMemoryDatabase()
-	AddConfig("secret", "url", "cert", "key")
+	AddConfig("secret", "url", "cert", "key", 1)
 	repo, _ := CreateRepository("foo", "baz", "accessKey", false, false)
 	job := CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
 
