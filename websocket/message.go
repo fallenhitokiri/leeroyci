@@ -16,6 +16,7 @@ type Message struct {
 	RepositoryName string `json:"repository_name"`
 	Branch         string `json:"branch"`
 	Status         string `json:"status"`
+	URL            string `json:"url"`
 }
 
 // NewMessage converts a job and event type to a message that can be send
@@ -28,5 +29,6 @@ func NewMessage(job *database.Job, event string) *Message {
 		RepositoryName: job.Repository.Name,
 		Branch:         job.Branch,
 		Status:         job.Status(),
+		URL:            job.URL(),
 	}
 }
