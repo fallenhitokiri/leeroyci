@@ -4,9 +4,10 @@ Leeroy is a self hosted, continuous integration, build and deployment service. I
 ![Leeroy](https://raw.github.com/fallenhitokiri/leeroyci/master/assets/leeroy.png)
 
 ## Integrations
-Currently Leeroy plays nicely with GitHub. Integrations for GitLab and Bitbucket are planned.
+Currently Leeroy plays nicely with GitHub. An integration for GitLab is current WIP, BitBucket should be supported before the first release.
 
 ## Features
+- self hosted
 - bring your own build / test scripts
 - comment on GitHub pull requests
 - close GitHub pull requests if the build for HEAD fails
@@ -18,7 +19,7 @@ Currently Leeroy plays nicely with GitHub. Integrations for GitLab and Bitbucket
 
 ## Quickstart
 For now please check out the master branch of this repository and run it via `go run leeroy.go`. Binaries will be available with the first stable release.
-Master is always considered to be stable and ready for production.
+Master can be considered production ready. Development is used by people who want to have the latest features and can accept if smaller problems show up, but the goal is to keep it stable, too.
 
 ### Build Script
 Before you start make sure you have a script that is able to run tests for your repository. Two arguments are passed to your build script, the repository URL (first argument) and the branch name (second argument) to which was pushed. Let us use a really simple one for now
@@ -31,7 +32,7 @@ We assume this script is saved in `/home/ec2-user/test.sh`. See `docs/buildscrip
 ### Configuration
 To set the path for the SQLite database you can use the environment variable `DATABASE_URL`. The format is `sqlite3 /path/to/leeory.sqlite3`.
 
-Once Leeroy is running go to port `8082` in your web browser and click through the setup assistant. The user you create will automatically be an administrator. If you specify an SSL certificate you have to restart Leeroy after completing the setup.
+Once Leeroy is running go to port `8082` in your web browser and click through the setup assistant. The user you create will automatically be an administrator. If you add an SSL certificate you have to restart Leeroy after completing the setup.
 
 To configure a repository click on `Admin -> Repository Management -> Add Repository`. After adding the repository you can add commands and notifications on the repository detail page you are redirected to. The access key needs permissions to update the status of your commits, comment on PRs and close them if you want to use that feature.
 
