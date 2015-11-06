@@ -1,7 +1,7 @@
 # Leeroy CI
 Leeroy is a self hosted, continuous integration, build and deployment service. It is designed to be easy to setup and will not require an additional ops person to keep running. It runs on your own server, so you can create the test environment you want, exactly mirroring production, without having to trust anyone else to keep your source code or eventually database images with sensitive information safe.
 
-![Leeroy](https://raw.github.com/fallenhitokiri/leeroyci/master/assets/leeroy.png)
+![Leeroy](https://raw.github.com/fallenhitokiri/leeroyci/master/assets/leeroy-black.png)
 
 ## Integrations
 Currently Leeroy plays nicely with GitHub. An integration for GitLab is current WIP, BitBucket should be supported before the first release.
