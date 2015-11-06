@@ -1,0 +1,79 @@
+{{ define "title" }}Jobs - LeeroyCI{{ end }}
+
+{{ define "body" }}list-jobs{{ end }}
+
+{{ define "content" }}
+<div class="row">
+    <div class="col-md-12">
+        {{ if .jobs }}
+            {{ if .query }}
+            <h3>Search results for "{{ .query }}"</h3>
+            {{ end }}
+
+            <ul class="job-list">
+                {{ range .jobs }}
+                    {{ if ne .Status "pending" }}<a href="/{{ .ID }}">{{ end }}
+                        <li class="job-row job-{{ .Status }}">
+                            <span class="job-info">
+                                {{ .Repository.Name }} <strong>{{ .Branch }}</strong>
+                                {{ if .IsRunning }}
+                                    <span class="label label-primary">running</span>
+                                {{ else }}
+                                    {{ if .Cancelled }}
+                                        <span class="label label-warning">cancelled</span>
+                                    {{ end }}
+
+                                    {{ if or .Done .Cancelled }}
+                                        <a href="/{{ .ID }}/rerun" class="btn btn-sm btn-success pull-right">Rerun</a>
+                                    {{ else }}
+                                        <a href="/{{ .ID }}/cancel" class="btn btn-sm btn-danger pull-right">Cancel</a>
+                                    {{ end }}
+                                {{ end }}
+                            </span>
+
+                            <span class="tasks">
+                                {{ range .CommandLogs }}
+                                    <span class="label {{ if .Passed }}label-success{{ else }}label-danger{{ end }}">{{ .Name }}</span>
+                                {{ end }}
+                            </span>
+
+                            <span class="job-details">
+                                <span class="label label-primary">
+                                    {{ .Name }} &lt;{{ .Email }}&gt;
+                                </span>
+                                <span class="label label-default">
+                                    {{ .Commit }}
+                                </span>
+
+                                <span class="label label-default">
+                                    {{ .CreatedAt }}
+                                </span>
+                            </span>
+                        </li>
+                    {{ if ne .Status "pending" }}</a>{{ end }}
+                {{ end }}
+
+                <li>
+                    {{ if .first_page }}
+                        <a href="/?offset={{ .previous_offset }}" class="btn btn-info">Previous</a>
+                    {{ end }}
+
+                    {{ if gt .next_offset -1 }}
+                        <a href="/?offset={{ .next_offset }}" class="btn btn-info pull-right">Next</a>
+                    {{ end }}
+                </li>
+            </ul>
+        {{ else }}
+            <div class="alert alert-info">
+                No jobs, give me something to do!
+            </div>
+        {{ end }}
+    </div>
+</div>
+{{ end }}
+
+{{ define "js" }}{{ end }}
+
+{{ define "css" }}
+<link rel="stylesheet" href="/static/css/jobs.css">
+{{ end }}

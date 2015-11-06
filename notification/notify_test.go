@@ -1,19 +1,16 @@
 package notification
 
 import (
+	"os"
 	"testing"
+
+	"github.com/fallenhitokiri/leeroyci/database"
 )
 
-func TestKindSupported(t *testing.T) {
-	s := kindSupported(KindBuild)
+func TestMain(m *testing.M) {
+	database.NewDatabase("sqlite3", ":memory:")
 
-	if s == false {
-		t.Error(s, "not supported, but should.")
-	}
+	i := m.Run()
 
-	s = kindSupported("foo")
-
-	if s == true {
-		t.Error(s, "supported, but should not.")
-	}
+	os.Exit(i)
 }

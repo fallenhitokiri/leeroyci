@@ -8,6 +8,8 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+
+	"github.com/fallenhitokiri/leeroyci/database"
 )
 
 // Payload HipChat expects to be POSTed to the API.
@@ -44,15 +46,34 @@ func (h *hipchatPayload) toURLEncoded() []byte {
 	return []byte(d.Encode())
 }
 
-// Send a notification to HipChat.
-func hipchat(n *notification, key string, chl string) {
-	e := endpointHipChat(key)
-	p := notToHipChapt(n, chl)
+func sendHipchat(job *database.Job, event string) {
+	not, _ := database.GetNotificationForRepoAndType(
+		&job.Repository,
+		database.NotificationServiceHipchat,
+	)
 
-	_, err := http.Post(
-		e,
+	channel, err := not.GetConfigValue("channel")
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	payload := payloadHipchat(job, event, channel)
+
+	key, err := not.GetConfigValue("key")
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	endpoint := endpointHipChat(key)
+
+	_, err = http.Post(
+		endpoint,
 		"application/x-www-form-urlencoded",
-		bytes.NewReader(p.toURLEncoded()),
+		bytes.NewReader(payload.toURLEncoded()),
 	)
 
 	if err != nil {
@@ -60,19 +81,19 @@ func hipchat(n *notification, key string, chl string) {
 	}
 }
 
-// Convert a notification to a hipchat payload.
-func notToHipChapt(n *notification, channel string) hipchatPayload {
-	p := hipchatPayload{
+// Convert a job to a hipchat payload.
+func payloadHipchat(job *database.Job, event, channel string) hipchatPayload {
+	msg := message(job, database.NotificationServiceHipchat, event, TypeText)
+
+	return hipchatPayload{
 		Color:   "green",
 		Notify:  true,
 		Format:  "text",
 		Room:    channel,
-		From:    "Leeroy",
-		Message: n.message,
-		Status:  n.Status,
+		From:    "LeeroyCI",
+		Message: msg,
+		Status:  job.Passed(),
 	}
-
-	return p
 }
 
 // Build the endpoint for HipChat

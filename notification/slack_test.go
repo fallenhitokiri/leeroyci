@@ -2,20 +2,22 @@ package notification
 
 import (
 	"testing"
+
+	"github.com/fallenhitokiri/leeroyci/database"
 )
 
 func TestBuildSlack(t *testing.T) {
-	n := notification{
-		Repo:   "repo",
-		Branch: "branch",
-		Name:   "name",
-		Email:  "email",
-		Status: true,
-		URL:    "url",
-		kind:   "build",
+	repo := database.Repository{
+		Name: "repo",
 	}
 
-	_, err := buildSlack(&n, "foo")
+	job := database.Job{
+		Branch:     "branch",
+		Commit:     "1234",
+		Repository: repo,
+	}
+
+	_, err := payloadSlack(&job, EventBuild, "foo")
 
 	if err != nil {
 		t.Error(err)

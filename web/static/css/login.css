@@ -1,0 +1,32 @@
+#login {
+    background:#000;
+}
+
+#login #logo {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+#login fieldset {
+    background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+}
+
+#login h1 {
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:20px;
+    text-align: center;
+}
+
+#login button {
+    width:100%;
+    margin-top:10px;
+}

@@ -3,66 +3,60 @@
 package notification
 
 import (
-	"encoding/base64"
 	"fmt"
-	"leeroy/config"
 	"log"
 	"net/mail"
-	"net/smtp"
+
+	"github.com/jpoehls/gophermail"
+
+	"github.com/fallenhitokiri/leeroyci/database"
 )
 
-// Send an email to `toName <toEmail>` with the details of the failed build.
-func email(c *config.Config, n *notification, to string) {
-	message := buildEmail(c, n)
-	auth := smtp.PlainAuth("", c.EmailUser, c.EmailPassword, c.EmailHost)
+// sendEmail sends an email notification. Event specifies which notification to
+// send. Valid choices are EVENT_ (see template.go).
+func sendEmail(job *database.Job, event string) {
+	mailServer := database.GetMailServer()
 
-	err := smtp.SendMail(
-		c.MailServer(),
-		auth,
-		c.EmailFrom,
-		[]string{to},
-		message,
-	)
+	htmlMessage := message(job, database.NotificationServiceEmail, event, TypeHTML)
+	txtMessage := message(job, database.NotificationServiceEmail, event, TypeText)
+	subject := emailSubject(job, event)
+	recipient := mail.Address{
+		Name:    job.Name,
+		Address: job.Email,
+	}
+
+	message := gophermail.Message{
+		From:     mailServer.From(),
+		To:       []mail.Address{recipient},
+		Subject:  subject,
+		Body:     txtMessage,
+		HTMLBody: htmlMessage,
+	}
+
+	err := gophermail.SendMail(mailServer.Server(), mailServer.Auth(), &message)
 
 	if err != nil {
 		log.Println(err)
 	}
 }
 
-// Notify the person who pushed the changes
-func buildEmail(c *config.Config, n *notification) []byte {
-	f := mail.Address{Name: "leeroy", Address: c.EmailFrom}
-	t := mail.Address{Name: n.Name, Address: n.Email}
-	s := subject(n)
-	b := n.message
-	m := addHeaders(f.String(), t.String(), s, b)
-	return m
-}
-
-// Build a string to be used as argument for net/smtp to send as mail.
-func addHeaders(from, to, subject, body string) []byte {
-	h := make(map[string]string)
-	h["From"] = from
-	h["To"] = to
-	h["Subject"] = subject
-	h["MIME-Version"] = "1.0"
-	h["Content-Type"] = "text/plain; charset=\"utf-8\""
-	h["Content-Transfer-Encoding"] = "base64"
-
-	m := ""
-
-	for k, v := range h {
-		m += fmt.Sprintf("%s: %s\r\n", k, v)
+// emailSubject returns the subject for an email.
+func emailSubject(job *database.Job, event string) string {
+	if event == EventBuild {
+		return fmt.Sprintf("%s/%s build", job.Repository.Name, job.Branch)
 	}
-	m += "\r\n" + base64.StdEncoding.EncodeToString([]byte(body))
 
-	return []byte(m)
-}
-
-// Returns the subject for the mail.
-func subject(n *notification) string {
-	if n.Status == true {
-		return fmt.Sprintf("%s: success", n.Branch)
+	if event == EventTest {
+		return fmt.Sprintf("%s/%s tests", job.Repository.Name, job.Branch)
 	}
-	return fmt.Sprintf("%s: failed", n.Branch)
+
+	if event == EventDeployStart {
+		return fmt.Sprintf("%s/%s deployment started", job.Repository.Name, job.Branch)
+	}
+
+	if event == EventDeployEnd {
+		return fmt.Sprintf("%s/%s deploy %s", job.Repository.Name, job.Branch, job.Status())
+	}
+
+	return "LeeroyCI is confused - not sure which message this is."
 }

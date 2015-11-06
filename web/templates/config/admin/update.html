@@ -1,0 +1,52 @@
+{{ define "title" }}Update Mailserver{{ end }}
+
+{{ define "body" }}admin-config-update{{ end }}
+
+{{ define "content" }}
+<div class="row">
+    <div class="col-md-6">
+        <form action="/admin/config/update" method="POST">
+            <fieldset>
+                <h1>{{ .repository.Name }}</h1>
+                {{ if .message }}
+                    <div class="alert alert-success">
+                        {{ .message }}
+                    </div>
+                {{ end }}
+
+                {{ if .error }}
+                    <div class="alert alert-danger">
+                        {{ .error }}
+                    </div>
+                {{ end }}
+
+                <div class="form-group">
+                    <label for="secret">Secret</label>
+                    <input type="text" class="form-control" id="secret" name="secret" placeholder="Secret" value="{{ .config.Secret }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="URL">Leeroy URL</label>
+                    <input type="text" class="form-control" id="url" name="url" placeholder="url" value="{{ .config.URL }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="cert">SSL Cert file</label>
+                    <input type="text" class="form-control" id="cert" name="cert" placeholder="SSL Cert" value="{{ .config.Cert }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="key">SSL Key file</label>
+                    <input type="text" class="form-control" id="key" name="key" placeholder="SSL Key" value="{{ .config.Key }}">
+                </div>
+
+                <button class="btn btn-info">Update Config</button>
+            </fieldset>
+        </form>
+    </div>
+</div>
+{{ end }}
+
+{{ define "js" }}{{ end }}
+
+{{ define "css" }}{{ end }}

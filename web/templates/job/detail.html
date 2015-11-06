@@ -1,0 +1,47 @@
+{{ define "title" }}Job {{ .job.ID }} - LeeroyCI{{ end }}
+
+{{ define "body" }}detail-job{{ end }}
+
+{{ define "content" }}
+<div class="row">
+    <div class="col-md-12">
+        {{ if .job }}
+            <ul class="job-list">
+                <li class="job-row job-{{ .job.Status }}">
+                    <span class="job-info">{{ .job.Repository.Name }} <strong>{{ .job.Branch }}</strong></span>
+
+                    <span class="tasks">
+                        {{ range .job.CommandLogs }}
+                            <span class="label {{ if .Passed }}label-success{{ else }}label-danger{{ end }}">{{ .Name }}</span>
+                            <pre><code>{{ .Output }}</code></pre>
+                        {{ end }}
+                    </span>
+
+                    <span class="job-details">
+                        <span class="label label-primary">
+                            {{ .job.Name }} &lt;{{ .job.Email }}&gt;
+                        </span>
+                        <span class="label label-default">
+                            {{ .job.Commit }}
+                        </span>
+
+                        <span class="label label-default">
+                            {{ .job.CreatedAt }}
+                        </span>
+                    </span>
+                </li>
+            </ul>
+        {{ else }}
+            <div class="alert alert-info">
+                No job found!
+            </div>
+        {{ end }}
+    </div>
+</div>
+{{ end }}
+
+{{ define "js" }}{{ end }}
+
+{{ define "css" }}
+<link rel="stylesheet" href="/static/css/jobs.css">
+{{ end }}

@@ -1,0 +1,51 @@
+{{ define "title" }}Add New User{{ end }}
+
+{{ define "body" }}admin-user-add{{ end }}
+
+{{ define "content" }}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <form action="/admin/user/create" method="POST">
+            <fieldset>
+                <h1>Add a new user</h1>
+                {{ if .error }}
+                    <div class="alert alert-danger">
+                        {{ .error }}
+                    </div>
+                {{ end }}
+
+                <div class="form-group">
+                    <label for="email">Email address (will be your login)</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+                </div>
+
+                <div class="form-group">
+                    <label for="first_name">Your first name</label>
+                    <input type="text" class="form-control" id="first_name"  name="first_name" placeholder="Enter first name">
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name">Your last name</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter last name">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Your password (required to update information)</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
+                </div>
+
+                <div class="form-group">
+                    <label for="is_admin">Is an admin user</label>
+                    <input type="checkbox" class="form-control" id="is_admin" name="is_admin">
+                </div>                
+
+                <button class="btn btn-info">Add</button>
+            </fieldset>
+        </form>
+    </div>
+</div>
+{{ end }}
+
+{{ define "js" }}{{ end }}
+
+{{ define "css" }}{{ end }}

@@ -1,24 +1,29 @@
+// Package notification handles all notifications for a job. This includes
+// build and deployment notifications.
 package notification
 
 import (
 	"strings"
 	"testing"
+
+	"github.com/fallenhitokiri/leeroyci/database"
 )
 
 func TestBuildHipChat(t *testing.T) {
-	n := notification{
-		Repo:   "repo",
-		Branch: "branch",
-		Name:   "name",
-		Email:  "email",
-		Status: false,
-		URL:    "url",
-		kind:   "build",
+	repo := database.Repository{
+		Name: "repo",
 	}
 
-	p := notToHipChapt(&n, "foo")
+	j := database.Job{
+		Repository: repo,
+		Branch:     "branch",
+		Name:       "name",
+		Email:      "email",
+	}
 
-	if p.Room != "foo" {
+	p := payloadHipchat(&j, "foo", "bar")
+
+	if p.Room != "bar" {
 		t.Error("Wrong room", p.Room)
 	}
 }

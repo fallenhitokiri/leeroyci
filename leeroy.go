@@ -1,60 +1,37 @@
 package main
 
 import (
-	"flag"
-	"leeroy/build"
-	"leeroy/config"
-	"leeroy/integrations"
-	"leeroy/logging"
-	"leeroy/web"
 	"log"
 	"net/http"
+	"os"
+
+	"github.com/fallenhitokiri/leeroyci/database"
+	"github.com/fallenhitokiri/leeroyci/runner"
+	"github.com/fallenhitokiri/leeroyci/web"
+	"github.com/fallenhitokiri/leeroyci/websocket"
 )
 
-var cfgFlag = flag.String("config", "leeroy.json", "JSON formatted config")
-
 func main() {
-	flag.Parse()
+	database.NewDatabase("", "")
+	websocket.NewServer()
+	go runner.Runner()
 
-	c := config.FromFile(*cfgFlag)
+	router := web.Routes()
+	config := database.GetConfig()
 
-	err := c.Validate()
-
-	if err != nil {
-		log.Fatal("Configuration error: ", err)
-	}
-
-	jobs := make(chan logging.Job, 100)
-	b := logging.New(c.BuildLogPath)
-
-	go build.Build(jobs, &c, b)
-
-	log.Println("leeroy up an running!")
-
-	http.HandleFunc("/callback/", web.Auth(func(w http.ResponseWriter, r *http.Request) {
-		integrations.Callback(w, r, jobs, &c, b)
-	}, c.Secret))
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		web.Status(w, r, &c, b)
-	})
-	http.HandleFunc("/status/repo/", func(w http.ResponseWriter, r *http.Request) {
-		web.Repo(w, r, &c, b)
-	})
-	http.HandleFunc("/status/branch/", func(w http.ResponseWriter, r *http.Request) {
-		web.Branch(w, r, &c, b)
-	})
-	http.HandleFunc("/status/commit/", func(w http.ResponseWriter, r *http.Request) {
-		web.Commit(w, r, &c, b)
-	})
-	http.HandleFunc("/status/badge/", func(w http.ResponseWriter, r *http.Request) {
-		web.Badge(w, r, &c, b)
-	})
-
-	if c.Scheme() == "https" {
-		log.Println("HTTPS:", c.URL)
-		log.Fatal(http.ListenAndServeTLS(c.Host(), c.Cert, c.Key, nil))
+	if config.Cert != "" {
+		log.Fatalln(http.ListenAndServeTLS(port(), config.Cert, config.Key, router))
 	} else {
-		log.Println("HTTP:", c.URL)
-		log.Fatal(http.ListenAndServe(c.Host(), nil))
+		log.Fatalln(http.ListenAndServe(port(), router))
 	}
+}
+
+func port() string {
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		return ":8082"
+	}
+
+	return ":" + port
 }

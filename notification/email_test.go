@@ -1,63 +1,34 @@
 package notification
 
 import (
-	"leeroy/config"
-	"strings"
 	"testing"
+
+	"github.com/fallenhitokiri/leeroyci/database"
 )
 
-func TestAddHeaders(t *testing.T) {
-	message := addHeaders("foo", "bar", "bla", "baz")
+func TestEmailSubject(t *testing.T) {
+	repo, _ := database.CreateRepository("repo", "bar", "accessKey", false, false)
+	job := database.CreateJob(repo, "branch", "1234", "commitURL", "foo", "bar")
+	job.TasksDone()
 
-	if len(message) != 137 {
-		t.Error("Message got the wrong length", len(message))
-	}
-}
+	build := emailSubject(job, EventBuild)
+	test := emailSubject(job, EventTest)
+	deployStart := emailSubject(job, EventDeployStart)
+	deployEnd := emailSubject(job, EventDeployEnd)
 
-func TestSubject(t *testing.T) {
-	n := notification{
-		Repo:   "repo",
-		Branch: "branch",
-		Name:   "name",
-		Email:  "email",
-		Status: true,
-		URL:    "url",
-		kind:   "build",
+	if build != "repo/branch build" {
+		t.Error("Wrong message", build)
 	}
 
-	s := subject(&n)
-
-	if s != "branch: success" {
-		t.Error("Wrong subject", s)
+	if test != "repo/branch tests" {
+		t.Error("Wrong message", test)
 	}
 
-	n.Status = false
-	s = subject(&n)
-
-	if s != "branch: failed" {
-		t.Error("Wrong subject", s)
-	}
-}
-
-func TestBuildEmail(t *testing.T) {
-	n := notification{
-		Repo:    "repo",
-		Branch:  "branch",
-		Name:    "name",
-		Email:   "email",
-		Status:  true,
-		URL:     "url",
-		kind:    "build",
-		message: "foo",
+	if deployStart != "repo/branch deployment started" {
+		t.Error("Wrong message", deployStart)
 	}
 
-	c := config.Config{
-		EmailFrom: "foo@bar.tld",
-	}
-
-	m := buildEmail(&c, &n)
-
-	if strings.Contains(string(m), "foo@bar.tld") == false {
-		t.Error("Sender email not found")
+	if deployEnd != "repo/branch deploy success" {
+		t.Error("Wrong message", deployEnd)
 	}
 }

@@ -1,0 +1,58 @@
+{{ define "title" }}Edit {{ .edit_user.FirstName }} {{ .edit_user.LastName }}{{ end }}
+
+{{ define "body" }}admin-user-edit{{ end }}
+
+{{ define "content" }}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <form action="/admin/user/{{ .edit_user.ID }}" method="POST">
+            <fieldset>
+                <h1>{{ .edit_user.FirstName }} {{ .edit_user.LastName }}</h1>
+                {{ if .message }}
+                    <div class="alert alert-success">
+                        {{ .message }}
+                    </div>
+                {{ end }}
+
+                {{ if .error }}
+                    <div class="alert alert-danger">
+                        {{ .error }}
+                    </div>
+                {{ end }}
+
+                <div class="form-group">
+                    <label for="email">Email address (will be your login)</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" value="{{ .edit_user.Email }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="first_name">Your first name</label>
+                    <input type="text" class="form-control" id="first_name"  name="first_name" placeholder="Enter first name" value="{{ .edit_user.FirstName }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name">Your last name</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter last name" value="{{ .edit_user.LastName }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Your password (required to update information)</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
+                </div>
+
+                <div class="form-group">
+                    <label for="is_admin">Is an admin user</label>
+                    <input type="checkbox" class="form-control" id="is_admin" name="is_admin" {{ if .edit_user.Admin }}checked{{ end }}>
+                </div>
+
+                <button class="btn btn-info">Update User</button>
+                <a href="/admin/user/delete/{{ .edit_user.ID }}" class="btn btn-danger pull-right">Delete User</a>
+            </fieldset>
+        </form>
+    </div>
+</div>
+{{ end }}
+
+{{ define "js" }}{{ end }}
+
+{{ define "css" }}{{ end }}

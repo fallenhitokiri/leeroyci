@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{{template "title" .}}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
+
+        <link rel="stylesheet" href="/static/css/base.css">
+        {{template "css" .}}
+    </head>
+    <body id="{{template "body" .}}">
+        {{ if .user }}
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#user-menu" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">
+                        <img alt="LeeroyCI" src="/static/leeroy.png">
+                    </a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="user-menu">
+                    <ul class="nav navbar-nav navbar-right">
+                        <form class="navbar-form navbar-left" role="search" action="/search" method="GET">
+                            <input type="text" class="form-control" placeholder="Search commit / branch" name="query">
+                        </form>
+
+                        <li><a href="/">All Jobs</a></li>
+
+                        {{ if .user.Admin }}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin <span class="caret"></span></a>
+
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="/admin/users">User Management</a></li>
+                                <li><a href="/admin/repositories">Repository Management</a></li>
+                                <li><a href="/admin/mailserver/update">Mailserver Config</a></li>
+                                <li><a href="/admin/config/update">Leeroy Config</a></li>
+                            </ul>
+                        </li>
+                        {{ end }}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ .user.FirstName }} <span class="caret"></span></a>
+
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="/user/settings">User Settings</a></li>
+                                <li><a href="/logout">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        {{ end }}
+
+        <div class="container-fluid">
+            {{template "content" .}}
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="/static/js/bootstrap.min.js"></script>
+        {{template "js" .}}
+    </body>
+</html>

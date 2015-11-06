@@ -1,34 +1,32 @@
 package notification
 
 import (
+	"strings"
 	"testing"
+
+	"github.com/fallenhitokiri/leeroyci/database"
 )
 
-func TestBuildCampfire(t *testing.T) {
-	n := notification{
-		Repo:    "repo",
-		Branch:  "branch",
-		Name:    "name",
-		Email:   "email",
-		Status:  true,
-		URL:     "url",
-		kind:    "build",
-		message: "foo",
-	}
+func TestEndpointCampfire(t *testing.T) {
+	end := endpointCampfire("1", "2")
 
-	_, err := buildCampfire(&n)
-
-	if err != nil {
-		t.Error(err)
+	if end != "https://1.campfirenow.com/room/2/speak.json" {
+		t.Error("Wrong endpoint", end)
 	}
 }
 
-func TestEndpointCampfire(t *testing.T) {
-	exp := "https://foo.campfirenow.com/room/bar/speak.json"
-	e := endpointCampfire("foo", "bar")
+func TestPayloadCampfire(t *testing.T) {
+	repo, _ := database.CreateRepository("repo", "", "", false, false)
+	job := database.CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
 
-	if exp != e {
-		t.Error("Expected ", exp, " got ", e)
+	pay, err := payloadCampfire(job, EventBuild)
+
+	if err != nil {
+		t.Error(err.Error())
+	}
+
+	if !strings.Contains(string(pay), "repo") {
+		t.Error("Wrong payload", string(pay))
 	}
 }
 

@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/fallenhitokiri/leeroyci/database"
 )
 
 // Payload Campfire expects to be POSTed to their API.
@@ -20,49 +22,74 @@ type campfireMessage struct {
 	Body string `json:"body"`
 }
 
-// Send a notification to Campfire
-func campfire(n *notification, id string, room string, key string) {
-	m, _ := buildCampfire(n)
-	e := endpointCampfire(id, room)
-	r := requestCampfire(e, key, m)
-	c := &http.Client{}
-
-	_, err := c.Do(r)
+// sendCampfire sends a notification to Campfire
+func sendCampfire(job *database.Job, event string) {
+	payload, err := payloadCampfire(job, event)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
+	}
+
+	not, _ := database.GetNotificationForRepoAndType(
+		&job.Repository,
+		database.NotificationServiceCampfire,
+	)
+
+	id, err := not.GetConfigValue("id")
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	room, err := not.GetConfigValue("room")
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	endpoint := endpointCampfire(id, room)
+
+	key, err := not.GetConfigValue("key")
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	request := requestCampfire(endpoint, key, payload)
+	client := &http.Client{}
+
+	_, err = client.Do(request)
+
+	if err != nil {
+		log.Println(err)
 	}
 }
 
 // Build the payload to send to Campfire.
-func buildCampfire(n *notification) ([]byte, error) {
+func payloadCampfire(job *database.Job, event string) ([]byte, error) {
+	msg := message(job, database.NotificationServiceCampfire, event, TypeText)
+
 	p := campfirePayload{
 		Message: &campfireMessage{
-			Body: n.message,
+			Body: msg,
 		},
 	}
 
-	marsh, err := json.Marshal(p)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return marsh, err
+	return json.Marshal(p)
 }
 
 // Build the endpoint for campfire
 func endpointCampfire(id, room string) string {
-	return fmt.Sprintf(
-		"https://%s.campfirenow.com/room/%s/speak.json",
-		id,
-		room,
-	)
+	return fmt.Sprintf("https://%s.campfirenow.com/room/%s/speak.json", id, room)
 }
 
 // Build the request for the campfire API.
-func requestCampfire(endpoint string, key string, message []byte) *http.Request {
-	req, err := http.NewRequest("POST", endpoint, bytes.NewReader(message))
+func requestCampfire(endpoint string, key string, payload []byte) *http.Request {
+	req, err := http.NewRequest("POST", endpoint, bytes.NewReader(payload))
 
 	if err != nil {
 		log.Fatal(err)

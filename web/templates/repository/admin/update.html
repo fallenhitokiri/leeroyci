@@ -1,0 +1,104 @@
+{{ define "title" }}Edit {{ .repository.Name }}{{ end }}
+
+{{ define "body" }}admin-repository-edit{{ end }}
+
+{{ define "content" }}
+<div class="row">
+    <div class="col-md-6">
+        <form action="/admin/repository/{{ .repository.ID }}" method="POST">
+            <fieldset>
+                <h1>{{ .repository.Name }}</h1>
+                {{ if .message }}
+                    <div class="alert alert-success">
+                        {{ .message }}
+                    </div>
+                {{ end }}
+
+                {{ if .error }}
+                    <div class="alert alert-danger">
+                        {{ .error }}
+                    </div>
+                {{ end }}
+
+                <div class="form-group">
+                    <label for="name">Name for this repository</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Repository name" value="{{ .repository.Name }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="url">URL for this repository</label>
+                    <input type="text" class="form-control" id="url" name="url" placeholder="Repository URL" value="{{ .repository.URL }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="access_key">AccessKey - required for endpoint</label>
+                    <input type="text" class="form-control" id="access_key" name="access_key" placeholder="Enter access key" value="{{ .repository.AccessKey }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="close_pr">Close pull requests if builds fail</label>
+                    <input type="checkbox" class="form-control" id="close_pr" name="close_pr" {{ if .repository.ClosePR }}checked{{ end }}>
+                </div>
+
+                <div class="form-group">
+                    <label for="status_pr">Update status of commits with build results</label>
+                    <input type="checkbox" class="form-control" id="status_pr" name="status_pr" {{ if .repository.StatusPR }}checked{{ end }}>
+                </div>   
+
+                <button class="btn btn-info">Update Repository</button>
+                <a href="/admin/repository/delete/{{ .repository.ID }}" class="btn btn-danger pull-right">Delete Repository</a>
+            </fieldset>
+        </form>
+    </div>
+
+    <div class="col-md-5 col-md-offset-1">
+        <h3>
+            Commands
+            <a href="/admin/repository/{{ .repository.ID }}/command/create" class="btn btn-sm btn-default pull-right">Add Command</a>
+        </h3>
+
+        {{ if .repository.Commands }}
+            <ul>
+            {{ range .repository.Commands }}
+                <li>
+                    <a href="/admin/repository/{{ $.repository.ID }}/command/{{ .ID }}">{{ .Name }}</a>
+                    <span class="label label-info">{{ .Kind }}</span>
+                    <span class="label label-default">{{ .Branch }}</span>
+                </li>
+            {{ end }}
+            </ul>
+        {{ else }}
+            <div class="alert alert-info">
+                No commands configured yet - go ahead and add one so things
+                happen when you push new commits :)
+            </div>
+        {{ end }}
+
+        <!-- commands -->
+
+        <h3>
+            Notifications
+            <a href="/admin/repository/{{ .repository.ID }}/notification/create" class="btn btn-sm btn-default pull-right">Add Notification</a>
+        </h3>
+        {{ if .repository.Notifications }}
+            <ul>
+            {{ range .repository.Notifications }}
+                <li>
+                    <a href="/admin/repository/{{ $.repository.ID }}/notification/{{ .ID }}">Service: {{ .Service }}</a>
+                </li>
+            {{ end }}
+            </ul>
+        {{ else }}
+            <div class="alert alert-info">
+                No notifications configured yet - go ahead and add one so you
+                know what is going on :)
+            </div>
+        {{ end }}
+        <!-- notifications -->
+    </div>
+</div>
+{{ end }}
+
+{{ define "js" }}{{ end }}
+
+{{ define "css" }}{{ end }}
