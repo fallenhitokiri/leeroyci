@@ -39,7 +39,7 @@ func Runner() {
 
 		if err != nil {
 			log.Println("Could not find repository for", job.Repository.URL)
-			return
+			continue
 		}
 
 		if job.Cancelled == true {

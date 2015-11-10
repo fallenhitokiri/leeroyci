@@ -41,6 +41,11 @@ func (s *server) removeClient(c *client) {
 
 // Send sends a message to all connected clients.
 func Send(msg *Message) {
+	// If the socket server is not initilaized this is a noop
+	if socketServer == nil {
+		return
+	}
+
 	for _, c := range socketServer.clients {
 		c.write(msg)
 	}
