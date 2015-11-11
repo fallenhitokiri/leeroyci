@@ -67,7 +67,7 @@ func (p *pullRequestCallback) updatePR() {
 		}
 
 		if repository.ClosePR && job.Passed() == false {
-			closePR(job, repository, p.PR.URL)
+			closePR(job, repository, p.PR.URL, githubAPI{})
 		}
 
 		return
@@ -76,7 +76,7 @@ func (p *pullRequestCallback) updatePR() {
 
 func (p *pullRequestCallback) isCurrent() bool {
 	repo := database.GetRepository(p.repositoryURL())
-	response, err := makeRequest("GET", p.PR.URL, repo.AccessKey, nil)
+	response, err := githubAPI{}.makeRequest("GET", p.PR.URL, repo.AccessKey, nil)
 
 	if err != nil {
 		return false
