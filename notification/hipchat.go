@@ -12,6 +12,8 @@ import (
 	"github.com/fallenhitokiri/leeroyci/database"
 )
 
+var hipchatEndpoint = "https://www.hipchat.com/v1/rooms/message?auth_token=%s"
+
 // Payload HipChat expects to be POSTed to the API.
 type hipchatPayload struct {
 	Room    string
@@ -98,8 +100,5 @@ func payloadHipchat(job *database.Job, event, channel string) hipchatPayload {
 
 // Build the endpoint for HipChat
 func endpointHipChat(key string) string {
-	return fmt.Sprintf(
-		"https://www.hipchat.com/v1/rooms/message?auth_token=%s",
-		key,
-	)
+	return fmt.Sprintf(hipchatEndpoint, key)
 }

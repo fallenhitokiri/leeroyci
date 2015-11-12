@@ -1,6 +1,8 @@
 package notification
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 
@@ -41,5 +43,34 @@ func TestRequestCampfire(t *testing.T) {
 
 	if u != "bar" {
 		t.Error("Wrong username", u)
+	}
+}
+
+func TestSendCampfire(t *testing.T) {
+	database.NewInMemoryDatabase()
+	repo, _ := database.CreateRepository("repo", "", "", false, false)
+	job := database.CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
+	database.CreateNotification(
+		database.NotificationServiceCampfire,
+		"id:::foo:::::room:::bar:::::key:::baz",
+		repo,
+	)
+
+	var request *http.Request
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		request = r
+	}))
+	defer ts.Close()
+
+	campfireEndpoint = ts.URL + "/%s/%s"
+
+	sendCampfire(job, EventBuild)
+
+	if request.URL.Path != "/foo/bar" {
+		t.Error("Wrong URL path", request.URL.Path)
+	}
+
+	if request.Header["Authorization"][0] != "Basic YmF6Olg=" {
+		t.Error("Wrong auth token", request.Header["Authorization"][0])
 	}
 }
