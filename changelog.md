@@ -1,3 +1,16 @@
+2015-10-18 Timo Zimmermann <timo@screamingatmyscreen.com>
+
+* websocket support
+* setup and configure LeeroyCI through the webinterface
+* improve test coverage
+
+2015-05-02 Timo Zimmermann <timo@screamingatmyscreen.com>
+
+* use SQLite as data store
+* support for users
+* new webinterface
+* enqueue already finished jobs if they failed
+
 2015-01-24 Timo Zimmermann <timo@screamingatmyscreen.com>
 
 * add support for GitHubs status API
