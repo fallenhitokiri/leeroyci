@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/fallenhitokiri/leeroyci/database"
 	"github.com/fallenhitokiri/leeroyci/runner"
@@ -18,11 +19,19 @@ func main() {
 
 	router := web.Routes()
 	config := database.GetConfig()
+	
+	httpd := &http.Server{
+		Addr: port(),
+		Handler: router,
+		ReadTimeout: 10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		MaxHeaderBytes: 1 << 20,
+	}
 
 	if config.Cert != "" {
-		log.Fatalln(http.ListenAndServeTLS(port(), config.Cert, config.Key, router))
+		log.Fatalln(httpd.ListenAndServeTLS(config.Cert, config.Key))
 	} else {
-		log.Fatalln(http.ListenAndServe(port(), router))
+		log.Fatalln(httpd.ListenAndServe())
 	}
 }
 
