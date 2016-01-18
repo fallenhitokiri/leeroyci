@@ -9,10 +9,11 @@ import (
 )
 
 type configAdminForm struct {
-	Secret string
-	URL    string
-	Cert   string
-	Key    string
+	Secret   string
+	URL      string
+	Cert     string
+	Key      string
+	Parallel int
 }
 
 func (c configAdminForm) update(request *http.Request) error {
@@ -31,7 +32,7 @@ func (c configAdminForm) update(request *http.Request) error {
 		return err
 	}
 
-	database.UpdateConfig(form.Secret, form.URL, form.Cert, form.Key)
+	database.UpdateConfig(form.Secret, form.URL, form.Cert, form.Key, form.Parallel)
 	return nil
 }
 

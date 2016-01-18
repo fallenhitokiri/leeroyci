@@ -59,6 +59,7 @@ func (c configForm) save(request *http.Request) (*database.User, error) {
 		form.URL,
 		form.SSLCert,
 		form.SSLKey,
+		1,
 	)
 
 	database.AddMailServer(

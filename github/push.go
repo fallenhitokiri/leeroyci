@@ -128,7 +128,7 @@ func (p *pushCallback) createJob() error {
 	if repo.StatusPR {
 		<-status
 		job = database.GetJob(job.ID)
-		postStatus(job, repo, p.statusURL())
+		postStatus(job, repo, p.statusURL(), githubAPI{})
 	}
 
 	return nil

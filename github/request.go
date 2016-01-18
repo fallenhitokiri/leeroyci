@@ -3,9 +3,7 @@
 package github
 
 import (
-	"bytes"
 	"encoding/json"
-	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -57,7 +55,7 @@ func newStatus(job *database.Job) *commitStatus {
 	}
 }
 
-func postStatus(job *database.Job, repo *database.Repository, URL string) {
+func postStatus(job *database.Job, repo *database.Repository, URL string, api github) {
 	status := newStatus(job)
 	payload, err := json.Marshal(&status)
 
@@ -66,14 +64,14 @@ func postStatus(job *database.Job, repo *database.Repository, URL string) {
 		return
 	}
 
-	_, err = makeRequest("POST", URL, repo.AccessKey, payload)
+	_, err = api.makeRequest("POST", URL, repo.AccessKey, payload)
 
 	if err != nil {
 		log.Println(err)
 	}
 }
 
-func closePR(job *database.Job, repo *database.Repository, URL string) {
+func closePR(job *database.Job, repo *database.Repository, URL string, api github) {
 	status := newStatus(job)
 	status.State = "closed"
 	payload, err := json.Marshal(&status)
@@ -83,41 +81,11 @@ func closePR(job *database.Job, repo *database.Repository, URL string) {
 		return
 	}
 
-	_, err = makeRequest("PATCH", URL, repo.AccessKey, payload)
+	_, err = api.makeRequest("PATCH", URL, repo.AccessKey, payload)
 
 	if err != nil {
 		log.Println(err)
 	}
-}
-
-// githubRequest handles HTTP requests to GitHubs API.
-// If the API endpoint does not expect any information nil should be passed as payload.
-func makeRequest(method string, url string, token string, payload []byte) ([]byte, error) {
-	r, err := http.NewRequest(method, url, bytes.NewReader(payload))
-
-	if err != nil {
-		return nil, err
-	}
-
-	addHeaders(token, r)
-
-	c := http.Client{}
-
-	re, err := c.Do(r)
-
-	if err != nil {
-		return nil, err
-	}
-
-	defer re.Body.Close()
-
-	b, err := ioutil.ReadAll(re.Body)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return b, nil
 }
 
 // AddHeaders adds all headers to a request to conform to GitHubs API.

@@ -3,6 +3,8 @@
 package notification
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 
@@ -68,5 +70,30 @@ func TestEndpointHipChat(t *testing.T) {
 
 	if e != exp {
 		t.Error("Wrong API endpoint ", e)
+	}
+}
+
+func TestSendHipchat(t *testing.T) {
+	database.NewInMemoryDatabase()
+	repo, _ := database.CreateRepository("repo", "", "", false, false)
+	job := database.CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
+	database.CreateNotification(
+		database.NotificationServiceHipchat,
+		"channel:::foo:::::key:::bar",
+		repo,
+	)
+
+	var request *http.Request
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		request = r
+	}))
+	defer ts.Close()
+
+	hipchatEndpoint = ts.URL + "/%s"
+
+	sendHipchat(job, EventBuild)
+
+	if request.URL.Path != "/bar" {
+		t.Error("Wrong URL path", request.URL.Path)
 	}
 }

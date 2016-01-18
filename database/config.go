@@ -8,23 +8,25 @@ import (
 
 // Config represents the complete configuration for the CI.
 type Config struct {
-	ID     int64
-	Secret string
-	URL    string
-	Cert   string
-	Key    string
+	ID       int64
+	Secret   string
+	URL      string
+	Cert     string
+	Key      string
+	Parallel int
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
 // AddConfig adds a new configuration.
-func AddConfig(secret, url, cert, key string) *Config {
+func AddConfig(secret, url, cert, key string, parallel int) *Config {
 	c := &Config{
-		Secret: secret,
-		URL:    url,
-		Cert:   cert,
-		Key:    key,
+		Secret:   secret,
+		URL:      url,
+		Cert:     cert,
+		Key:      key,
+		Parallel: parallel,
 	}
 
 	db.Save(c)
@@ -36,17 +38,24 @@ func AddConfig(secret, url, cert, key string) *Config {
 func GetConfig() *Config {
 	c := &Config{}
 	db.First(c)
+
+	if c.Parallel < 1 && c.ID != 0 {
+		c.Parallel = 1
+		db.Save(c)
+	}
+
 	return c
 }
 
 // UpdateConfig updates the config.
-func UpdateConfig(secret, url, cert, key string) *Config {
+func UpdateConfig(secret, url, cert, key string, parallel int) *Config {
 	c := GetConfig()
 
 	c.Secret = secret
 	c.URL = url
 	c.Cert = cert
 	c.Key = key
+	c.Parallel = parallel
 
 	db.Save(c)
 
