@@ -26,7 +26,7 @@ type Command struct {
 	Branch  string
 	Execute string
 
-	RepositoryID int64 `sql:index`
+	RepositoryID int64
 
 	CreatedAt time.Time
 	UpdatedAt time.Time

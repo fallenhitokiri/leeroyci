@@ -25,9 +25,9 @@ func TestHost(t *testing.T) {
 }
 
 func TestConfigCRUD(t *testing.T) {
-	AddConfig("secret", "url", "cert", "key")
+	AddConfig("secret", "url", "cert", "key", 1)
 	get1 := GetConfig()
-	updated := UpdateConfig("secret2", "url", "cert", "key")
+	updated := UpdateConfig("secret2", "url", "cert", "key", 1)
 	get2 := GetConfig()
 	DeleteConfig()
 	get3 := GetConfig()

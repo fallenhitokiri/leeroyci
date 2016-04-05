@@ -12,6 +12,8 @@ import (
 	"github.com/fallenhitokiri/leeroyci/database"
 )
 
+var campfireEndpoint = "https://%s.campfirenow.com/room/%s/speak.json"
+
 // Payload Campfire expects to be POSTed to their API.
 type campfirePayload struct {
 	Message *campfireMessage `json:"message"`
@@ -84,7 +86,7 @@ func payloadCampfire(job *database.Job, event string) ([]byte, error) {
 
 // Build the endpoint for campfire
 func endpointCampfire(id, room string) string {
-	return fmt.Sprintf("https://%s.campfirenow.com/room/%s/speak.json", id, room)
+	return fmt.Sprintf(campfireEndpoint, id, room)
 }
 
 // Build the request for the campfire API.
