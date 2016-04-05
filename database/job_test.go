@@ -140,7 +140,7 @@ func TestJobURL(t *testing.T) {
 	repo, _ := CreateRepository("foo", "baz", "accessKey", false, false)
 	job := CreateJob(repo, "branch", "bar", "commit URL", "name", "email")
 
-	if job.URL() != "url/1" {
+	if job.URL() != "url/7" {
 		t.Error("Wrong URL", job.URL())
 	}
 }

@@ -11,7 +11,7 @@ import (
 	_ "github.com/mattn/go-sqlite3" // Sqlite3 driver (used for testing)
 )
 
-var db gorm.DB
+var db *gorm.DB
 
 // Configured indicates if there is a valid configuration.
 var Configured bool
