@@ -1,6 +1,8 @@
 // Package config contains all data models used for LeeroyCI.
 package config
 
+// import "errors"
+
 // Project represents one project / repository used to run jobs for.
 type Project struct {
 	Name      string
@@ -19,3 +21,7 @@ type Project struct {
 
 	Notifications []*Notification
 }
+
+// func NewProject(name string) (*Project, error)  {
+//
+// }
