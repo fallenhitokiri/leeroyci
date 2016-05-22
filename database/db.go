@@ -29,7 +29,7 @@ func NewDatabase(driver, options string) error {
 	}
 
 	sql.DB()
-	db = sql
+	db = &sql
 
 	db.AutoMigrate(
 		&Command{},
@@ -70,6 +70,7 @@ func envURL() (string, string) {
 	return s[0], s[1]
 }
 
+// NewInMemoryDatabase creates a new database using :memory:
 func NewInMemoryDatabase() {
 	NewDatabase("sqlite3", ":memory:")
 }
