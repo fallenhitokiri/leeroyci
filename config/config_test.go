@@ -8,7 +8,7 @@ import (
 )
 
 func TestNewConfigDefault(t *testing.T) {
-	cfg, err := NewConfig("")
+	err := NewConfig("")
 
 	if err != nil {
 		t.Error(err.Error())
@@ -39,7 +39,7 @@ func TestNewConfig(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	cfg, err := NewConfig(tmpCfg)
+	err = NewConfig(tmpCfg)
 
 	if err != nil {
 		t.Error(err.Error())
@@ -70,7 +70,7 @@ func TestNewConfigInvalidJSON(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	_, err = NewConfig(tmpCfg)
+	err = NewConfig(tmpCfg)
 
 	if err == nil {
 		t.Error("No error for invalid JSON")
@@ -89,7 +89,7 @@ func TestNewConfigCannotReadFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	_, err = NewConfig(tmpCfg)
+	err = NewConfig(tmpCfg)
 
 	if err == nil {
 		t.Error("No error for config file that cannot be read")

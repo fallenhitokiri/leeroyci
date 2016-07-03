@@ -19,12 +19,12 @@ func main() {
 
 	router := web.Routes()
 	config := database.GetConfig()
-	
+
 	httpd := &http.Server{
-		Addr: port(),
-		Handler: router,
-		ReadTimeout: 10 * time.Second,
-		WriteTimeout: 10 * time.Second,
+		Addr:           port(),
+		Handler:        router,
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
 
