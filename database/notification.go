@@ -19,6 +19,7 @@ const (
 // job of the notification plugin to access them correctly and handle missing
 // ones.
 type Notification struct {
+	ID        string
 	Service   string
 	Arguments string
 }

@@ -1,5 +1,12 @@
 package database
 
+import "errors"
+
+var (
+	ErrorProjectNotFound   = errors.New("Project not found")
+	ErrorProjectNameExists = errors.New("Project with this name exists")
+)
+
 // Project represents one project / repository used to run jobs for.
 type Project struct {
 	Name      string
@@ -14,7 +21,7 @@ type Project struct {
 	// if this is supported by the git hosting service.
 	StatusPR bool
 
-	Tasks []*Task
-
+	Tasks         []*Task
 	Notifications []*Notification
+	Branches      []*Branch
 }

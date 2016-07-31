@@ -1,5 +1,6 @@
 package database
 
+// Config provides all information to run a leeroy instance.
 type Config struct {
 	URL            string `json:"url"`
 	Port           int    `json:"port"`
