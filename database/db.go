@@ -29,7 +29,7 @@ func NewDatabase(driver, options string) error {
 	}
 
 	sql.DB()
-	db = &sql
+	db = sql
 
 	db.AutoMigrate(
 		&Command{},

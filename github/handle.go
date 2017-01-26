@@ -10,7 +10,7 @@ import (
 // Handle checks if we are dealing with a pull request or a commit and either
 // creates a new job in the queue or a PR watcher.
 func Handle(req *http.Request) {
-	event := req.Header["X-Github-Event"][0]
+	event := req.Header.Get("X-Github-Event")
 
 	switch event {
 	case "push":
