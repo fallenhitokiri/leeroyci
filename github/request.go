@@ -25,11 +25,11 @@ type commitStatus struct {
 
 // status messages linked to their status code.
 var statusMessages = map[int]map[string]string{
-	statusSuccess: map[string]string{
+	statusSuccess: {
 		"state":       "success",
 		"description": "Build successful",
 	},
-	statusFailed: map[string]string{
+	statusFailed: {
 		"state":       "failure",
 		"description": "Build failed",
 	},

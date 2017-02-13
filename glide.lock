@@ -1,0 +1,59 @@
+hash: efab4f5ad60ccb913150fcc6aeeefcdd3d7e3bb8ec5a3f703e500c85f1a14422
+updated: 2017-01-26T18:40:18.383726024+08:00
+imports:
+- name: github.com/daaku/go.zipexe
+  version: a5fe2436ffcb3236e175e5149162b41cd28bd27d
+- name: github.com/davecgh/go-spew
+  version: 346938d642f2ec3594ed81d874461961cd0faa76
+- name: github.com/fallenhitokiri/leeroyci
+  version: a32039b2f76563906c8c00f2b0f2b70f4fe7aa62
+  subpackages:
+  - database
+  - github
+  - notification
+  - runner
+  - web
+  - websocket
+- name: github.com/GeertJohan/go.rice
+  version: 4bbccbfa39e784796e483270451217d3369ecfbe
+  subpackages:
+  - embedded
+- name: github.com/gorilla/context
+  version: 1ea25387ff6f684839d82767c1733ff4d4d15d0a
+- name: github.com/gorilla/mux
+  version: 392c28fe23e1c45ddba891b0320b3b5df220beea
+- name: github.com/gorilla/schema
+  version: dfd60678a6033f19803293695dcd30f40ed3cd19
+- name: github.com/gorilla/securecookie
+  version: 667fe4e3466a040b780561fe9b51a83a3753eefc
+- name: github.com/gorilla/sessions
+  version: ca9ada44574153444b00d3fd9c8559e4cc95f896
+- name: github.com/jinzhu/gorm
+  version: 5174cc5c242a728b435ea2be8a2f7f998e15429b
+- name: github.com/jinzhu/inflection
+  version: 1c35d901db3da928c72a72d8458480cc9ade058f
+- name: github.com/jpoehls/gophermail
+  version: 62941eab772c480c968feea68faba37f941cc931
+- name: github.com/justinas/alice
+  version: 052b8b6c18edb9db317af86806d8e00ebaa94160
+- name: github.com/kardianos/osext
+  version: c2c54e542fb797ad986b31721e1baedf214ca413
+- name: github.com/lib/pq
+  version: 67c3f2a8884c9b1aac5503c8d42ae4f73a93511c
+  subpackages:
+  - oid
+- name: github.com/mattn/go-sqlite3
+  version: ca5e3819723d8eeaf170ad510e7da1d6d2e94a08
+- name: github.com/sloonz/go-qprintable
+  version: 775b3a4592d5bfc47b0ba398ec0d4dba018e5926
+- name: golang.org/x/crypto
+  version: 9477e0b78b9ac3d0b03822fd95422e2fe07627cd
+  subpackages:
+  - bcrypt
+  - blowfish
+- name: golang.org/x/net
+  version: 87635b2611e4683a6f0aa595c36683021a00b2e4
+  subpackages:
+  - context
+  - websocket
+testImports: []

@@ -20,6 +20,7 @@ type slackPayload struct {
 
 // Send a notification to Slack
 func sendSlack(job *database.Job, event string) {
+	log.Println("Start sendSlack")
 	notification, _ := database.GetNotificationForRepoAndType(
 		&job.Repository,
 		database.NotificationServiceSlack,
@@ -50,6 +51,7 @@ func sendSlack(job *database.Job, event string) {
 	if err != nil {
 		log.Println(err)
 	}
+	log.Println("Finish sendSlack")
 }
 
 // Build the payload to send to Slack.

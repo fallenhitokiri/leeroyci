@@ -64,7 +64,7 @@ func Runner() {
 // builds and tests are done.
 func handleJob(job *database.Job, repository *database.Repository,
 	queueJob *QueueJob, taskID int) {
-
+	log.Println("Job started:", repository.Name)
 	job.Started()
 
 	run(job, repository, database.CommandKindTest, taskID)
