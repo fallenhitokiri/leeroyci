@@ -22,5 +22,3 @@ import:
 - package: golang.org/x/net
   subpackages:
   - websocket
-- package: github.com/davecgh/go-spew
-  version: ~1.1.0
