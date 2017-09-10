@@ -6,6 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"github.com/fallenhitokiri/leeroyci/gitea"
 	"github.com/fallenhitokiri/leeroyci/github"
 )
 
@@ -16,6 +17,8 @@ func viewCallback(w http.ResponseWriter, r *http.Request) {
 	switch service {
 	case "github":
 		github.Handle(r)
+	case "gitea":
+		gitea.Handle(r)
 	default:
 		log.Println("Service not supported.")
 	}
