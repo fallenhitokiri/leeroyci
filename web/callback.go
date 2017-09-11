@@ -17,7 +17,7 @@ func viewCallback(w http.ResponseWriter, r *http.Request) {
 	switch service {
 	case "github":
 		github.Handle(r)
-	case "gitea":
+	case "gitea": // should also work for gogs
 		gitea.Handle(r)
 	default:
 		log.Println("Service not supported.")
